@@ -1,0 +1,113 @@
+<!-- ==========================================================================
+     STAGE  — fixed 16:9 canvas. Topbar / rail+screens / footbar.
+     ========================================================================== -->
+<div class="stage" id="stage" data-screen="listing" data-rail="none" data-chrome="corporate">
+
+  <!-- ===================== TOP BAR ======================================== -->
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#listing" data-goto="listing" aria-label="STANDARD home">
+      <!-- BRAND MARK SLOT ------------------------------------------------
+           Drop the logo PNG in assets/img/brand/ and put its path in src=.
+           Leave src empty (or point it at a file that is not there) and the
+           image placeholder below is shown instead. -->
+      <span class="brand__mark brand__logo">
+        <img class="brand__logoImg" src="" alt="" onerror="this.removeAttribute('src')">
+        <svg class="brand__logoPh" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-image"></use></svg>
+      </span>
+      <span class="brand__text">
+        <span class="brand__name">STANDARD<sup>®</sup></span>
+        <span class="brand__tag">BUILT FOR A BETTER TOMORROW</span>
+      </span>
+    </a>
+
+    <!-- corporate navigation (listing + compare screens) -->
+    <nav class="topbar__nav" data-on="listing compare overview">
+      <a class="topbar__link is-active" href="#listing" data-inert="Demo build — corporate pages are out of scope.">Home</a>
+      <a class="topbar__link" href="#listing" data-goto="listing">Products</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Technology</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Applications</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Services</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Dealers</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">About Us</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Support</a>
+    </nav>
+
+    <!-- product tab navigation (all deep screens) -->
+    <nav class="tabnav" data-off="listing compare overview">
+      <a class="tabnav__i" href="#view360"   data-goto="view360">360° View</a>
+      <a class="tabnav__i" href="#exploded"  data-goto="exploded">Exploded View</a>
+      <a class="tabnav__i" href="#schematic" data-goto="schematic">Schematic Diagram</a>
+      <a class="tabnav__i" href="#drawing"   data-goto="drawing">Engineering Drawing</a>
+      <a class="tabnav__i" href="#exterior"  data-goto="exterior">Exterior</a>
+      <a class="tabnav__i" href="#engine"    data-goto="engine">Engine</a>
+      <a class="tabnav__i" href="#operator"  data-goto="operator">Operator Station</a>
+      <a class="tabnav__i" href="#hydraulics" data-goto="hydraulics">Hydraulics</a>
+      <a class="tabnav__i" href="#features"  data-goto="features">Features</a>
+      <a class="tabnav__i" href="#specs"     data-goto="specs">Specifications</a>
+      <a class="tabnav__i" href="#gallery"   data-goto="gallery">Gallery</a>
+      <a class="tabnav__i" href="#videos"    data-goto="videos">Videos</a>
+      <a class="tabnav__i" href="#brochure"  data-goto="brochure">Brochure</a>
+    </nav>
+
+    <div class="u-grow"></div>
+
+    <label class="topbar__search" data-on="listing compare overview">
+      <input type="search" placeholder="Search tractors, models, features..." aria-label="Search">
+      <button type="button" data-inert="Demo build — search is wired up in the Laravel release." aria-label="Search">
+        <svg class="i i--sm"><use href="#i-search"></use></svg>
+      </button>
+    </label>
+
+    <!-- Add to Cart — intentionally inactive in this demo build -->
+    <button class="btn btn--ghost btn--sm" type="button" aria-disabled="true" disabled
+            title="Add to Cart is disabled in this static demo">
+      <svg class="i i--sm"><use href="#i-cart"></use></svg> Add to Cart
+    </button>
+
+    <a class="btn btn--accent" data-on="listing compare overview" href="#" data-inert="Demo build — enquiry form ships with the Laravel release.">
+      <svg class="i i--sm"><use href="#i-mail"></use></svg> Enquire Now
+    </a>
+    <a class="btn btn--primary" data-off="listing compare overview" href="#enquire" data-goto="enquire">
+      <svg class="i i--sm"><use href="#i-mail"></use></svg> Enquire Now
+    </a>
+  </header>
+
+  <div class="stage__main">
+
+    <!-- ===================== MASTER DASHBOARD RAIL ======================== -->
+    <nav class="rail" id="rail" aria-label="Product sections">
+      <div class="rail__head">
+        <span class="rail__eyebrow">DI 470</span>
+        <span class="rail__title">DI 470</span>
+      </div>
+      <div class="rail__nav">
+        <a class="rail__item" href="#overview"   data-goto="overview"><svg class="i"><use href="#i-home"></use></svg><span>Overview</span></a>
+        <a class="rail__item" href="#view360"    data-goto="view360"><svg class="i"><use href="#i-cube"></use></svg><span>360° View</span></a>
+        <a class="rail__item" href="#exploded"   data-goto="exploded"><svg class="i"><use href="#i-layers"></use></svg><span>Exploded View</span></a>
+        <a class="rail__item" href="#schematic"  data-goto="schematic"><svg class="i"><use href="#i-schema"></use></svg><span>Schematic Diagram</span></a>
+        <a class="rail__item" href="#drawing"    data-goto="drawing"><svg class="i"><use href="#i-drawing"></use></svg><span>Engineering Drawing</span></a>
+        <a class="rail__item" href="#exterior"   data-goto="exterior"><svg class="i"><use href="#i-image"></use></svg><span>Exterior</span></a>
+        <a class="rail__item" href="#engine"     data-goto="engine"><svg class="i"><use href="#i-engine"></use></svg><span>Engine</span></a>
+        <a class="rail__item" href="#operator"   data-goto="operator"><svg class="i"><use href="#i-seat"></use></svg><span>Operator Station</span></a>
+        <a class="rail__item" href="#hydraulics" data-goto="hydraulics"><svg class="i"><use href="#i-gear"></use></svg><span>Hydraulics</span></a>
+        <a class="rail__item" href="#features"   data-goto="features"><svg class="i"><use href="#i-wrench"></use></svg><span>Features</span></a>
+        <a class="rail__item" href="#specs"      data-goto="specs"><svg class="i"><use href="#i-doc"></use></svg><span>Specifications</span></a>
+        <a class="rail__item" href="#variants"   data-goto="variants"><svg class="i"><use href="#i-grid4"></use></svg><span>Variants</span></a>
+        <a class="rail__item" href="#videos"     data-goto="videos"><svg class="i"><use href="#i-play"></use></svg><span>Videos</span></a>
+        <a class="rail__item" href="#gallery"    data-goto="gallery"><svg class="i"><use href="#i-images"></use></svg><span>Gallery</span></a>
+        <a class="rail__item" href="#brochure"   data-goto="brochure"><svg class="i"><use href="#i-download"></use></svg><span>Brochure</span></a>
+        <a class="rail__item" href="#compare"    data-goto="compare"><svg class="i"><use href="#i-compare"></use></svg><span>Compare</span></a>
+        <a class="rail__item" href="#enquire"    data-goto="enquire"><svg class="i"><use href="#i-mail"></use></svg><span>Enquire</span></a>
+      </div>
+      <div class="rail__foot">
+        <div class="rail__help">
+          <svg class="i"><use href="#i-tractor"></use></svg>
+          <div><b>Need Help?</b><span>Talk to Our Experts</span></div>
+        </div>
+        <a class="rail__cta" href="#enquire" data-goto="enquire">Contact Us <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+      </div>
+    </nav>
+
+    <!-- ===================== SCREENS ===================================== -->
+    <div class="screens" id="screens">
+

@@ -1,0 +1,92 @@
+/* ============================================================================
+   08 — DETAIL SCREENS :: Exterior · Engine · Operator Station · Hydraulics · Features
+   One shared layout (.sc-hot). Each screen only changes its backdrop and panels.
+   ========================================================================== */
+
+.sc-hot { grid-template-rows: minmax(0,1fr) 9.6rem; }
+.sc-exterior   { background: var(--bg-pad)   center 58% / cover no-repeat; }
+.sc-engine     { background: var(--bg-soil)  center 40% / cover no-repeat; }
+.sc-operator   { background: var(--bg-crop)  center 48% / cover no-repeat; }
+.sc-hydraulics { background: var(--bg-soil)  center 52% / cover no-repeat; }
+.sc-features   { background: var(--bg-soil)  center 44% / cover no-repeat; }
+
+.ht__stage { position: relative; min-height: 0; min-width: 0; overflow: hidden; }
+.ht__stage::before {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(100deg, rgba(248,251,254,.94) 0%, rgba(248,251,254,.6) 26%, rgba(248,251,254,0) 44%);
+}
+
+/* ---- headline block ------------------------------------------------------ */
+.ht__head { position: absolute; left: 8.6rem; top: 2rem; z-index: 6; max-width: 30rem; }
+.ht__head--copy { max-width: 31rem; }
+.ht__title { font-size: 4.2rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: #0A2540; }
+.ht__sub   { font-size: 1.85rem; font-weight: 600; color: #22405E; margin-top: .3rem; }
+.ht__copy  { font-size: 1.25rem; line-height: 1.42; color: var(--c-ink-2); margin-top: 1rem; }
+
+.ht__script { position: absolute; right: 3rem; top: 1.4rem; width: 18rem; font-size: 2.1rem; z-index: 6; }
+
+/* ---- the product plate --------------------------------------------------- */
+.ht__art {
+  position: absolute; left: 52%; top: 50%; transform: translate(-50%,-50%); z-index: 1;
+  max-width: 62%; max-height: 88%; width: auto; height: auto; object-fit: contain;
+  filter: drop-shadow(0 2rem 2.4rem rgba(10,40,70,.3));
+  transition: opacity var(--t-base) var(--ease);
+}
+.ht__art--wide { max-width: 60%; max-height: 90%; }
+.sc-engine .ht__art { left: 50%; max-width: 54%; }
+.sc-operator .ht__art { left: 50%; max-width: 56%; }
+.sc-hydraulics .ht__art { left: 50%; max-width: 50%; }
+
+/* ---- side panel ---------------------------------------------------------- */
+.sidepane { position: absolute; right: 1.6rem; top: 1.6rem; width: 24rem; max-height: calc(100% - 3.2rem); z-index: 7; }
+.sc-engine .sidepane, .sc-operator .sidepane { top: 10rem; }
+.sidepane--wide { width: 27rem; }
+.sidepane .panel__head { padding: 1.2rem 1.4rem .4rem; }
+.sidepane .panel__title { font-size: 1.72rem; line-height: 1.15; }
+.sidepane .panel__body { padding: 0 1.4rem 1.2rem; }
+.ht__side .speclist__row { padding: .95rem .1rem; }
+.ht__side .speclist__row b { font-size: 1.32rem; }
+.ht__side .speclist__row span span { font-size: 1.12rem; }
+
+.ht__ctrl { right: 1.6rem; top: 50%; transform: translateY(-50%); }
+
+/* ---- bottom furniture ---------------------------------------------------- */
+.ht__plate { left: 8.6rem; bottom: 1.6rem; padding: .9rem 1.6rem; }
+.ht__plate .plate__t { font-size: 1.9rem; }
+.ht__plate .plate__s { font-size: 1.05rem; letter-spacing: .04em; }
+.ht__hint { right: 1.6rem; bottom: 1.6rem; }
+.ht__hint .v360__glyphSm { color: #fff; }
+.ht__ar { right: 1.6rem; bottom: 1.6rem; }
+
+.ht__rotate {
+  position: absolute; left: 50%; bottom: 1.4rem; transform: translateX(-50%);
+  z-index: 5; display: grid; place-items: center; width: 34rem; pointer-events: none;
+}
+.ht__rotate svg { width: 100%; height: 4.4rem; }
+.ht__rotate b { position: absolute; top: .2rem; font-size: 2.8rem; font-weight: 800; color: #12314F; text-shadow: 0 .1rem .4rem rgba(255,255,255,.7); }
+.ht__rotate span { font-size: 1.2rem; color: #22405E; font-weight: 500; margin-top: -.4rem; }
+
+.ht__thumbs { background: #F2F5F8; }
+.ht__thumbs--wide .thumb__label { font-size: .96rem; }
+
+/* ---- hydraulics extras --------------------------------------------------- */
+.hy__mini { position: absolute; left: 8.6rem; bottom: 11rem; width: 23rem; z-index: 6; }
+.hy__mini .panel__body { padding: .6rem 1.2rem; }
+.hy__mini .speclist__row { padding: .7rem .1rem; }
+.hy__mini .speclist__row b { font-size: 1.22rem; font-weight: 600; }
+.hy__script { margin: .4rem 1.4rem 1.4rem; font-size: 2rem; }
+
+/* ---- features extras ----------------------------------------------------- */
+.ft__side { top: 1.4rem; bottom: 1.4rem; max-height: none; }
+.ft__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .5rem; align-content: start; }
+.ft__grid .stat { background: var(--c-surface-2); }
+.ft__grid .stat__v { font-size: 1.3rem; }
+.ft__grid .stat__l { font-size: 1.02rem; }
+.ft__banner { position: relative; height: 8.4rem; margin: 0 1.4rem 1.4rem; border-radius: var(--r-md); overflow: hidden; flex: none; }
+.ft__banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ft__banner .script { position: absolute; inset: 0; display: grid; place-content: center; font-size: 1.9rem; text-shadow: 0 .2rem .6rem rgba(0,0,0,.4); }
+
+/* icon-style hotspot markers (Features screen) ----------------------------- */
+.hotspot--card .hotspot__dot { width: 3.4rem; height: 3.4rem; }
+.hotspot--card .hotspot__dot .i { width: 1.8rem; height: 1.8rem; stroke-width: 2; }
+.hotlayer--icons .hotspot__note { max-width: 19rem; }

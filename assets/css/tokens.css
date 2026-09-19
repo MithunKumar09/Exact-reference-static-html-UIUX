@@ -1,0 +1,173 @@
+/* ============================================================================
+   STANDARD · PRODUCT EXPERIENCE PLATFORM
+   01 — BRAND TOKENS
+   ----------------------------------------------------------------------------
+   THIS IS THE ONLY FILE YOU NEED TO TOUCH TO RE-BRAND THE ENTIRE PLATFORM.
+   Change the values in [data-brand="standard"] and every screen follows.
+
+   To add a SECOND product line with its own colour, copy the whole block,
+   rename the selector (e.g. [data-brand="agrimax"]) and change the 6 seed
+   values marked ★. Then set  <html data-brand="agrimax">  — done.
+   ========================================================================== */
+
+:root {
+  /* ---- Design canvas (16:9). Do not change unless the whole deck changes. --
+     160 x 90 units. base.css caps 1rem at 9px, so the stage tops out at the
+     1440 x 810 design frame and is centred past it. -------------------------- */
+  --canvas-w: 160rem;      /* 1440px at the capped scale */
+  --canvas-h: 90rem;       /*  810px at the capped scale */
+
+  /* ---- Geometry scale -------------------------------------------------- */
+  --r-xs: 0.4rem;  --r-sm: 0.6rem;  --r-md: 0.9rem;
+  --r-lg: 1.2rem;  --r-xl: 1.6rem;  --r-pill: 999rem;
+
+  --gap-1: 0.4rem; --gap-2: 0.8rem; --gap-3: 1.2rem;
+  --gap-4: 1.6rem; --gap-5: 2.4rem; --gap-6: 3.2rem;
+
+  /* ---- Elevation ------------------------------------------------------- */
+  --sh-1: 0 .1rem .3rem rgba(9, 30, 55, .08), 0 .1rem .1rem rgba(9, 30, 55, .04);
+  --sh-2: 0 .4rem 1.2rem rgba(9, 30, 55, .10), 0 .1rem .2rem rgba(9, 30, 55, .06);
+  --sh-3: 0 1.2rem 3.2rem rgba(9, 30, 55, .16), 0 .2rem .6rem rgba(9, 30, 55, .08);
+  --sh-4: 0 2.4rem 6.4rem rgba(9, 30, 55, .26);
+  --sh-inset: inset 0 0 0 .1rem rgba(255, 255, 255, .55);
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --ease: cubic-bezier(.4, 0, .2, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --t-fast: 140ms; --t-base: 240ms; --t-slow: 420ms;
+
+  /* ---- Typography families -------------------------------------------- */
+  --ff-ui: "Inter", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --ff-script: "Caveat", "Segoe Script", "Bradley Hand", cursive;
+  --ff-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+}
+
+/* ===========================================================================
+   BRAND :: STANDARD  (default)
+   ========================================================================= */
+[data-brand="standard"] {
+  /* ★ 1. SEED COLOURS — the six values that define the whole identity ----- */
+  --seed-primary:   #0068FE;   /* ★ action blue  */
+  --seed-deep:      #0C2742;   /* ★ deep navy    */
+  --seed-accent:    #FED047;   /* ★ accent yellow*/
+  --seed-ink:       #0E263C;   /* ★ text ink     */
+  --seed-surface:   #FFFFFF;   /* ★ card surface */
+  --seed-canvas:    #F3F9FE;   /* ★ page canvas  */
+
+  /* ---- 2. Derived brand ramp ------------------------------------------ */
+  --c-primary:        var(--seed-primary);
+  --c-primary-hi:     #0073FE;
+  --c-primary-lo:     #0052CC;
+  --c-primary-deep:   #003A81;
+  --c-primary-band:   #013A75;
+  --c-primary-soft:   #E8F1FE;
+  --c-primary-softer: #F3F8FF;
+  --c-primary-ring:   rgba(0, 104, 254, .32);
+
+  --c-deep:           var(--seed-deep);
+  --c-deep-2:         #0A2C4D;
+  --c-deep-3:         #1A334D;
+  --c-footer:         #062846;
+  --c-footer-alt:     #002B54;
+
+  --c-accent:         var(--seed-accent);
+  --c-accent-hi:      #FFDC72;
+  --c-accent-lo:      #F2BD1F;
+  --c-accent-ink:     #2A1E00;
+
+  /* ---- 3. Neutrals / text --------------------------------------------- */
+  --c-ink:            var(--seed-ink);
+  --c-ink-2:          #33465A;
+  --c-ink-3:          #5A6B7D;
+  --c-ink-4:          #8494A4;
+  --c-line:           #E1E8F0;
+  --c-line-2:         #EDF2F8;
+  --c-surface:        var(--seed-surface);
+  --c-surface-2:      #F7FAFD;
+  --c-canvas:         var(--seed-canvas);
+  --c-page:           #DCE4EE;   /* field the capped stage sits on */
+  --c-on-dark:        #EAF2FB;
+  --c-on-dark-2:      #A9C0D8;
+
+  /* ---- 4. Status / badge palette -------------------------------------- */
+  --c-bestseller:     #FED043;
+  --c-new:            #089620;
+  --c-popular:        #0185FB;
+  --c-special:        #F86C1C;
+  --c-heavy:          #D62222;
+  --c-value:          #7A34C8;
+  --c-premium:        #FFC400;
+  --c-orchard:        #0E9A5A;
+
+  /* ---- 5. System colours (schematic diagram legend) ------------------- */
+  --sys-engine:       #F01A1A;
+  --sys-transmission: #F2600C;
+  --sys-hydraulic:    #0A6DF0;
+  --sys-fuel:         #12B23A;
+  --sys-cooling:      #7B2FD6;
+  --sys-electrical:   #FFC400;
+  --sys-controls:     #FF2FA0;
+  --sys-air:          #A8B4BE;
+
+  /* ---- 6. Composite surfaces ------------------------------------------ */
+  --grad-primary: linear-gradient(180deg, var(--c-primary-hi), var(--c-primary-lo));
+  --grad-accent:  linear-gradient(180deg, var(--c-accent-hi), var(--c-accent-lo));
+  --grad-deep:    linear-gradient(180deg, var(--c-deep-2), var(--c-footer));
+  --grad-band:    linear-gradient(90deg, var(--c-primary-band) 0%, var(--c-deep) 62%, var(--c-deep) 100%);
+  --glass:        rgba(255, 255, 255, .92);
+  --glass-dark:   rgba(12, 39, 66, .82);
+
+  /* ---- 7. Product imagery (swap folder to re-skin the demo) ----------- */
+  --img-dir:      "../img";
+  --bg-hero:      url("../img/bg/field-sunset.png");
+  --bg-pad:       url("../img/bg/sky-pad.webp");
+  --bg-soil:      url("../img/bg/soil-field.webp");
+  --bg-crop:      url("../img/bg/crop-rows.webp");
+  --bg-studio:    url("../img/bg/studio.webp");
+  --bg-dusk:      url("../img/bg/field-dusk.webp");
+}
+
+/* ===========================================================================
+   BRAND :: EXAMPLE SECOND LINE  —  copy/paste template for a new product
+   Set <html data-brand="agrimax"> to activate. Only the ★ seeds changed.
+   ========================================================================= */
+[data-brand="agrimax"] {
+  --seed-primary: #0E9A5A;
+  --seed-deep:    #0B3324;
+  --seed-accent:  #F5C518;
+  --seed-ink:     #10241B;
+  --seed-surface: #FFFFFF;
+  --seed-canvas:  #F1FBF5;
+
+  --c-primary: var(--seed-primary);
+  --c-primary-hi: #16B268;  --c-primary-lo: #0A7A46;
+  --c-primary-deep: #06522E; --c-primary-band: #0A6B3D;
+  --c-primary-soft: #E6F7EE; --c-primary-softer: #F2FBF6;
+  --c-primary-ring: rgba(14, 154, 90, .32);
+  --c-deep: var(--seed-deep); --c-deep-2: #124030; --c-deep-3: #1D4C3A;
+  --c-footer: #0B3324; --c-footer-alt: #06291C;
+  --c-accent: var(--seed-accent); --c-accent-hi: #FFD84D;
+  --c-accent-lo: #D9A907; --c-accent-ink: #2A2100;
+  --c-ink: var(--seed-ink); --c-ink-2: #274034; --c-ink-3: #55685E;
+  --c-ink-4: #86988D; --c-line: #DCE9E1; --c-line-2: #EBF4EF;
+  --c-surface: var(--seed-surface); --c-surface-2: #F6FBF8;
+  --c-canvas: var(--seed-canvas); --c-page: #D6E6DC;
+  --c-on-dark: #E8F6EE; --c-on-dark-2: #A9CBB8;
+  --c-bestseller: #F5C518; --c-new: #089620; --c-popular: #0E9A5A;
+  --c-special: #F86C1C; --c-heavy: #D62222; --c-value: #7A34C8;
+  --c-premium: #FFC400; --c-orchard: #0E9A5A;
+  --sys-engine: #F01A1A; --sys-transmission: #F2600C; --sys-hydraulic: #0A6DF0;
+  --sys-fuel: #12B23A; --sys-cooling: #7B2FD6; --sys-electrical: #FFC400;
+  --sys-controls: #FF2FA0; --sys-air: #A8B4BE;
+  --grad-primary: linear-gradient(180deg, var(--c-primary-hi), var(--c-primary-lo));
+  --grad-accent:  linear-gradient(180deg, var(--c-accent-hi), var(--c-accent-lo));
+  --grad-deep:    linear-gradient(180deg, var(--c-deep-2), var(--c-footer));
+  --grad-band:    linear-gradient(90deg, var(--c-primary-band) 0%, var(--c-deep) 62%, var(--c-deep) 100%);
+  --glass: rgba(255,255,255,.92); --glass-dark: rgba(11,51,36,.82);
+  --bg-hero: url("../img/bg/field-sunset.webp");
+  --bg-pad: url("../img/bg/sky-pad.webp");
+  --bg-soil: url("../img/bg/soil-field.webp");
+  --bg-crop: url("../img/bg/crop-rows.webp");
+  --bg-studio: url("../img/bg/studio.webp");
+  --bg-dusk: url("../img/bg/field-dusk.webp");
+}

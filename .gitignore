@@ -1,0 +1,11 @@
+.chrome-*/
+.qa-*/
+.design-qa-compare.html
+.responsive-*.html
+_reference/
+_source-photography/
+reference exact tracker model/
+current-*.png
+responsive-*.png
+review-*.png
+design-qa-*.png

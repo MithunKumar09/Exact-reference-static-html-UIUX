@@ -1,0 +1,125 @@
+<!-- ========================================================== 03 360° VIEW -->
+<!-- Live 3D. The model, the HDRI and the camera presets all come from
+     assets/js/config.js → viewer3d. Swap the .glb to change the product. -->
+<section class="screen sc-360" id="s-view360" data-rail="glass" data-chrome="product">
+
+  <div class="v360" data-fs>
+
+    <header class="v360__head">
+      <span class="v360__headTitle"><svg class="v360__glyph" viewBox="-1.2 -0.5 47.4 23.7" aria-hidden="true"><use href="#i-360"></use></svg> VIEW</span>
+      <span class="v360__headSub">DRAG &nbsp;&bull;&nbsp; ROTATE &nbsp;&bull;&nbsp; EXPLORE</span>
+    </header>
+
+    <div class="script v360__script">Powering<br>Progress<br>in Every Field
+      <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+    </div>
+
+    <!-- Pre-rendered turntable. data-position on each marker is a FRACTION of the
+         product's bounding box - x 0=left 1=right, y 0=front 1=rear, z 0=ground
+         1=roofline - not a distance, so swapping the 3D model does not fling the
+         markers into mid-air. tools/turntable.py resolves them against the real
+         bbox and projects them through the render camera for every frame into
+         assets/data/hotspots-360.json. Edit here, then re-run the renderer. -->
+    <div class="v360__stage" data-spin360 data-ar data-alt="STANDARD DI 470 — interactive 360° view"
+         data-orbit="45deg 78deg 112%" data-fov="26deg" data-target="0m 5.4m 0m">
+      <img class="v360__fallback" src="assets/img/spin/f001.webp" alt="STANDARD DI 470">
+      <span class="v360__loader"><i></i><i></i><i></i></span>
+
+      <button class="hotspot" type="button" data-hs="exhaust" data-position="0.36 0.30 0.96"
+              data-title="Exhaust" data-img="assets/img/product/grille-thumb.webp"
+              data-text="High-mount exhaust routes emissions clear of the operator while keeping noise low in long working shifts.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Exhaust</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="air" data-side="left" data-position="0.44 0.17 0.88"
+              data-title="Air Cleaner" data-img="assets/img/product/engine-thumb.webp"
+              data-text="Prevents dust and dirt from entering the engine, ensuring longer engine life and better performance in tough field conditions.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Air Cleaner</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="grille" data-side="left" data-position="0.50 0.02 0.46"
+              data-title="Front Grille" data-img="assets/img/product/grille-thumb.webp"
+              data-text="Stylish, rugged grille protects the radiator core and channels clean air for efficient cooling.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Front Grille</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="engine" data-position="0.84 0.33 0.44"
+              data-title="Engine" data-img="assets/img/product/engine-thumb.webp"
+              data-text="3-cylinder, 4-stroke DI engine delivering 47 HP @ 2000 RPM with an inline injection pump for lower running cost.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Engine</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="operator" data-position="0.50 0.62 0.70"
+              data-title="Operator Station" data-img="assets/img/product/operator-thumb.webp"
+              data-text="Ergonomic seat, clear instrument cluster and easy-reach controls designed for comfort across long working hours.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Operator Station</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="hyd" data-position="0.50 0.97 0.28"
+              data-title="Hydraulics" data-img="assets/img/product/hydraulics-thumb.webp"
+              data-text="1500 kg lift capacity with position &amp; draft control and a Category II three-point linkage for every implement.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Hydraulics</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="ftyre" data-side="left" data-position="0.88 0.16 0.16"
+              data-title="Front Tyre" data-img="assets/img/product/front-thumb.webp"
+              data-text="7.50 – 16 front tyres give precise steering response and a stable footprint on uneven ground.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Front Tyre</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="rtyre" data-position="0.92 0.72 0.34"
+              data-title="Rear Tyre" data-img="assets/img/product/rear-thumb.webp"
+              data-text="16.9 – 28 rear tyres deliver better traction and higher productivity in wet, loose and tilled soil.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Rear Tyre</span>
+      </button>
+    </div>
+
+    <div class="ctrlstack v360__ctrl">
+      <button class="ctrlstack__btn" type="button" data-vc="full"><svg class="i"><use href="#i-maximize"></use></svg>Full Screen</button>
+      <button class="ctrlstack__btn" type="button" data-vc="rotate"><svg class="i"><use href="#i-rotate"></use></svg>Auto Rotate</button>
+      <button class="ctrlstack__btn" type="button" data-vc="reset"><svg class="v360__glyphSm" viewBox="-1.2 -0.5 47.4 23.7"><use href="#i-360"></use></svg>Reset View</button>
+      <!-- The spin set has no AR of its own, so AR gets an explicit launcher.
+           It loads <model-viewer> and the .glb only when tapped. -->
+      <button class="ctrlstack__btn" type="button" data-ar-launch><svg class="i"><use href="#i-ar"></use></svg>View in AR</button>
+    </div>
+
+    <div class="hintpill v360__hint">
+      <svg class="i i--lg"><use href="#i-ar"></use></svg>
+      <span class="hintpill__t">Drag to rotate</span>
+    </div>
+
+    <div class="plate v360__plate">
+      <span class="plate__t">STANDARD</span>
+      <span class="plate__s">TRUST &nbsp;|&nbsp; DURABILITY &nbsp;|&nbsp; PERFORMANCE</span>
+    </div>
+
+    <div class="v360__arc">
+      <svg viewBox="0 0 520 60" aria-hidden="true">
+        <path d="M18 18q242 44 484 0" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".92"/>
+        <path d="M18 18 34 8M18 18l16 12M502 18l-16-10M502 18l-16 12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".92"/>
+      </svg>
+      <span>360&deg;</span>
+    </div>
+  </div>
+
+  <div class="thumbstrip v360__thumbs">
+    <button class="thumb" type="button" data-view="front" data-frame="0"><span class="thumb__img"><img src="assets/img/spin/thumb-front.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb is-active" type="button" data-view="front-left" data-frame="1"><span class="thumb__img"><img src="assets/img/spin/thumb-front-left.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left" data-frame="2"><span class="thumb__img"><img src="assets/img/spin/thumb-left.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left" data-frame="4"><span class="thumb__img"><img src="assets/img/spin/thumb-rear-left.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear" data-frame="5"><span class="thumb__img"><img src="assets/img/spin/thumb-rear.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right" data-frame="6"><span class="thumb__img"><img src="assets/img/spin/thumb-rear-right.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right" data-frame="8"><span class="thumb__img"><img src="assets/img/spin/thumb-right.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right" data-frame="9"><span class="thumb__img"><img src="assets/img/spin/thumb-front-right.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top" data-frame="top"><span class="thumb__img"><img src="assets/img/spin/thumb-top.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+  </div>
+</section>
+

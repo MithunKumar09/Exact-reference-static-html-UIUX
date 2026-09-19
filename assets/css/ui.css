@@ -1,0 +1,515 @@
+/* ============================================================================
+   03 — UI COMPONENTS
+   Every component is token-driven. Nothing here hard-codes a brand colour.
+   ========================================================================== */
+
+/* ===========================================================================
+   ICONS
+   ========================================================================= */
+.i { width: 1.8rem; height: 1.8rem; flex: none; stroke: currentColor; fill: none;
+     stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.i--xs { width: 1.3rem; height: 1.3rem; }
+.i--sm { width: 1.6rem; height: 1.6rem; }
+.i--lg { width: 2.2rem; height: 2.2rem; }
+.i--xl { width: 2.8rem; height: 2.8rem; }
+.i--fill { fill: currentColor; stroke: none; }
+
+/* ===========================================================================
+   BRAND LOCKUP
+   ========================================================================= */
+.brand { display: flex; align-items: center; gap: .9rem; flex: none; }
+.brand__mark { width: 3.6rem; height: 3.6rem; flex: none; }
+
+/* --- brand mark slot ------------------------------------------------------
+   The mark is a PNG the brand supplies, not artwork baked into the markup.
+   Both children sit in the same grid cell; :has() decides which one shows,
+   so an empty or missing src falls back to the image placeholder. Without
+   :has() support the supplied logo still renders — only the placeholder is
+   lost, which is the harmless direction. ---------------------------------- */
+.brand__logo { display: grid; place-items: center; overflow: hidden; border-radius: .5rem; }
+.brand__logo > * { grid-area: 1 / 1; }
+.brand__logoImg { width: 100%; height: 100%; object-fit: contain; }
+.brand__logoPh { display: none; }
+
+.brand__logo:not(:has(> .brand__logoImg[src]:not([src=""]))) {
+  border: .12rem dashed color-mix(in srgb, var(--c-primary-band) 40%, transparent);
+  background: color-mix(in srgb, var(--c-primary-band) 7%, transparent);
+}
+.brand__logo:not(:has(> .brand__logoImg[src]:not([src=""]))) .brand__logoImg { display: none; }
+.brand__logo:not(:has(> .brand__logoImg[src]:not([src=""]))) .brand__logoPh {
+  display: block; width: 62%; height: 62%;
+  fill: none; stroke: var(--c-primary-band); stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round; opacity: .55;
+}
+.brand--on-dark .brand__logo:not(:has(> .brand__logoImg[src]:not([src=""]))) {
+  border-color: rgba(255,255,255,.45); background: rgba(255,255,255,.08);
+}
+.brand--on-dark .brand__logo:not(:has(> .brand__logoImg[src]:not([src=""]))) .brand__logoPh {
+  stroke: #fff; opacity: .7;
+}
+.brand__text { display: flex; flex-direction: column; line-height: 1; }
+.brand__name {
+  font-size: 2.45rem; font-weight: 900; letter-spacing: -.005em;
+  color: var(--c-primary-band);
+}
+.brand__name sup { font-size: .42em; vertical-align: super; font-weight: 700; }
+.brand__tag {
+  font-size: .76rem; font-weight: 600; letter-spacing: .215em;
+  color: var(--c-primary-band); opacity: .92; margin-top: .25rem;
+}
+.brand--on-dark .brand__name, .brand--on-dark .brand__tag { color: #fff; }
+.brand--sm .brand__mark { width: 2.8rem; height: 2.8rem; }
+.brand--sm .brand__name { font-size: 1.9rem; }
+.brand--sm .brand__tag { font-size: .62rem; letter-spacing: .19em; }
+
+/* ===========================================================================
+   TOP BAR
+   ========================================================================= */
+.topbar {
+  height: 6rem; display: flex; align-items: center; gap: 2rem;
+  padding: 0 2rem 0 1.8rem; background: #FEFEFE;
+  border-bottom: .1rem solid var(--c-line-2);
+  box-shadow: 0 .1rem .4rem rgba(9, 30, 55, .06);
+  position: relative; z-index: 40;
+}
+.topbar__sep { width: .1rem; height: 3rem; background: var(--c-line); flex: none; }
+.topbar__nav { display: flex; align-items: center; gap: .4rem; }
+.topbar__link {
+  position: relative; white-space: nowrap; padding: .7rem 1.1rem; border-radius: var(--r-sm);
+  font-size: 1.35rem; font-weight: 500; color: var(--c-ink-2);
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.topbar__link:hover { color: var(--c-primary); background: var(--c-primary-softer); }
+.topbar__link.is-active { color: var(--c-primary); font-weight: 600; }
+.topbar__link.is-active::after {
+  content: ""; position: absolute; left: 1.1rem; right: 1.1rem; bottom: -.15rem;
+  height: .25rem; border-radius: var(--r-pill); background: var(--c-primary);
+}
+.topbar__search {
+  display: flex; align-items: center; gap: 1rem; width: 34rem; height: 3.8rem;
+  padding: 0 1.4rem; border-radius: var(--r-md);
+  background: #EDF2FA; border: .1rem solid #DDE7F4; color: var(--c-ink-4);
+}
+.topbar__search input { flex: 1; min-width: 0; border: 0; background: none; font-size: 1.3rem; color: var(--c-ink); }
+.topbar__search input::placeholder { color: var(--c-ink-4); }
+.topbar__search button { display: grid; place-items: center; color: var(--c-ink-3); }
+
+/* compact variant used on the deep product screens */
+.stage[data-chrome="product"] .topbar { gap: 1.4rem; padding-right: 1.4rem; }
+.stage[data-chrome="product"] .tabnav__i { font-size: 1.12rem; padding: .5rem .58rem; }
+.stage[data-chrome="product"] .tabnav__i.is-active::after { left: .58rem; right: .58rem; }
+.stage[data-chrome="product"] .brand__name { font-size: 2.15rem; }
+.stage[data-chrome="product"] .brand__tag { font-size: .68rem; letter-spacing: .2em; }
+.stage[data-chrome="product"] .brand__mark { width: 3.2rem; height: 3.2rem; }
+.stage[data-chrome="product"] .topbar .btn { --btn-h: 3.6rem; font-size: 1.28rem; padding: 0 1.4rem; }
+.topbar > * { flex: none; }
+/* …except the search field. The row's fixed cells measure ~160.5rem, so with
+   nothing elastic the trailing CTA lost its last 5px to the stage's clip at
+   every viewport width. This is the one cell that can give it back. */
+.topbar > .topbar__search { flex: 0 1 34rem; min-width: 22rem; }
+.topbar .tabnav { min-width: 0; overflow: hidden; }
+
+/* ===========================================================================
+   BUTTONS
+   ========================================================================= */
+.btn {
+  --btn-h: 4rem;
+  display: inline-flex; align-items: center; justify-content: center; gap: .8rem;
+  height: var(--btn-h); padding: 0 1.8rem; border-radius: var(--r-md);
+  font-size: 1.35rem; font-weight: 700; white-space: nowrap;
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease),
+              background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+  will-change: transform;
+}
+.btn:hover  { transform: translateY(-.1rem); }
+.btn:active { transform: translateY(0); }
+
+.btn--primary { background: var(--grad-primary); color: #fff; box-shadow: 0 .3rem .9rem var(--c-primary-ring); }
+.btn--primary:hover { box-shadow: 0 .6rem 1.6rem var(--c-primary-ring); }
+.btn--accent  { background: var(--grad-accent); color: var(--c-accent-ink); box-shadow: 0 .3rem .9rem rgba(242, 189, 31, .38); }
+.btn--deep    { background: var(--c-primary-deep); color: #fff; }
+.btn--dark    { background: var(--c-deep); color: #fff; }
+.btn--ghost   { background: #fff; color: var(--c-ink); border: .1rem solid var(--c-line); box-shadow: var(--sh-1); }
+.btn--ghost:hover { border-color: var(--c-primary); color: var(--c-primary); }
+.btn--outline { background: transparent; color: var(--c-primary); border: .15rem solid var(--c-primary); }
+.btn--sm { --btn-h: 3.2rem; font-size: 1.2rem; padding: 0 1.2rem; border-radius: var(--r-sm); }
+.btn--lg { --btn-h: 4.8rem; font-size: 1.5rem; padding: 0 2.4rem; }
+.btn--block { display: flex; width: 100%; }
+.btn--icon { width: var(--btn-h); padding: 0; }
+
+/* Disabled / demo-inactive state (used by "Add to Cart") */
+.btn[disabled], .btn.is-disabled, .btn[aria-disabled="true"] {
+  cursor: not-allowed; opacity: 1; transform: none !important;
+  background: #EEF2F7; color: #9AA9B8; border-color: #E1E8F0;
+  box-shadow: none; filter: grayscale(1);
+}
+.btn[aria-disabled="true"] .btn__note {
+  font-size: 1rem; font-weight: 600; opacity: .8;
+}
+
+/* ===========================================================================
+   PANELS  (every "panel" in the reference is real markup, never an image)
+   ========================================================================= */
+.panel {
+  background: var(--c-surface); border: .1rem solid var(--c-line);
+  border-radius: var(--r-lg); box-shadow: var(--sh-2);
+  display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden;
+}
+.panel--flat   { box-shadow: none; }
+.panel--glass  { background: var(--glass); backdrop-filter: blur(1.2rem); border-color: rgba(255,255,255,.7); box-shadow: var(--sh-3); }
+.panel--dark   { background: var(--glass-dark); backdrop-filter: blur(1rem); border-color: rgba(255,255,255,.12); color: var(--c-on-dark); }
+.panel--tint   { background: var(--c-primary-softer); border-color: var(--c-primary-soft); }
+.panel__head   { padding: 1.4rem 1.6rem 1rem; display: flex; align-items: baseline; gap: .8rem; }
+.panel__title  { font-size: 1.8rem; font-weight: 800; letter-spacing: -.01em; }
+.panel__sub    { font-size: 1.15rem; color: var(--c-ink-3); font-weight: 500; }
+.panel__body   { padding: 0 1.6rem 1.4rem; flex: 1; min-height: 0; min-width: 0; }
+.panel__foot   { padding: 1.2rem 1.6rem; border-top: .1rem solid var(--c-line-2); }
+
+/* Coloured caption bar used by the assembly / system cards */
+.panel__bar {
+  display: flex; align-items: center; gap: .8rem; padding: .7rem 1rem;
+  background: var(--bar, var(--c-primary)); color: #fff;
+  font-size: 1.25rem; font-weight: 700;
+}
+.panel__bar .num {
+  width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(255,255,255,.28); font-size: 1.1rem; font-weight: 800;
+}
+
+/* ===========================================================================
+   KEY/VALUE + SPEC LISTS
+   ========================================================================= */
+.kv { display: flex; flex-direction: column; }
+.kv__row {
+  display: flex; align-items: center; gap: 1.2rem; padding: 1.05rem .2rem;
+  border-bottom: .1rem solid var(--c-line-2);
+}
+.kv__row:last-child { border-bottom: 0; }
+.kv__ico {
+  width: 3rem; height: 3rem; flex: none; display: grid; place-items: center;
+  color: var(--c-ink-2);
+}
+.kv__txt { min-width: 0; }
+.kv__k { display: block; font-size: 1.5rem; font-weight: 800; line-height: 1.15; }
+.kv__v { display: block; font-size: 1.12rem; color: var(--c-ink-3); margin-top: .1rem; }
+
+.speclist { display: flex; flex-direction: column; gap: .1rem; }
+.speclist__row { display: flex; align-items: center; gap: 1.1rem; padding: .85rem .2rem; border-bottom: .1rem solid var(--c-line-2); }
+.speclist__row:last-child { border-bottom: 0; }
+.speclist__row .i { color: var(--c-ink-2); }
+.speclist__row b { font-size: 1.3rem; font-weight: 700; display: block; }
+.speclist__row span { font-size: 1.1rem; color: var(--c-ink-3); }
+
+/* Bulleted colour-coded feature list (schematic cards) */
+.dotlist { display: flex; flex-direction: column; gap: .5rem; }
+.dotlist li { display: flex; gap: .7rem; font-size: 1.1rem; color: var(--c-ink-2); line-height: 1.3; }
+.dotlist li::before {
+  content: ""; width: .7rem; height: .7rem; border-radius: 50%; flex: none;
+  margin-top: .45rem; background: var(--bar, var(--c-primary));
+}
+
+/* ===========================================================================
+   TABLES
+   ========================================================================= */
+.tbl { font-size: 1.15rem; }
+.tbl th, .tbl td { text-align: left; padding: .62rem .9rem; border-bottom: .1rem solid var(--c-line-2); }
+.tbl thead th { background: var(--c-primary-softer); font-weight: 700; color: var(--c-ink); font-size: 1.1rem; }
+.tbl tbody tr:nth-child(even) { background: #FAFCFE; }
+.tbl tbody tr:hover { background: var(--c-primary-softer); }
+.tbl td:last-child, .tbl th:last-child { color: var(--c-ink-2); }
+.tbl--spec td:first-child { color: var(--c-ink-2); }
+.tbl--spec td:last-child { font-weight: 600; }
+
+/* ===========================================================================
+   BADGES / CHIPS / TAGS
+   ========================================================================= */
+.badge {
+  display: inline-flex; align-items: center; gap: .4rem; height: 2.2rem;
+  padding: 0 .9rem; border-radius: .5rem; font-size: 1.1rem; font-weight: 700;
+  background: var(--c-primary); color: #fff;
+}
+.badge--bestseller { background: var(--c-bestseller); color: #3A2B00; }
+.badge--new        { background: var(--c-new); }
+.badge--popular    { background: var(--c-popular); }
+.badge--special    { background: var(--c-special); }
+.badge--heavy      { background: var(--c-heavy); }
+.badge--value      { background: var(--c-value); }
+.badge--premium    { background: var(--c-premium); color: #3A2B00; }
+.badge--orchard    { background: var(--c-orchard); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: .6rem; height: 3.4rem;
+  padding: 0 1.6rem; border-radius: var(--r-md); font-size: 1.25rem; font-weight: 600;
+  background: #fff; border: .1rem solid var(--c-line); color: var(--c-ink-2);
+  box-shadow: var(--sh-1); transition: all var(--t-fast) var(--ease);
+}
+.chip:hover { border-color: var(--c-primary); color: var(--c-primary); }
+.chip.is-active { background: var(--c-primary); border-color: var(--c-primary); color: #fff; box-shadow: 0 .3rem .9rem var(--c-primary-ring); }
+
+/* trust strip item ("Higher Productivity", "Rugged & Reliable"…) */
+.trust { display: flex; align-items: center; gap: 2rem; }
+.trust__item { display: flex; align-items: center; gap: .8rem; font-size: 1.2rem; font-weight: 600; line-height: 1.15; }
+.trust__item .i { color: currentColor; opacity: .9; }
+.trust__sep { width: .1rem; height: 2.6rem; background: currentColor; opacity: .2; }
+
+/* ===========================================================================
+   HOTSPOTS   (reference: HOTSPOT-refer-image-1)
+   ========================================================================= */
+.hotlayer { position: absolute; inset: 0; pointer-events: none; }
+.hotlayer .hotspot { pointer-events: auto; }
+
+.hotspot {
+  position: absolute; transform: translate(-50%, -50%);
+  display: flex; align-items: center; gap: .8rem;
+  z-index: 5;
+}
+.hotspot[data-side="left"] { flex-direction: row-reverse; }
+
+.hotspot__dot {
+  position: relative; width: 3rem; height: 3rem; flex: none; border-radius: 50%;
+  display: grid; place-items: center; color: #fff;
+  background: radial-gradient(circle at 35% 30%, #3D96FF, var(--c-primary) 60%, var(--c-primary-lo));
+  box-shadow: 0 0 0 .3rem rgba(255,255,255,.92), 0 .4rem 1.2rem rgba(4,60,130,.45);
+  transition: transform var(--t-base) var(--ease-out);
+}
+.hotspot__dot::before {
+  content: ""; position: absolute; inset: -.3rem; border-radius: 50%;
+  border: .2rem solid var(--c-primary); opacity: .55;
+  animation: hot-pulse 2.4s var(--ease-out) infinite;
+}
+@keyframes hot-pulse {
+  0%   { transform: scale(1);   opacity: .55; }
+  70%  { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+.hotspot:hover .hotspot__dot, .hotspot.is-open .hotspot__dot { transform: scale(1.12); }
+.hotspot__dot .i { width: 1.6rem; height: 1.6rem; stroke-width: 2.6; }
+/* Invisible tap ring. Keeps every marker at a ~44px target on touch without
+   inflating the mark itself, which is what made the phone dots read oversized. */
+.hotspot__dot::after {
+  content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 4.4rem; height: 4.4rem; border-radius: 50%;
+}
+
+/* small dark label chip (360° screen) */
+.hotspot__chip {
+  padding: .5rem 1rem; border-radius: .7rem; background: #3C4955; color: #fff;
+  font-size: 1.15rem; font-weight: 600; white-space: nowrap;
+  box-shadow: var(--sh-2);
+}
+/* white label card (Exterior / Engine / Features screens) */
+.hotspot__note {
+  max-width: 17rem; padding: .7rem 1rem; border-radius: .8rem;
+  background: #fff; box-shadow: var(--sh-2); border: .1rem solid rgba(255,255,255,.9);
+}
+.hotspot__note b { display: block; font-size: 1.2rem; font-weight: 700; line-height: 1.15; }
+.hotspot__note span { display: block; font-size: 1.05rem; color: var(--c-ink-3); line-height: 1.25; margin-top: .15rem; }
+
+/* rich popup card (opens on click) */
+.hotcard {
+  position: absolute; left: 0; top: 0; width: 21rem; z-index: 60;
+  background: #fff; border-radius: var(--r-lg); box-shadow: var(--sh-4);
+  overflow: hidden; transform-origin: top left;
+  /* the card sits inside .hotlayer, which is click-through */
+  pointer-events: auto;
+  animation: hot-in var(--t-base) var(--ease-out) both;
+}
+@keyframes hot-in { from { opacity: 0; transform: scale(.94) translateY(.6rem); } to { opacity: 1; transform: none; } }
+.hotcard__close {
+  position: absolute; top: .8rem; right: .8rem; width: 2.2rem; height: 2.2rem;
+  border-radius: 50%; display: grid; place-items: center; color: var(--c-ink-3);
+  background: rgba(255,255,255,.9); z-index: 2;
+}
+.hotcard__close:hover { background: var(--c-line-2); color: var(--c-ink); }
+.hotcard__media {
+  position: relative; height: 9.6rem; overflow: hidden;
+  background: linear-gradient(180deg, #F6F9FD, #E9F1F9);
+}
+/* absolute + explicit box: a percentage height cannot resolve against an
+   auto-sized grid row, which lets the artwork spill over the copy. */
+.hotcard__media img {
+  position: absolute; inset: .8rem;
+  width: calc(100% - 1.6rem); height: calc(100% - 1.6rem);
+  object-fit: contain;
+}
+.hotcard__body { padding: 1.1rem 1.3rem 1.4rem; }
+.hotcard__title { font-size: 1.6rem; font-weight: 800; color: var(--c-primary); margin-bottom: .5rem; }
+.hotcard__text  { font-size: 1.15rem; line-height: 1.42; color: var(--c-ink-2); }
+
+/* ===========================================================================
+   VIEW CONTROL STACK  (Full Screen / Auto Rotate / Reset View)
+   ========================================================================= */
+.ctrlstack {
+  position: absolute; display: flex; flex-direction: column;
+  background: var(--glass); backdrop-filter: blur(1rem);
+  border-radius: var(--r-lg); box-shadow: var(--sh-3); overflow: hidden; z-index: 20;
+}
+.ctrlstack__btn {
+  display: grid; place-items: center; gap: .3rem; width: 9.6rem; padding: 1.2rem .6rem;
+  font-size: 1.1rem; font-weight: 600; color: var(--c-ink-2);
+  border-bottom: .1rem solid var(--c-line-2);
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.ctrlstack__btn:last-child { border-bottom: 0; }
+.ctrlstack__btn:hover { background: var(--c-primary-softer); color: var(--c-primary); }
+.ctrlstack__btn.is-on { background: var(--c-primary-soft); color: var(--c-primary); }
+.ctrlstack__btn .i { width: 2.4rem; height: 2.4rem; }
+
+/* floating glass hint pill ("Drag to rotate") */
+.hintpill {
+  position: absolute; display: flex; align-items: center; gap: 1.1rem; z-index: 20;
+  padding: 1.1rem 1.6rem; border-radius: var(--r-lg);
+  background: var(--glass-dark); backdrop-filter: blur(.8rem);
+  color: #fff; box-shadow: var(--sh-3);
+}
+.hintpill__t { display: block; font-size: 1.35rem; font-weight: 600; }
+.hintpill__s { display: block; font-size: 1.1rem; opacity: .8; }
+
+/* dark identity plate ("STANDARD · TRUST | DURABILITY | PERFORMANCE") */
+.plate {
+  position: absolute; z-index: 20; padding: 1rem 2.4rem; border-radius: var(--r-md);
+  background: var(--glass-dark); backdrop-filter: blur(.8rem); color: #fff;
+  box-shadow: var(--sh-3); text-align: center;
+}
+.plate__t { display: block; font-size: 2rem; font-weight: 800; letter-spacing: .02em; line-height: 1.1; }
+.plate__s { display: block; font-size: 1.05rem; letter-spacing: .1em; opacity: .85; margin-top: .2rem; }
+.plate--row { display: flex; align-items: center; gap: 1.4rem; text-align: left; }
+
+/* ===========================================================================
+   THUMB STRIP  (bottom angle selector)
+   ========================================================================= */
+.thumbstrip {
+  display: flex; align-items: stretch; gap: .8rem; padding: .8rem 1rem;
+  background: #F2F5F8; border-top: .1rem solid var(--c-line);
+}
+.thumb {
+  flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center;
+  gap: .2rem; padding: .5rem .3rem .4rem; border-radius: var(--r-md);
+  background: #fff; border: .15rem solid #E7EDF4; box-shadow: var(--sh-1);
+  transition: border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.thumb:hover { transform: translateY(-.2rem); box-shadow: var(--sh-2); border-color: #C9DCF2; }
+.thumb.is-active { border-color: var(--c-primary); box-shadow: 0 0 0 .1rem var(--c-primary), var(--sh-2); }
+.thumb__img { flex: 1; min-height: 0; width: 100%; position: relative; overflow: hidden; }
+.thumb__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.thumb__label { font-size: 1.05rem; font-weight: 600; color: var(--c-ink-2); line-height: 1.1; text-align: center; }
+.thumb.is-active .thumb__label { color: var(--c-primary); }
+
+/* ===========================================================================
+   FOOTER BAR
+   ========================================================================= */
+.footbar {
+  height: 7.6rem; display: flex; align-items: center; gap: 2.4rem;
+  padding: 0 2.4rem; background: var(--c-footer); color: var(--c-on-dark);
+  position: relative; overflow: hidden; z-index: 30;
+}
+.footbar--alt { background: var(--c-footer-alt); }
+.footbar__items { display: flex; align-items: center; gap: 2.4rem; flex: 1; }
+.footbar__item { display: flex; align-items: center; gap: .9rem; font-size: 1.22rem; line-height: 1.2; }
+.footbar__item .i { opacity: .9; }
+.footbar__sep { width: .1rem; height: 3.2rem; background: rgba(255,255,255,.16); }
+.footbar__flash {
+  position: absolute; right: 0; top: 0; bottom: 0; width: 26rem;
+  background: var(--grad-accent); clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+  display: grid; place-items: center; padding-left: 3rem;
+}
+
+/* ===========================================================================
+   BREADCRUMB
+   ========================================================================= */
+.crumbs { display: flex; align-items: center; gap: .7rem; font-size: 1.2rem; color: var(--c-ink-3); }
+.crumbs a:hover { color: var(--c-primary); }
+.crumbs .i { width: 1.2rem; height: 1.2rem; opacity: .6; }
+.crumbs b { color: var(--c-ink); font-weight: 600; }
+.crumbs--on-dark { color: rgba(255,255,255,.75); }
+.crumbs--on-dark b { color: #fff; }
+
+/* ===========================================================================
+   STAT TILE  (Key Features at a Glance grid)
+   ========================================================================= */
+.stat {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .5rem; padding: 1.1rem .6rem; text-align: center;
+  border-radius: var(--r-md); background: var(--c-surface);
+  border: .1rem solid var(--c-line-2);
+}
+.stat .i { color: var(--c-primary); }
+.stat__v { font-size: 1.5rem; font-weight: 800; line-height: 1.05; }
+.stat__l { font-size: 1.1rem; color: var(--c-ink-3); line-height: 1.2; }
+
+/* circular icon tile (Key Highlights) */
+.hltile { display: flex; flex-direction: column; align-items: center; gap: .6rem; text-align: center; padding: .6rem .3rem; }
+.hltile__ico {
+  width: 4.4rem; height: 4.4rem; border-radius: 50%; display: grid; place-items: center;
+  background: var(--c-primary-softer); border: .12rem solid var(--c-primary-soft); color: var(--c-primary);
+}
+.hltile__t { font-size: 1.15rem; font-weight: 700; line-height: 1.2; }
+.hltile__s { font-size: 1.05rem; color: var(--c-ink-3); line-height: 1.15; }
+
+/* ===========================================================================
+   MEDIA FRAME (rounded media with label overlay)
+   ========================================================================= */
+.mframe { display: block; position: relative; border-radius: var(--r-md); overflow: hidden; background: #DCE6F0; }
+.mframe img, .mframe video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mframe--fit { background: linear-gradient(180deg, #F5F9FD, #E4EDF7); }
+.mframe--fit img { object-fit: contain; padding: .8rem; }
+.mframe__cap {
+  position: absolute; left: .8rem; bottom: .8rem; padding: .35rem .8rem;
+  border-radius: .5rem; background: rgba(9,30,55,.72); color: #fff;
+  font-size: 1.05rem; font-weight: 600; backdrop-filter: blur(.4rem);
+}
+.mframe__play {
+  position: absolute; inset: 0; margin: auto; width: 5.4rem; height: 5.4rem;
+  border-radius: 50%; display: grid; place-items: center;
+  background: rgba(255,255,255,.28); border: .25rem solid rgba(255,255,255,.9);
+  color: #fff; backdrop-filter: blur(.4rem);
+  transition: transform var(--t-base) var(--ease-out), background var(--t-base) var(--ease);
+}
+.mframe:hover .mframe__play { transform: scale(1.08); background: rgba(255,255,255,.4); }
+.mframe__dur {
+  position: absolute; right: .7rem; bottom: .7rem; padding: .2rem .6rem; border-radius: .4rem;
+  background: rgba(0,0,0,.7); color: #fff; font-size: 1rem; font-weight: 600;
+}
+
+/* ===========================================================================
+   ANGLED HEADER BAND (STANDARD DI 470 — used on diagram screens)
+   ========================================================================= */
+.band {
+  position: absolute; top: 0; right: 0; height: 8.6rem; padding: 1.2rem 2.4rem 1.2rem 6rem;
+  display: flex; flex-direction: column; justify-content: center;
+  background: var(--grad-band); color: #fff;
+  clip-path: polygon(5.2rem 0, 100% 0, 100% 100%, 0 100%);
+}
+.band__t { font-size: 2.6rem; font-weight: 900; font-style: italic; letter-spacing: .01em; line-height: 1; }
+.band__s { font-size: 1.15rem; font-weight: 700; font-style: italic; line-height: 1.25; margin-top: .4rem; opacity: .95; }
+.band__rule { width: 100%; height: .3rem; background: var(--c-accent); margin: .35rem 0; border-radius: var(--r-pill); }
+
+/* ===========================================================================
+   SEGMENTED TAB NAV (used above diagram screens)
+   ========================================================================= */
+.tabnav { display: flex; align-items: center; gap: .1rem; }
+.tabnav__i {
+  position: relative; padding: .6rem .8rem; font-size: 1.18rem; font-weight: 500;
+  color: var(--c-ink-2); border-radius: var(--r-sm); white-space: nowrap;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.tabnav__i:hover { background: var(--c-primary-softer); color: var(--c-primary); }
+.tabnav__i.is-active { color: var(--c-primary); font-weight: 700; }
+.tabnav__i.is-active::after {
+  content: ""; position: absolute; left: .8rem; right: .8rem; bottom: -.5rem;
+  height: .25rem; background: var(--c-primary); border-radius: var(--r-pill);
+}
+
+/* ===========================================================================
+   TOASTS (demo feedback for inactive controls)
+   ========================================================================= */
+.toaster { position: fixed; left: 50%; bottom: 3rem; transform: translateX(-50%); z-index: 200;
+           display: flex; flex-direction: column; gap: .8rem; align-items: center; pointer-events: none; }
+.toast {
+  padding: 1rem 1.8rem; border-radius: var(--r-pill); background: var(--c-deep); color: #fff;
+  font-size: 1.3rem; font-weight: 600; box-shadow: var(--sh-4);
+  animation: toast-in var(--t-base) var(--ease-out) both;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(1.2rem); } to { opacity: 1; transform: none; } }
+.toast.is-out { animation: toast-out var(--t-base) var(--ease) both; }
+@keyframes toast-out { to { opacity: 0; transform: translateY(.8rem); } }

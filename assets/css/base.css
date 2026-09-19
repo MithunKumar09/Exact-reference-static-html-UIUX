@@ -1,0 +1,141 @@
+/* ============================================================================
+   02 — BASE :: reset, 16:9 stage, typography primitives
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* --- The 16:9 scaling root -------------------------------------------------
+   Screens are drawn on a 160 x 90 unit canvas and every dimension in this
+   project is expressed in rem, so the whole UI scales as one piece with no
+   blurry transforms.
+
+   The scale follows viewport WIDTH and stops at the 1440px design frame:
+   1rem === 9px puts the stage at exactly 1440 wide. Below the frame the stage
+   fills the window edge to edge — no letterboxing to the shorter axis, and a
+   window shorter than 9/16 of its width scrolls the last strip into view. At
+   or above it the scale holds and the stage sits centred as a fixed-width
+   content container while the page background runs on to any monitor width,
+   rather than the UI stretching to 1920 and beyond.                        */
+html {
+  font-size: min(calc(100vw / 160), 9px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 100vw counts the classic scrollbar but the layout box does not, so a visible
+   gutter would make every rem-sized shell element 15px wider than the stage it
+   sits in — the top bar loses its last button. Take the gutter out of play on
+   the fixed-canvas breakpoint only; wheel, trackpad, keyboard and touch
+   scrolling are untouched, and tablet/phone keep their normal scrollbar. */
+@media (min-width: 1101px) and (orientation: landscape) {
+  html, body { scrollbar-width: none; }
+  html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
+}
+
+body {
+  font-family: var(--ff-ui);
+  font-size: 1.4rem;
+  line-height: 1.45;
+  color: var(--c-ink);
+  background: var(--c-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* centres the capped stage on a wide display; `safe` keeps the top edge
+     reachable when the window is shorter than the stage. */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-items: safe center;
+}
+
+img, svg, video, canvas { display: block; max-width: 100%; }
+img { border-style: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+table { border-collapse: collapse; width: 100%; }
+[hidden] { display: none !important; }
+:focus-visible { outline: .3rem solid var(--c-primary-ring); outline-offset: .2rem; }
+
+/* --- Stage ---------------------------------------------------------------- */
+/* Width tracks the window up to the 1440px design frame; height stays locked
+   to it at 16:9 so every screen keeps the row budget it was designed against.
+   Past the frame it reads as a centred fixed-width container against a page
+   background that keeps going. */
+.stage {
+  position: relative;
+  flex: none;
+  width: 100%;
+  max-width: var(--canvas-w);
+  height: var(--canvas-h);
+  margin-inline: auto;
+  background: var(--c-canvas);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  isolation: isolate;
+}
+/* Only meaningful once the page is wider than the design frame — it gives the
+   container an edge instead of letting it float on a flat field. */
+@media (min-width: 1441px) {
+  .stage { box-shadow: 0 0 0 1px rgba(9,30,55,.07), 0 24px 64px rgba(9,30,55,.16); }
+}
+
+/* --- Screens -------------------------------------------------------------- */
+.screen { display: none; min-height: 0; height: 100%; }
+.screen.is-active { display: grid; animation: screen-in var(--t-slow) var(--ease-out) both; }
+@keyframes screen-in { from { opacity: 0; transform: translateY(.8rem); } to { opacity: 1; transform: none; } }
+
+/* --- Type scale ----------------------------------------------------------- */
+.t-display  { font-size: 5.4rem; font-weight: 800; line-height: .98; letter-spacing: -.02em; }
+.t-h1       { font-size: 4.0rem; font-weight: 800; line-height: 1.02; letter-spacing: -.02em; }
+.t-h2       { font-size: 2.8rem; font-weight: 800; line-height: 1.1;  letter-spacing: -.015em; }
+.t-h3       { font-size: 2.0rem; font-weight: 700; line-height: 1.15; letter-spacing: -.01em; }
+.t-h4       { font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
+.t-body     { font-size: 1.4rem; font-weight: 400; color: var(--c-ink-2); }
+.t-sm       { font-size: 1.25rem; }
+.t-xs       { font-size: 1.1rem; }
+.t-muted    { color: var(--c-ink-3); }
+.t-eyebrow  { font-size: 1.1rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--c-ink-4); }
+
+/* --- Handwritten brand script (Fields Today / Powering Progress) ---------- */
+.script {
+  font-family: var(--ff-script);
+  font-weight: 700;
+  color: var(--c-primary-band);
+  line-height: .92;
+  transform: rotate(-6deg);
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+}
+.script--light { color: #fff; }
+.script__swoosh { display: block; width: 100%; height: .9rem; margin-top: .4rem; }
+.script__swoosh path { fill: var(--c-accent); }
+
+/* --- Utilities ------------------------------------------------------------ */
+.u-row     { display: flex; align-items: center; }
+.u-col     { display: flex; flex-direction: column; }
+.u-between { display: flex; align-items: center; justify-content: space-between; }
+.u-grow    { flex: 1 1 auto; min-width: 0; min-height: 0; }
+.u-nowrap  { white-space: nowrap; }
+.u-clip    { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.u-sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* --- Scrollbars (panel internals) ---------------------------------------- */
+.scroll-y { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.scroll-y::-webkit-scrollbar { width: .5rem; height: .5rem; }
+.scroll-y::-webkit-scrollbar-thumb { background: #C7D6E4; border-radius: var(--r-pill); }
+.scroll-y::-webkit-scrollbar-track { background: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}

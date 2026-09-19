@@ -1,0 +1,278 @@
+{
+ "_comment": [
+  "Hand-authored marker KEYFRAMES for the 360 spin set.",
+  "",
+  "Eight keyframes, one per named view, evenly spaced around the turn:",
+  "front - front-left - left - rear-left - rear - rear-right - right - front-right.",
+  "build-hotspots.py interpolates these around the ring to whatever frame count",
+  "the spin set actually has, so going from 16 to 48 frames costs nothing here.",
+  "",
+  "space = 'bbox': coordinates are a fraction of THE PRODUCT'S OWN BOUNDS in",
+  "that frame, x 0=left 1=right, y 0=top 1=bottom. Deliberately not a fraction",
+  "of the frame: re-packing the set would then silently move every marker off",
+  "the part it names. Against the product's own box they are invariant.",
+  "",
+  "null = not visible from that view. A marker is drawn only where BOTH",
+  "surrounding keyframes agree it is visible, so it fades out of the turn at a",
+  "sensible place instead of blinking.",
+  "",
+  "Positions were read off a 10% coordinate grid laid over each named view.",
+  "Re-run tools/build-hotspots.py after editing."
+ ],
+ "space": "bbox",
+ "keyframes": 8,
+ "views": [
+  "front",
+  "front-left",
+  "left",
+  "rear-left",
+  "rear",
+  "rear-right",
+  "right",
+  "front-right"
+ ],
+ "pos": {
+  "exhaust": [
+   [
+    0.3069,
+    0.1126
+   ],
+   [
+    0.2823,
+    0.0226
+   ],
+   [
+    0.3263,
+    0.1635
+   ],
+   [
+    0.2778,
+    0.1217
+   ],
+   [
+    0.3665,
+    0.0502
+   ],
+   [
+    0.6652,
+    0.0616
+   ],
+   [
+    0.6771,
+    0.1245
+   ],
+   [
+    0.6029,
+    0.1228
+   ]
+  ],
+  "air": [
+   [
+    0.2295,
+    0.1535
+   ],
+   [
+    0.1505,
+    0.0877
+   ],
+   [
+    0.1996,
+    0.2247
+   ],
+   [
+    0.195,
+    0.1933
+   ],
+   null,
+   null,
+   [
+    0.7988,
+    0.1778
+   ],
+   null
+  ],
+  "grille": [
+   [
+    0.1742,
+    0.4496
+   ],
+   [
+    0.1302,
+    0.4243
+   ],
+   [
+    0.0519,
+    0.5
+   ],
+   [
+    0.0915,
+    0.4387
+   ],
+   null,
+   null,
+   [
+    0.9155,
+    0.4447
+   ],
+   [
+    0.9117,
+    0.4496
+   ]
+  ],
+  "engine": [
+   [
+    0.412,
+    0.5619
+   ],
+   [
+    0.399,
+    0.522
+   ],
+   [
+    0.2894,
+    0.6224
+   ],
+   [
+    0.2416,
+    0.5613
+   ],
+   null,
+   [
+    0.9043,
+    0.3985
+   ],
+   [
+    0.7227,
+    0.5621
+   ],
+   [
+    0.7264,
+    0.5517
+   ]
+  ],
+  "operator": [
+   [
+    0.6111,
+    0.2964
+   ],
+   [
+    0.5816,
+    0.2072
+   ],
+   [
+    0.6271,
+    0.347
+   ],
+   [
+    0.5522,
+    0.2444
+   ],
+   [
+    0.5006,
+    0.2649
+   ],
+   [
+    0.4154,
+    0.1943
+   ],
+   [
+    0.3576,
+    0.2632
+   ],
+   [
+    0.325,
+    0.276
+   ]
+  ],
+  "hyd": [
+   null,
+   null,
+   [
+    0.8909,
+    0.5
+   ],
+   [
+    0.8421,
+    0.6227
+   ],
+   [
+    0.5006,
+    0.6636
+   ],
+   [
+    0.1816,
+    0.521
+   ],
+   [
+    0.0533,
+    0.7115
+   ],
+   null
+  ],
+  "ftyre": [
+   [
+    0.4562,
+    0.8069
+   ],
+   [
+    0.4396,
+    0.7826
+   ],
+   [
+    0.1363,
+    0.7753
+   ],
+   [
+    0.1018,
+    0.7147
+   ],
+   null,
+   [
+    0.9097,
+    0.6027
+   ],
+   [
+    0.8495,
+    0.7755
+   ],
+   [
+    0.8396,
+    0.7253
+   ]
+  ],
+  "rtyre": [
+   [
+    0.8544,
+    0.6231
+   ],
+   [
+    0.8352,
+    0.5546
+   ],
+   [
+    0.7432,
+    0.704
+   ],
+   [
+    0.4487,
+    0.6022
+   ],
+   [
+    0.918,
+    0.6227
+   ],
+   [
+    0.4686,
+    0.5517
+   ],
+   [
+    0.2967,
+    0.6688
+   ],
+   [
+    0.2118,
+    0.6231
+   ]
+  ]
+ }
+}

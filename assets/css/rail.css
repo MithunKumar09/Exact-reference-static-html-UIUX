@@ -1,0 +1,108 @@
+/* ============================================================================
+   04 — MASTER DASHBOARD RAIL
+   Collapsed = icons only.  Hover (or focus, or tap on touch) = full menu.
+   The rail is an OVERLAY: expanding it never reflows the 16:9 layout.
+   ========================================================================== */
+
+.stage__main { position: relative; min-height: 0; display: flex; }
+
+.rail {
+  --rail-w: 6.4rem;
+  --rail-w-open: 20.4rem;
+  position: absolute; inset: 0 auto 0 0; z-index: 50;
+  width: var(--rail-w);
+  display: flex; flex-direction: column;
+  background: linear-gradient(180deg, #0C2742 0%, #0A2540 55%, #0B2B49 100%);
+  color: #fff;
+  box-shadow: .2rem 0 1.6rem rgba(6, 22, 40, .22);
+  transition: width var(--t-base) var(--ease-out);
+  overflow: hidden;
+}
+.rail:hover, .rail:focus-within, .rail.is-open { width: var(--rail-w-open); }
+
+/* ---- header ------------------------------------------------------------- */
+.rail__head {
+  padding: 1rem 1.6rem .9rem; height: 6rem; flex: none;
+  display: flex; flex-direction: column; justify-content: center;
+  white-space: nowrap; overflow: hidden;
+  opacity: 0; transition: opacity var(--t-fast) var(--ease);
+}
+.rail:hover .rail__head, .rail.is-open .rail__head, .rail:focus-within .rail__head { opacity: 1; }
+.rail__eyebrow { font-size: 1.35rem; font-weight: 500; color: #7E93AC; line-height: 1; }
+.rail__title   { font-size: 2.1rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.1; margin-top: .1rem; }
+.rail__badge {
+  width: 3.2rem; height: 3.2rem; border-radius: var(--r-sm); display: grid; place-items: center;
+  background: rgba(255,255,255,.1); font-size: 1.15rem; font-weight: 800; letter-spacing: .02em;
+}
+
+/* ---- nav ---------------------------------------------------------------- */
+.rail__nav { flex: 1; min-height: 0; padding: 0 .9rem; display: flex; flex-direction: column; gap: .15rem; overflow: hidden; }
+.rail__item {
+  position: relative; display: flex; align-items: center; gap: 1.2rem;
+  height: 3.4rem; padding: 0 1rem; border-radius: var(--r-sm); flex: none;
+  color: #DCE7F3; font-size: 1.38rem; font-weight: 500; white-space: nowrap; overflow: hidden;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.rail__item .i { width: 2.05rem; height: 2.05rem; flex: none; margin-left: .05rem; }
+.rail__item span { opacity: 0; transform: translateX(-.4rem); transition: opacity var(--t-fast) var(--ease), transform var(--t-base) var(--ease-out); }
+.rail:hover .rail__item span,
+.rail:focus-within .rail__item span,
+.rail.is-open .rail__item span { opacity: 1; transform: none; }
+.rail__item:hover { background: rgba(255,255,255,.09); color: #fff; }
+.rail__item.is-active { background: var(--c-primary); color: #fff; font-weight: 600; box-shadow: 0 .3rem 1rem rgba(0,104,254,.42); }
+
+/* ---- footer help block -------------------------------------------------- */
+.rail__foot { padding: .8rem .9rem .9rem; display: flex; flex-direction: column; gap: .6rem; flex: none; }
+.rail__help {
+  display: flex; align-items: center; gap: 1.1rem; padding: .9rem 1rem;
+  border-radius: var(--r-sm); background: rgba(255,255,255,.07);
+}
+.rail__help { overflow: hidden; }
+.rail__help .i { width: 2.4rem; height: 2.4rem; flex: none; }
+.rail__help div { white-space: nowrap; opacity: 0; transition: opacity var(--t-fast) var(--ease); }
+.rail:hover .rail__help div, .rail.is-open .rail__help div, .rail:focus-within .rail__help div { opacity: 1; }
+.rail__help b { display: block; font-size: 1.2rem; font-weight: 700; line-height: 1.2; }
+.rail__help span { display: block; font-size: 1.2rem; line-height: 1.2; color: #CFE0F0; }
+.rail__cta {
+  display: flex; align-items: center; justify-content: center; gap: .6rem; height: 3.6rem;
+  border-radius: var(--r-sm); background: #5BA0E0; color: #fff; font-size: 1.3rem; font-weight: 600;
+  white-space: nowrap; overflow: hidden; transition: background var(--t-fast) var(--ease);
+}
+.rail__cta > * { flex: none; }
+.rail__cta { opacity: 0; transition: opacity var(--t-fast) var(--ease), background var(--t-fast) var(--ease); }
+.rail:hover .rail__cta, .rail.is-open .rail__cta, .rail:focus-within .rail__cta { opacity: 1; }
+.rail__cta:hover { background: #6FB0EA; }
+
+/* ---- glass skin (screens that float the menu over imagery) -------------- */
+.stage[data-rail="glass"] .rail {
+  inset: 1.4rem auto auto 1.4rem; bottom: auto; height: auto; max-height: calc(100% - 2.8rem);
+  border-radius: var(--r-lg);
+  background: rgba(255, 255, 255, .93);
+  backdrop-filter: blur(1.4rem);
+  color: var(--c-ink);
+  box-shadow: var(--sh-3);
+}
+.stage[data-rail="glass"] .rail__head { display: none; }
+.stage[data-rail="glass"] .rail__nav { padding: .8rem; gap: .1rem; }
+.stage[data-rail="glass"] .rail__item { color: var(--c-ink-2); border-bottom: .1rem solid var(--c-line-2); border-radius: var(--r-sm); }
+.stage[data-rail="glass"] .rail__item:last-of-type { border-bottom: 0; }
+.stage[data-rail="glass"] .rail__item:hover { background: var(--c-primary-softer); color: var(--c-primary); }
+.stage[data-rail="glass"] .rail__item.is-active { background: var(--c-primary); color: #fff; border-bottom-color: transparent; }
+.stage[data-rail="glass"] .rail__foot { display: none; }
+
+/* ---- content offset ----------------------------------------------------- */
+.screens { flex: 1; min-width: 0; min-height: 0; margin-left: 6.4rem; position: relative; }
+.stage[data-rail="glass"] .screens { margin-left: 0; }
+
+/* ---- expand affordance -------------------------------------------------- */
+.rail::after {
+  content: ""; position: absolute; right: .5rem; top: 50%; width: .3rem; height: 3.2rem;
+  border-radius: var(--r-pill); background: rgba(255,255,255,.22); transform: translateY(-50%);
+  transition: opacity var(--t-fast) var(--ease); pointer-events: none;
+}
+.rail:hover::after, .rail.is-open::after, .rail:focus-within::after { opacity: 0; }
+.stage[data-rail="glass"] .rail::after { background: rgba(12,39,66,.18); }
+
+/* ---- no rail (corporate screens: listing, compare) ---------------------- */
+.stage[data-rail="none"] .rail { display: none; }
+.stage[data-rail="none"] .screens { margin-left: 0; }

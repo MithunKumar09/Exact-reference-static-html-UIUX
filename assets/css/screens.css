@@ -1,0 +1,383 @@
+/* ============================================================================
+   05 — SCREEN LAYOUTS
+   One block per screen, in the same order as the <section>s in index.html.
+   Heights are budgeted against the 76.4rem tall content band of the 16:9 stage.
+   ========================================================================== */
+
+/* ===========================================================================
+   01 · PRODUCT LISTING
+   ========================================================================= */
+.sc-listing { grid-template-rows: 16.4rem 3.2rem minmax(0,1fr); }
+
+.lst__hero {
+  position: relative; overflow: hidden;
+  background: var(--bg-hero) center 34% / cover no-repeat;
+}
+.lst__hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(96deg, rgba(243,248,253,.97) 0%, rgba(243,248,253,.93) 30%, rgba(243,248,253,.35) 50%, rgba(243,248,253,0) 62%);
+}
+.lst__heroText { position: absolute; left: 4rem; top: 1.7rem; z-index: 2; }
+.lst__heroTitle { font-size: 3.5rem; font-weight: 800; line-height: 1.02; letter-spacing: -.02em; color: #0B3F7E; }
+.lst__heroTitle b { color: #022451; font-weight: 900; }
+.lst__heroSub { font-size: 1.7rem; font-weight: 700; color: #0B3F7E; margin-top: .5rem; }
+.lst__trust { margin-top: 1.4rem; color: #12365F; gap: 1.6rem; }
+.lst__trust .trust__item .i { color: #0B4F9E; }
+.lst__heroImg {
+  position: absolute; right: 15rem; bottom: -1rem; height: 15rem; width: auto;
+  object-fit: contain; filter: drop-shadow(0 1.2rem 1.6rem rgba(10,40,70,.28));
+}
+.lst__script { position: absolute; right: 2.4rem; top: 2rem; width: 17rem; font-size: 1.9rem; z-index: 3; }
+
+.lst__crumbbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 4rem; background: #fff; border-bottom: .1rem solid var(--c-line-2);
+}
+
+.lst__body {
+  display: grid; grid-template-columns: 23rem 1fr; gap: 1.6rem;
+  padding: 1.1rem 2.2rem; background: var(--c-canvas); min-height: 0;
+}
+
+/* filters ---------------------------------------------------------------- */
+.lst__filters { padding: 1.4rem 1.4rem 1.2rem; gap: 1rem; }
+.lst__filtersHead { flex: none; }
+.lst__clear { font-size: 1.2rem; font-weight: 600; color: var(--c-primary); text-decoration: underline; }
+.lst__filtersBody { flex: 1; min-height: 0; padding-right: .4rem; }
+.fgroup { padding: .9rem 0; border-bottom: .1rem solid var(--c-line-2); }
+.fgroup:last-child { border-bottom: 0; }
+.fgroup__h {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 1.35rem; font-weight: 700; margin-bottom: .5rem; color: var(--c-ink);
+}
+.fopt { display: flex; align-items: center; gap: .8rem; padding: .3rem 0; font-size: 1.22rem; color: var(--c-ink-2); cursor: pointer; }
+.fopt input { width: 1.5rem; height: 1.5rem; accent-color: var(--c-primary); cursor: pointer; }
+.fopt i { font-style: normal; color: var(--c-ink-4); font-size: 1.15rem; }
+.lst__apply { flex: none; }
+
+/* catalogue --------------------------------------------------------------- */
+.lst__main { display: grid; grid-template-rows: auto auto 1fr; gap: 1rem; min-height: 0; }
+.lst__title { font-size: 3rem; font-weight: 800; letter-spacing: -.025em; color: #0B3F7E; line-height: 1.05; }
+.lst__lead { font-size: 1.35rem; color: var(--c-ink-2); margin-top: .3rem; }
+.lst__tools { display: flex; align-items: center; gap: 1rem; }
+.lst__search {
+  display: flex; align-items: center; gap: .8rem; flex: 1 1 auto; max-width: 34rem; height: 4rem;
+  padding: 0 1.2rem; border-radius: var(--r-md); background: #fff; border: .1rem solid var(--c-line); color: var(--c-ink-4);
+}
+.lst__search input { flex: 1; min-width: 0; border: 0; background: none; font-size: 1.25rem; }
+.lst__toolLbl { font-size: 1.25rem; color: var(--c-ink-2); font-weight: 500; }
+.lst__select {
+  height: 4rem; min-width: 12.5rem; padding: 0 1rem; border-radius: var(--r-md);
+  background: #fff; border: .1rem solid var(--c-line); font-size: 1.25rem; cursor: pointer;
+}
+.lst__viewtog { display: flex; gap: .3rem; }
+.lst__viewtog button {
+  width: 3.6rem; height: 3.6rem; display: grid; place-items: center; border-radius: var(--r-sm);
+  background: #fff; border: .1rem solid var(--c-line); color: var(--c-ink-3);
+}
+.lst__viewtog button.is-active { background: var(--c-primary); border-color: var(--c-primary); color: #fff; }
+.lst__cmpBtn { margin-left: auto; }
+
+.lst__grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); grid-auto-rows: minmax(0,1fr);
+  gap: 1.2rem; min-height: 0;
+}
+
+/* product card ------------------------------------------------------------ */
+/* The photo is the only flexible row, so every other row is held to the
+   reference's own metrics: anything spent on type, gaps or padding here comes
+   straight out of the tractor. At the locked frame that leaves the photo row
+   ~8.4rem, which renders the tractor at the same height it has in 02.Product
+   Listing.png once that 3:2 reference is scaled to this 16:9 stage. */
+.pcard {
+  position: relative; display: grid; grid-template-rows: minmax(0,1fr) auto auto auto auto auto;
+  gap: .28rem; padding: 0 1rem .85rem; min-height: 0; background: #fff; overflow: hidden;
+  border: .1rem solid var(--c-line); border-radius: var(--r-lg); box-shadow: var(--sh-1);
+  transition: box-shadow var(--t-base) var(--ease), transform var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
+}
+.pcard:hover { box-shadow: var(--sh-3); transform: translateY(-.3rem); border-color: #C9DCF2; }
+.pcard__badge { position: absolute; left: 0; top: 1rem; border-radius: 0 .5rem .5rem 0; z-index: 2; }
+/* Taking the image out of flow is what makes object-fit work. The row is a
+   1fr track with no definite height, so a percentage height on an in-flow
+   <img> resolves to auto: it lays out at its intrinsic ratio, overshoots the
+   row and the overflow crops everything but the top sliver. Pinned to the
+   box, object-fit scales it instead of the box growing around it. */
+.pcard__img { position: relative; min-height: 0; overflow: hidden; margin-inline: -1rem; }
+.pcard__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.pcard__name { font-size: 1.55rem; line-height: 1.18; font-weight: 800; color: var(--c-primary-band); letter-spacing: -.01em; }
+.pcard__tag { font-size: 1.12rem; line-height: 1.3; color: var(--c-ink-3); }
+.pcard__specs { display: flex; gap: .85rem; flex-wrap: nowrap; }
+.pcard__specs li { display: flex; align-items: center; gap: .3rem; font-size: 1.02rem; line-height: 1.35; color: var(--c-ink-2); white-space: nowrap; }
+.pcard__specs .i { color: var(--c-ink-3); }
+.pcard__cmp { display: flex; align-items: center; gap: .6rem; font-size: 1.15rem; color: var(--c-ink-2); cursor: pointer; }
+.pcard__cmp input { width: 1.4rem; height: 1.4rem; accent-color: var(--c-primary); cursor: pointer; }
+.pcard__acts { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .15rem; }
+.pcard__acts .btn { width: 100%; --btn-h: 2.7rem; }
+
+/* ===========================================================================
+   02 · OVERVIEW
+   ========================================================================= */
+.sc-overview {
+  grid-template-rows: 32.6rem 10.2rem minmax(0,1fr); gap: 1rem;
+  padding: 1rem 1.2rem; background: var(--c-canvas); min-height: 0;
+}
+
+.ov__top { display: grid; grid-template-columns: minmax(0,1fr) 25.4rem; gap: 1rem; min-height: 0; }
+
+/* One photograph runs the full width of the row and the Key Specifications
+   card floats on top of it — the reference art has no seam between the two. */
+/* z-map inside the hero: 0 photograph · 1 tractor · 2 daylight wash ·
+   3 copy · 4 trust plate · 5 key specifications                            */
+.ov__hero {
+  grid-column: 1 / -1; grid-row: 1;
+  position: relative; overflow: hidden; border-radius: var(--r-lg);
+  background: #D9E6F1; box-shadow: var(--sh-2);
+}
+/* The photograph rides on its own layer with its own grade, so the sunrise
+   can be pushed without dragging the tractor's blue or the copy with it:
+   a warm pass down the sky, a cooler settle into the soil, one grade. */
+.ov__hero::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255,201,120,.06) 0%, rgba(255,201,120,0) 38%),
+    linear-gradient(0deg,   rgba(26,44,30,.12)    0%, rgba(26,44,30,0)    22%),
+    var(--bg-hero) 50% 56% / cover no-repeat;
+  filter: saturate(1.16) contrast(1.04);
+}
+/* Daylight wash that carries the copy. It sits *above* the tractor so the near
+   wheel picks up the same haze as the reference composite, and it clears the
+   frame by ~46% so the sun, treeline and crop rows stay fully saturated. */
+.ov__hero::before {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(95deg,
+    rgba(249,252,255,.97)  0%,
+    rgba(249,252,255,.945) 12%,
+    rgba(249,252,255,.80)  21%,
+    rgba(249,252,255,.50)  30%,
+    rgba(249,252,255,.22)  38%,
+    rgba(249,252,255,0)    46%);
+}
+.ov__crumbs { position: absolute; left: 1.6rem; top: 1.2rem; z-index: 4; color: #0F3358; }
+.ov__crumbs b { color: #06213D; }
+.ov__crumbs a:hover { color: var(--c-primary); }
+
+.ov__heroText { position: absolute; left: 1.8rem; top: 3.2rem; width: 32rem; z-index: 3; }
+.ov__kicker { display: block; font-size: 1.75rem; font-weight: 900; letter-spacing: -.01em; color: #0B3F7E; }
+.ov__kicker sup { font-size: .45em; vertical-align: super; }
+.ov__model { font-size: 6.1rem; font-weight: 900; line-height: .92; letter-spacing: -.035em; margin-top: -.3rem; }
+.ov__model span { color: #0A2F5C; }
+.ov__model b { color: var(--c-primary); }
+.ov__tagline { font-size: 2rem; font-weight: 700; color: #0A2F5C; margin-top: .1rem; letter-spacing: -.01em; }
+.ov__copy { font-size: 1.22rem; line-height: 1.38; color: var(--c-ink-2); margin-top: .6rem; }
+.ov__cta { display: flex; gap: .9rem; margin-top: 1rem; }
+.ov__cta .btn { --btn-h: 3.6rem; font-size: 1.25rem; padding: 0 1.4rem; }
+
+/* The cutout is 1672x941 with the machine inside a 143px / 171px transparent
+   margin, so `right` is measured to that margin, not to the rear fender. */
+.ov__heroImg {
+  position: absolute; right: 33.5rem; bottom: .2rem; height: 28.8rem; width: auto; z-index: 1;
+  object-fit: contain; filter: drop-shadow(0 1.1rem 1.6rem rgba(16,38,62,.26));
+}
+.ov__script { position: absolute; right: 26.8rem; top: .7rem; width: 18.5rem; font-size: 2.1rem; z-index: 3; }
+.ov__script .script__swoosh { width: 104%; margin-left: -4%; height: 1rem; }
+
+/* Frosted plate under the trust row. It stops short of the tractor's rear
+   wheel, exactly like the band in the reference, instead of fading across
+   the whole frame — which now spans the key-spec card as well. */
+.ov__trust {
+  position: absolute; left: 0; bottom: 0; right: auto; z-index: 4;
+  width: max-content; max-width: 50%;
+  padding: .85rem 2.6rem .9rem 1.8rem; gap: 1.5rem; color: #123A63;
+  border-radius: 0 1rem 0 0;
+  background: linear-gradient(90deg, rgba(255,255,255,.93) 0%, rgba(255,255,255,.90) 74%, rgba(255,255,255,.76) 100%);
+  backdrop-filter: blur(.3rem);
+}
+.ov__trust .trust__item { font-size: 1.18rem; }
+.ov__trust .trust__item .i { color: #0B4F9E; }
+
+/* key specifications ------------------------------------------------------ */
+/* Floats over the hero photograph, inset just enough to show the field
+   around all four edges. Rows share the remaining height so all five stay
+   visible at this stage size instead of the last one being clipped away. */
+.ov__keyspec {
+  grid-column: 2; grid-row: 1; position: relative; z-index: 5;
+  margin: .9rem .9rem .9rem 0; background: #FCFDFE; box-shadow: var(--sh-3);
+}
+.ov__keyspecHead { flex-direction: column; align-items: flex-start; gap: 0; padding-bottom: .6rem; border-bottom: .1rem solid var(--c-line-2); }
+.ov__keyspec .panel__body { padding-top: .2rem; display: flex; flex-direction: column; }
+.ov__keyspec .kv { flex: 1 1 auto; min-height: 0; }
+.ov__keyspec .panel__foot { border-top: 0; padding-top: .4rem; }
+
+/* view strip --------------------------------------------------------------- */
+.ov__strip { display: grid; grid-template-columns: minmax(0,1fr) 17rem; gap: 1rem; min-height: 0; }
+.ov__thumbs { border-radius: var(--r-lg); border: .1rem solid var(--c-line); background: #F5F8FB; gap: .7rem; }
+.ov__go360 {
+  display: flex; align-items: center; gap: 1rem; padding: 0 1.4rem; border-radius: var(--r-lg);
+  background: #fff; border: .1rem solid var(--c-line); box-shadow: var(--sh-1);
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.ov__go360:hover { border-color: var(--c-primary); box-shadow: var(--sh-2); }
+.ov__go360Ico { color: var(--c-primary-band); }
+.ov__go360Txt { flex: 1; font-size: 1.32rem; font-weight: 500; line-height: 1.2; }
+.ov__go360Txt b { font-weight: 800; }
+.ov__go360 > .i { color: var(--c-ink-3); }
+
+/* panels row --------------------------------------------------------------- */
+.ov__panels { display: grid; grid-template-columns: 32rem 41rem minmax(0,1fr); gap: 1rem; min-height: 0; }
+
+.ov__perf { overflow: hidden; }
+.ov__perfBody { padding: 1.4rem 1.5rem .8rem; }
+.ov__perfTitle { font-size: 2rem; font-weight: 800; line-height: 1.12; letter-spacing: -.015em; color: #0A2F5C; }
+.ov__perfCopy { font-size: 1.22rem; line-height: 1.42; color: var(--c-ink-2); margin-top: .7rem; }
+.ov__perfMedia { position: relative; flex: 1; min-height: 0; margin: 0 1.2rem 1.2rem; border-radius: var(--r-md); overflow: hidden; }
+.ov__perfMedia img { width: 100%; height: 100%; object-fit: cover; }
+.ov__perfMini {
+  position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: .9rem;
+  padding: .6rem .9rem; color: #fff; font-size: 1.05rem; font-weight: 600; line-height: 1.15;
+  background: linear-gradient(0deg, rgba(8,28,48,.82), rgba(8,28,48,0));
+}
+.ov__perfMini span { display: flex; align-items: center; gap: .45rem; }
+.ov__perfMini i { width: .1rem; height: 2.2rem; background: rgba(255,255,255,.3); }
+
+.ov__high .panel__head { padding-bottom: .4rem; }
+.ov__highGrid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); grid-template-rows: minmax(0,1fr) minmax(0,1fr); gap: .4rem; }
+
+.ov__right { display: grid; grid-template-rows: minmax(0,1fr) 10.6rem; gap: 1rem; min-height: 0; min-width: 0; }
+.ov__apps .panel__head { padding-bottom: .5rem; }
+.ov__appsGrid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: .6rem; min-width: 0; }
+.ov__appsGrid figure { display: flex; flex-direction: column; gap: .3rem; min-height: 0; }
+.ov__appsGrid .mframe { flex: 1; min-height: 0; }
+.ov__appsGrid figcaption { font-size: 1.05rem; color: var(--c-ink-2); text-align: center; }
+
+.ov__watch { position: relative; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-2); }
+.ov__watch img { width: 100%; height: 100%; object-fit: cover; }
+.ov__watchOverlay {
+  position: absolute; inset: 0; display: flex; align-items: center; gap: 1.4rem; padding: 0 1.8rem;
+  background: linear-gradient(90deg, rgba(8,28,48,.05) 0%, rgba(8,28,48,.45) 30%, rgba(8,28,48,.78) 58%, rgba(8,28,48,.86) 100%);
+  color: #fff;
+}
+.ov__watchPlay {
+  width: 4.4rem; height: 4.4rem; flex: none; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(255,255,255,.22); border: .22rem solid #fff; padding-left: .3rem;
+  transition: transform var(--t-base) var(--ease-out);
+}
+.ov__watch:hover .ov__watchPlay { transform: scale(1.08); }
+.ov__watchTxt b { display: block; font-size: 1.65rem; font-weight: 800; line-height: 1.15; }
+.ov__watchTxt span { display: block; font-size: 1.1rem; opacity: .85; margin-top: .4rem; max-width: 24rem; line-height: 1.3; }
+
+/* overview fine-tuning ------------------------------------------------------ */
+.ov__keyspec .panel__head { padding: .95rem 1.4rem .45rem; }
+.ov__keyspec .kv__row { flex: 1 1 0; min-height: 0; padding: .3rem .1rem; }
+.ov__keyspec .panel__body { padding: 0 1.4rem .35rem; }
+.ov__keyspec .panel__foot { padding: .35rem 1.4rem .9rem; }
+.ov__keyspec .panel__foot .btn { --btn-h: 3.6rem; }
+.ov__perfTitle { font-size: 1.85rem; }
+.ov__perfCopy { font-size: 1.18rem; }
+.ov__high .panel__title, .ov__apps .panel__title { font-size: 1.7rem; }
+.ov__highGrid .hltile__ico { width: 4rem; height: 4rem; }
+
+/* grid children must be allowed to shrink below their intrinsic image width */
+.ov__panels > *, .ov__top > *, .ov__strip > *, .lst__body > *, .lst__grid > * { min-width: 0; }
+.ov__appsGrid figure { min-width: 0; }
+
+/* ===========================================================================
+   03 · 360° VIEW   (live 3D — model-viewer)
+   ========================================================================= */
+.sc-360 { grid-template-rows: minmax(0,1fr) 10.2rem; background: var(--bg-pad) center 58% / cover no-repeat; }
+
+.v360 { position: relative; min-height: 0; min-width: 0; }
+
+.v360__head {
+  position: absolute; top: 1.2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; z-index: 6; pointer-events: none;
+}
+.v360__headTitle {
+  display: flex; align-items: center; gap: 1.2rem;
+  font-size: 4.2rem; font-weight: 800; letter-spacing: .04em; color: #16324C; line-height: 1;
+}
+/* The 360 mark is 2:1 and its numerals fill ~65% of the box, so the height is
+   set from the adjoining cap height rather than matching it. */
+.v360__glyph { width: 9.6rem; height: 4.8rem; color: #16324C; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.v360__glyph text, .v360__glyphSm text { font-size: 21px; }
+.v360__glyphSm { width: 4rem; height: 2rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.v360__headSub { font-size: 1.7rem; font-weight: 600; letter-spacing: .12em; color: #2E4C68; margin-top: .3rem; }
+
+.v360__script { position: absolute; right: 3rem; top: 1.2rem; width: 19rem; font-size: 2.3rem; z-index: 6; }
+
+.v360__stage { position: absolute; inset: 0; z-index: 2; }
+.v360__stage model-viewer {
+  width: 100%; height: 100%; background: transparent;
+  --poster-color: transparent; --progress-bar-color: var(--c-primary);
+  --min-hotspot-opacity: .35;
+}
+.v360__fallback {
+  position: absolute; left: 50%; top: 52%; transform: translate(-50%,-50%);
+  max-height: 68%; width: auto; opacity: 1; transition: opacity var(--t-slow) var(--ease);
+  filter: drop-shadow(0 2rem 2.4rem rgba(10,40,70,.35));
+}
+/* Spin set. The box shrink-wraps the render (abs-positioned boxes size to
+   their content), so the baked marker percentages land on the product and not
+   on the stage's empty margins. Every frame shares one canvas size, so the box
+   never changes shape and nothing shifts while dragging. */
+.v360__box {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  height: 78%; max-width: 88%; z-index: 3;
+  /* aspect-ratio is pinned from the first loaded frame — see lockRatio() */
+  cursor: grab; touch-action: pan-y;
+}
+.v360__stage.is-drag .v360__box { cursor: grabbing; }
+.v360__frame {
+  display: block; height: 100%; width: 100%; object-fit: contain;
+  filter: drop-shadow(0 2rem 2.4rem rgba(10,40,70,.35));
+  user-select: none; -webkit-user-select: none; -webkit-user-drag: none;
+  pointer-events: none;                    /* the box owns the drag gesture */
+}
+.v360__stage:focus-visible { outline: .3rem solid var(--c-primary); outline-offset: .4rem; border-radius: var(--r-md); }
+.v360__stage .hotspot[hidden] { display: none; }
+
+.v360__stage.is-ready .v360__fallback, .v360__stage.is-ready .v360__loader { opacity: 0; pointer-events: none; }
+/* Model unavailable: show the product's own render, never a stand-in model. */
+.v360__stage.is-failed .v360__fallback { opacity: 1; }
+.v360__stage.is-failed .v360__loader,
+.v360__stage.is-failed .v360__box,
+.v360__stage.is-failed model-viewer { display: none; }
+.viewer__offline {
+  position: absolute; left: 50%; bottom: 15%; transform: translateX(-50%);
+  max-width: 54rem; padding: .9rem 1.6rem; border-radius: var(--r-md); z-index: 8;
+  background: var(--glass-dark); backdrop-filter: blur(.8rem);
+  color: #fff; font-size: 1.2rem; font-weight: 500; text-align: center;
+  box-shadow: var(--sh-3);
+}
+.v360__loader { position: absolute; left: 50%; bottom: 24%; transform: translateX(-50%); display: flex; gap: .5rem; }
+.v360__loader i { width: .8rem; height: .8rem; border-radius: 50%; background: var(--c-primary); animation: ld 1s var(--ease) infinite; }
+.v360__loader i:nth-child(2) { animation-delay: .15s; }
+.v360__loader i:nth-child(3) { animation-delay: .3s; }
+@keyframes ld { 0%,100% { opacity: .25; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-.5rem); } }
+
+.v360__ctrl { right: 1.6rem; top: 50%; transform: translateY(-46%); }
+.v360__hint { left: 9rem; bottom: 9.6rem; }
+.v360__plate { right: 1.6rem; bottom: 9.6rem; }
+
+.v360__arc {
+  position: absolute; left: 50%; bottom: 3rem; transform: translateX(-50%);
+  width: 52rem; display: grid; place-items: center; z-index: 4; pointer-events: none;
+}
+.v360__arc svg { width: 100%; height: 6rem; filter: drop-shadow(0 .2rem .4rem rgba(0,0,0,.35)); }
+.v360__arc span {
+  position: absolute; top: 1.1rem; font-size: 3.6rem; font-weight: 800; color: #fff;
+  text-shadow: 0 .2rem .8rem rgba(0,0,0,.45); letter-spacing: .01em;
+}
+.v360__thumbs { background: rgba(255,255,255,.78); backdrop-filter: blur(1rem); border-top-color: rgba(255,255,255,.6); }
+
+/* AR proxy: <model-viewer> is mounted only to hand off to the device's AR
+   session, never to be looked at. Kept in the layout (not display:none) so the
+   component still initialises. */
+.ar-proxy {
+  position: fixed; width: 1px; height: 1px; left: -9999px; top: 0;
+  opacity: 0; pointer-events: none;
+}
+.ctrlstack__btn.is-busy { opacity: .6; pointer-events: none; }
+
+/* Second spin layer, stacked over the first so a step can crossfade. It is
+   absolutely positioned, so the in-flow layer above still sizes the box. */
+.v360__frame--b { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
