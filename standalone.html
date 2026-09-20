@@ -1,0 +1,2392 @@
+<!DOCTYPE html>
+<!-- ===========================================================================
+     STANDARD · PRODUCT EXPERIENCE PLATFORM  —  static demo build v1.0
+     ---------------------------------------------------------------------------
+     HOW TO WORK ON THIS FILE
+       • This file is the SHELL: the <head> (meta, fonts, stylesheets) plus the
+         loader at the bottom. Everything you see on screen lives in parts/*.html
+         and is fetched and assembled here at load time — edit a part, reload the
+         page, done. There is no build step and no generated index.html.
+       • The parts are HTML FRAGMENTS, not pages: parts/03 opens the
+         <div class="stage"> that parts/09 closes. They are joined in the PARTS
+         order below and parsed as one blob, so never open a part on its own and
+         never reorder the list.
+       • Copy lives in  parts/*.html , in plain HTML. Edit text directly there.
+       • Colours live in  assets/css/tokens.css  (change 6 seeds to rebrand).
+       • Demo asset URLs live in  assets/js/config.js.
+       • Behaviour lives in  assets/js/core.min.js  (source: assets/js/_source/).
+       • Every screen is one <section class="screen" id="s-NAME">.
+         Navigation is  data-goto="NAME"  on any element. That is the whole API.
+       • fetch() needs HTTP, so serve the folder:  npx serve .  (or
+         python -m http.server 8080). For one double-clickable file instead, run
+         python tools/build-html.py  — it writes standalone.html with the parts
+         already inlined.
+     =========================================================================== -->
+<html lang="en" data-brand="standard">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C2742">
+<meta name="description" content="STANDARD DI 470 — interactive product experience: 360° view, exploded diagram, schematics, specifications and more.">
+<title>STANDARD · DI 470 Product Experience</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/ui.css">
+<link rel="stylesheet" href="assets/css/rail.css">
+<link rel="stylesheet" href="assets/css/screens.css">
+<link rel="stylesheet" href="assets/css/diagrams.css">
+<link rel="stylesheet" href="assets/css/detail.css">
+<link rel="stylesheet" href="assets/css/content.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%230068FE'/%3E%3Cpath d='M21 10c-3-2-9-1-9 3s9 3 9 7-6 4-9 2' stroke='%23fff' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<script src="assets/js/config.js"></script>
+</head>
+<body>
+
+<noscript>
+  <div style="font:500 15px/1.6 Inter,system-ui,sans-serif;max-width:46rem;margin:12vh auto;padding:0 1.5rem;color:#0C2742">
+    <h1 style="font:800 22px/1.3 Inter,system-ui,sans-serif;margin:0 0 .6em">JavaScript is required</h1>
+    <p>This product experience assembles its screens and runs its 360° viewer in the browser.
+       Enable JavaScript, or open <strong>standalone.html</strong>.</p>
+  </div>
+</noscript>
+
+<!-- ==========================================================================
+     ICON SPRITE — one place for every glyph. Add a <symbol id="i-NAME"> and
+     use it anywhere with  <svg class="i"><use href="#i-NAME"></use></svg>
+     ========================================================================== -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+<symbol id="i-cube" viewBox="0 0 24 24"><path d="M21 7.8 12 3 3 7.8v8.4L12 21l9-4.8z"/><path d="m3 7.8 9 4.9 9-4.9M12 12.7V21"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></symbol>
+<symbol id="i-schema" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.2"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="19" r="2.2"/><path d="M12 7.2v4.3M12 11.5 6.3 17M12 11.5 17.7 17"/></symbol>
+<symbol id="i-drawing" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 18 4.2-4.2a1.6 1.6 0 0 1 2.2 0L15 17.5m1.4-2.3a1.6 1.6 0 0 1 2.2 0l1 1"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m4 17 4.5-4.5a1.7 1.7 0 0 1 2.4 0L16 17.5"/></symbol>
+<symbol id="i-engine" viewBox="0 0 24 24"><rect x="3.5" y="9" width="11" height="8" rx="1.6"/><path d="M14.5 11.5h2.3l2.7 2.2V17h-4.5M7 9V6.2h5.2V9M6 17v2M12 17v2M2 12.5h1.5"/></symbol>
+<symbol id="i-seat" viewBox="0 0 24 24"><path d="M8 3.5h5a2 2 0 0 1 2 2V12H8a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2Z"/><path d="M6 12h11a2 2 0 0 1 2 2v2H8a2 2 0 0 1-2-2zM4 19h16M7 16v3M17 16v3"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 14.5a1.6 1.6 0 0 0 .32 1.77l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-1 1.47V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9.1 19.4a1.6 1.6 0 0 0-1.77.32l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.6 1.6 0 0 0 .32-1.77 1.6 1.6 0 0 0-1.47-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.47-1.1 1.6 1.6 0 0 0-.32-1.77l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.6 1.6 0 0 0 1.77.32H9a1.6 1.6 0 0 0 1-1.47V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.47 1.6 1.6 0 0 0 1.77-.32l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.6 1.6 0 0 0-.32 1.77V9a1.6 1.6 0 0 0 1.47 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.47 1Z"/></symbol>
+<symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14.5 2v5H20M8.5 12h7M8.5 16h7M8.5 8h2"/></symbol>
+<symbol id="i-grid4" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m10 8.5 6 3.5-6 3.5z"/></symbol>
+<symbol id="i-play-f" viewBox="0 0 24 24"><path d="M7 4.5 20 12 7 19.5z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-images" viewBox="0 0 24 24"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M7 6V4.5h13a1 1 0 0 1 1 1V16"/><circle cx="7.5" cy="10.5" r="1.3"/><path d="m4 16 3.6-3.6a1.6 1.6 0 0 1 2.3 0L14 16.5"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5"/></symbol>
+<symbol id="i-download-box" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M12 7v7m0 0 3-3m-3 3-3-3M8 17h8"/></symbol>
+<symbol id="i-compare" viewBox="0 0 24 24"><circle cx="18" cy="5.5" r="2.3"/><circle cx="6" cy="12" r="2.3"/><circle cx="18" cy="18.5" r="2.3"/><path d="m8.1 10.9 7.8-4.3M8.1 13.1l7.8 4.3"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 6.5 9 6 9-6"/></symbol>
+<symbol id="i-tractor" viewBox="0 0 24 24"><circle cx="7" cy="16.5" r="4"/><circle cx="18.5" cy="17.5" r="3"/><path d="M4 12V8.5h6l2 3.5M10 8.5V6h4l1.5 6.5M15 13h4.5"/></symbol>
+<symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="i-chev-d" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-chev-u" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
+<symbol id="i-rotate" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3.5V9h-5.5"/></symbol>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.4 5.1-6C9.5 14.5 12 13 13 12"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 12.5c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.66 0C7.5 20 4 17.5 4 12.5V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9.2 12 2 2 3.6-3.7"/></symbol>
+<symbol id="i-gauge" viewBox="0 0 24 24"><path d="M12 14.5 16 10"/><path d="M3.6 19a10 10 0 1 1 16.8 0"/><circle cx="12" cy="15" r="1.3"/></symbol>
+<symbol id="i-fuel" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v16"/><path d="M3 21h11M6.5 8.5h4"/><path d="M13 10h3.5a1.5 1.5 0 0 1 1.5 1.5V17a2 2 0 0 0 3 0V9l-2.5-2.5"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16.5 5.2a3.4 3.4 0 0 1 0 6.6M17 14.2a6.5 6.5 0 0 1 4.5 5.8"/></symbol>
+<symbol id="i-headset" viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 0 1 17 0v5.5a2.5 2.5 0 0 1-2.5 2.5H16v-7h4.5M3.5 12v5.5A2.5 2.5 0 0 0 6 20h2v-7H3.5"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.2 9h17.6M3.2 15h17.6"/><ellipse cx="12" cy="12" rx="4" ry="9"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10.5c0 6-8 11.5-8 11.5s-8-5.5-8-11.5a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10.2" r="2.8"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M21.5 17v2.6a1.8 1.8 0 0 1-2 1.8 18 18 0 0 1-7.8-2.8 17.6 17.6 0 0 1-5.4-5.4A18 18 0 0 1 3.5 5.4 1.8 1.8 0 0 1 5.3 3.5h2.6a1.8 1.8 0 0 1 1.8 1.6c.1 1 .3 1.9.6 2.8a1.8 1.8 0 0 1-.4 1.9l-1.1 1.1a14.4 14.4 0 0 0 5.4 5.4l1.1-1.1a1.8 1.8 0 0 1 1.9-.4c.9.3 1.8.5 2.8.6a1.8 1.8 0 0 1 1.5 1.8Z"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M3.5 20.5h17M7 20.5V12M12 20.5V6M17 20.5v-5.5"/></symbol>
+<symbol id="i-package" viewBox="0 0 24 24"><path d="m21 8-9-5-9 5v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8M7.5 5.5l9 5"/></symbol>
+<symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h7M15 7h5M4 12h3M11 12h9M4 17h9M17 17h3"/><circle cx="13" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="15" cy="17" r="2"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.4l3.3 2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.2 2.6 2.6 5-5.2"/></symbol>
+<symbol id="i-check-f" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="currentColor" stroke="none"/><path d="m8.2 12.2 2.6 2.6 5-5.2" stroke="#fff" stroke-width="2"/></symbol>
+<symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M4.5 12h15m-6-6 6 6-6 6"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M3.5 5h17l-6.6 7.7V19L10 21v-8.3z"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M3 9l4-5 4 5M13 9l4-5 4 5"/><path d="M3 9a4 4 0 0 0 8 0M13 9a4 4 0 0 0 8 0"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.5 2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1L3.2 10l6.1-.9z"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.7 6.3 8.4a8 8 0 1 0 11.4 0z"/></symbol>
+<symbol id="i-battery" viewBox="0 0 24 24"><rect x="2.5" y="7" width="16" height="10" rx="2"/><path d="M21.5 11v2M6 10v4M10 10v4"/></symbol>
+<symbol id="i-ruler" viewBox="0 0 24 24"><path d="m16.5 2.5 5 5L7.5 21.5l-5-5z"/><path d="m8 8 2 2M11 5l2 2M5 11l2 2"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 7h3l1.6-2.2h6.8L17 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="3.6"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M2.5 3h2.6l2.4 12.2a1.7 1.7 0 0 0 1.7 1.3h8.6a1.7 1.7 0 0 0 1.7-1.3L21 7H6"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.8h.01"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M12 3v13M8 6.5 12 3l4 3.5"/></symbol>
+<symbol id="i-maximize" viewBox="0 0 24 24"><path d="M3 9V4.5A1.5 1.5 0 0 1 4.5 3H9m6 0h4.5A1.5 1.5 0 0 1 21 4.5V9m0 6v4.5a1.5 1.5 0 0 1-1.5 1.5H15m-6 0H4.5A1.5 1.5 0 0 1 3 19.5V15"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17"/></symbol>
+<symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></symbol>
+<symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6.5 9H3v6h3.5L11 19z"/><path d="M15.5 9.5a3.5 3.5 0 0 1 0 5M18 7a7 7 0 0 1 0 10"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></symbol>
+<symbol id="i-steering" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v6M3.3 13.5l5.9-1.8M20.7 13.5l-5.9-1.8"/></symbol>
+<symbol id="i-lift" viewBox="0 0 24 24"><path d="M12 3v7M5 21l7-11 7 11"/><circle cx="12" cy="3" r="1.4"/><path d="M4 21h16"/></symbol>
+<symbol id="i-valve" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v6M12 15v6M3 12h6M15 12h6"/></symbol>
+<symbol id="i-exhaust" viewBox="0 0 24 24"><path d="M8 21V8a4 4 0 0 1 8 0v2"/><path d="M5 21h6M16 6.5a2 2 0 1 0 2.5 2.5M18.5 3.5A2.5 2.5 0 1 0 21 7"/></symbol>
+<symbol id="i-aircleaner" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="12" rx="2"/><path d="M9.5 7V4.5h5V7M4.5 19h15M10 11v4M14 11v4"/></symbol>
+<symbol id="i-radiator" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="14" rx="2"/><path d="M8 4v14M12 4v14M16 4v14M7 21h10"/></symbol>
+<symbol id="i-gearbox" viewBox="0 0 24 24"><rect x="3" y="7" width="12" height="10" rx="2"/><path d="M15 10h3l3 2v4h-6"/><circle cx="8" cy="12" r="2.2"/></symbol>
+<symbol id="i-drive" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="2.8"/><circle cx="18.5" cy="12" r="2.8"/><path d="M8.3 12h7.4M12 9v6"/></symbol>
+<symbol id="i-cyl" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.6"/><path d="M5.5 6v12c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6V6"/><path d="M5.5 12c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6"/></symbol>
+<symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12c0-3.3-2.7-6-6-6 0 3.3 2.7 6 6 6ZM12 12c0-3.3 2.7-6 6-6 0 3.3-2.7 6-6 6Z"/><path d="M6 21h12"/></symbol>
+<symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="m8.5 14.5-1.5 7 5-3 5 3-1.5-7"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M3 4.5h6a3 3 0 0 1 3 3V21a2.5 2.5 0 0 0-2.5-2.5H3z"/><path d="M21 4.5h-6a3 3 0 0 0-3 3V21a2.5 2.5 0 0 1 2.5-2.5H21z"/></symbol>
+<symbol id="i-mirror" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="9" rx="2"/><path d="M12 12v5M8 21h8"/></symbol>
+<symbol id="i-pedal" viewBox="0 0 24 24"><rect x="4" y="13" width="9" height="7" rx="2"/><path d="M13 16.5h3.5L20 6M18 6h4"/></symbol>
+<symbol id="i-lever" viewBox="0 0 24 24"><circle cx="16" cy="5" r="2.2"/><path d="M15 7 7 19M4 19h9"/></symbol>
+<symbol id="i-alt" viewBox="0 0 24 24"><circle cx="10" cy="12" r="5.5"/><path d="M15.5 9.5H21v5h-5.5M3 12h1.5M10 6.5V4M10 20v-2.5"/></symbol>
+<symbol id="i-oil" viewBox="0 0 24 24"><rect x="7" y="6" width="10" height="13" rx="3"/><path d="M9.5 6V3.5h5V6M5 19h14"/></symbol>
+<symbol id="i-pump" viewBox="0 0 24 24"><rect x="4" y="9" width="11" height="9" rx="2"/><circle cx="9.5" cy="13.5" r="2.4"/><path d="M15 12h4.5v6M9.5 9V5.5h5"/></symbol>
+<symbol id="i-grille" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 5v14M12 5v14M16 5v14"/></symbol>
+<symbol id="i-tyre" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3v5.6M12 15.4V21M3 12h5.6M15.4 12H21"/></symbol>
+<!-- 360 mark: bold numerals with an open orbit arrow, per _reference/4.360degree.png.
+     The text is squeezed with textLength to the condensed width the reference uses. -->
+<symbol id="i-360" viewBox="-1.2 -0.5 47.4 23.7"><path d="M0 7.8A22.5 12.2 0 0 0 18.6 19.8M27.4 19.7A22.5 12.2 0 0 0 45 7.8"/><path d="M18.6 16.9 25.7 20l-7.1 2.8Z" fill="currentColor" stroke="none"/><text x="8.9" y="15.6" textLength="34.1" lengthAdjust="spacingAndGlyphs" font-size="21" font-weight="800" text-anchor="start" fill="currentColor" stroke="none" font-family="Inter,sans-serif">360°</text></symbol>
+<symbol id="i-ar" viewBox="0 0 24 24"><path d="M12 3 4 7.2v9.6L12 21l8-4.2V7.2z"/><path d="M4 7.2 12 11.5l8-4.3M12 11.5V21"/><path d="M2 2h3M22 2h-3M2 22h3M22 22h-3"/></symbol>
+<symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 4.5v15M15 4.5v15"/></symbol>
+<symbol id="i-quote" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 9h8M8 13h8M8 17h4"/></symbol>
+</defs></svg>
+
+<!-- ==========================================================================
+     STAGE  — fixed 16:9 canvas. Topbar / rail+screens / footbar.
+     ========================================================================== -->
+<div class="stage" id="stage" data-screen="listing" data-rail="none" data-chrome="corporate">
+
+  <!-- ===================== TOP BAR ======================================== -->
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#listing" data-goto="listing" aria-label="STANDARD home">
+      <!-- BRAND MARK SLOT ------------------------------------------------
+           Drop the logo PNG in assets/img/brand/ and put its path in src=.
+           Leave src empty (or point it at a file that is not there) and the
+           image placeholder below is shown instead. -->
+      <span class="brand__mark brand__logo">
+        <img class="brand__logoImg" src="" alt="" onerror="this.removeAttribute('src')">
+        <svg class="brand__logoPh" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-image"></use></svg>
+      </span>
+      <span class="brand__text">
+        <span class="brand__name">STANDARD<sup>®</sup></span>
+        <span class="brand__tag">BUILT FOR A BETTER TOMORROW</span>
+      </span>
+    </a>
+
+    <!-- corporate navigation (listing + compare screens) -->
+    <nav class="topbar__nav" data-on="listing compare overview">
+      <a class="topbar__link is-active" href="#listing" data-inert="Demo build — corporate pages are out of scope.">Home</a>
+      <a class="topbar__link" href="#listing" data-goto="listing">Products</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Technology</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Applications</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Services</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Dealers</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">About Us</a>
+      <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Support</a>
+    </nav>
+
+    <!-- product tab navigation (all deep screens) -->
+    <nav class="tabnav" data-off="listing compare overview">
+      <a class="tabnav__i" href="#view360"   data-goto="view360">360° View</a>
+      <a class="tabnav__i" href="#exploded"  data-goto="exploded">Exploded View</a>
+      <a class="tabnav__i" href="#schematic" data-goto="schematic">Schematic Diagram</a>
+      <a class="tabnav__i" href="#drawing"   data-goto="drawing">Engineering Drawing</a>
+      <a class="tabnav__i" href="#exterior"  data-goto="exterior">Exterior</a>
+      <a class="tabnav__i" href="#engine"    data-goto="engine">Engine</a>
+      <a class="tabnav__i" href="#operator"  data-goto="operator">Operator Station</a>
+      <a class="tabnav__i" href="#hydraulics" data-goto="hydraulics">Hydraulics</a>
+      <a class="tabnav__i" href="#features"  data-goto="features">Features</a>
+      <a class="tabnav__i" href="#specs"     data-goto="specs">Specifications</a>
+      <a class="tabnav__i" href="#gallery"   data-goto="gallery">Gallery</a>
+      <a class="tabnav__i" href="#videos"    data-goto="videos">Videos</a>
+      <a class="tabnav__i" href="#brochure"  data-goto="brochure">Brochure</a>
+    </nav>
+
+    <div class="u-grow"></div>
+
+    <label class="topbar__search" data-on="listing compare overview">
+      <input type="search" placeholder="Search tractors, models, features..." aria-label="Search">
+      <button type="button" data-inert="Demo build — search is wired up in the Laravel release." aria-label="Search">
+        <svg class="i i--sm"><use href="#i-search"></use></svg>
+      </button>
+    </label>
+
+    <!-- Add to Cart — intentionally inactive in this demo build -->
+    <button class="btn btn--ghost btn--sm" type="button" aria-disabled="true" disabled
+            title="Add to Cart is disabled in this static demo">
+      <svg class="i i--sm"><use href="#i-cart"></use></svg> Add to Cart
+    </button>
+
+    <a class="btn btn--accent" data-on="listing compare overview" href="#" data-inert="Demo build — enquiry form ships with the Laravel release.">
+      <svg class="i i--sm"><use href="#i-mail"></use></svg> Enquire Now
+    </a>
+    <a class="btn btn--primary" data-off="listing compare overview" href="#enquire" data-goto="enquire">
+      <svg class="i i--sm"><use href="#i-mail"></use></svg> Enquire Now
+    </a>
+  </header>
+
+  <div class="stage__main">
+
+    <!-- ===================== MASTER DASHBOARD RAIL ======================== -->
+    <nav class="rail" id="rail" aria-label="Product sections">
+      <div class="rail__head">
+        <span class="rail__eyebrow">DI 470</span>
+        <span class="rail__title">DI 470</span>
+      </div>
+      <div class="rail__nav">
+        <a class="rail__item" href="#overview"   data-goto="overview"><svg class="i"><use href="#i-home"></use></svg><span>Overview</span></a>
+        <a class="rail__item" href="#view360"    data-goto="view360"><svg class="i"><use href="#i-cube"></use></svg><span>360° View</span></a>
+        <a class="rail__item" href="#exploded"   data-goto="exploded"><svg class="i"><use href="#i-layers"></use></svg><span>Exploded View</span></a>
+        <a class="rail__item" href="#schematic"  data-goto="schematic"><svg class="i"><use href="#i-schema"></use></svg><span>Schematic Diagram</span></a>
+        <a class="rail__item" href="#drawing"    data-goto="drawing"><svg class="i"><use href="#i-drawing"></use></svg><span>Engineering Drawing</span></a>
+        <a class="rail__item" href="#exterior"   data-goto="exterior"><svg class="i"><use href="#i-image"></use></svg><span>Exterior</span></a>
+        <a class="rail__item" href="#engine"     data-goto="engine"><svg class="i"><use href="#i-engine"></use></svg><span>Engine</span></a>
+        <a class="rail__item" href="#operator"   data-goto="operator"><svg class="i"><use href="#i-seat"></use></svg><span>Operator Station</span></a>
+        <a class="rail__item" href="#hydraulics" data-goto="hydraulics"><svg class="i"><use href="#i-gear"></use></svg><span>Hydraulics</span></a>
+        <a class="rail__item" href="#features"   data-goto="features"><svg class="i"><use href="#i-wrench"></use></svg><span>Features</span></a>
+        <a class="rail__item" href="#specs"      data-goto="specs"><svg class="i"><use href="#i-doc"></use></svg><span>Specifications</span></a>
+        <a class="rail__item" href="#variants"   data-goto="variants"><svg class="i"><use href="#i-grid4"></use></svg><span>Variants</span></a>
+        <a class="rail__item" href="#videos"     data-goto="videos"><svg class="i"><use href="#i-play"></use></svg><span>Videos</span></a>
+        <a class="rail__item" href="#gallery"    data-goto="gallery"><svg class="i"><use href="#i-images"></use></svg><span>Gallery</span></a>
+        <a class="rail__item" href="#brochure"   data-goto="brochure"><svg class="i"><use href="#i-download"></use></svg><span>Brochure</span></a>
+        <a class="rail__item" href="#compare"    data-goto="compare"><svg class="i"><use href="#i-compare"></use></svg><span>Compare</span></a>
+        <a class="rail__item" href="#enquire"    data-goto="enquire"><svg class="i"><use href="#i-mail"></use></svg><span>Enquire</span></a>
+      </div>
+      <div class="rail__foot">
+        <div class="rail__help">
+          <svg class="i"><use href="#i-tractor"></use></svg>
+          <div><b>Need Help?</b><span>Talk to Our Experts</span></div>
+        </div>
+        <a class="rail__cta" href="#enquire" data-goto="enquire">Contact Us <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+      </div>
+    </nav>
+
+    <!-- ===================== SCREENS ===================================== -->
+    <div class="screens" id="screens">
+
+<!-- ============================================================= 01 LISTING -->
+<section class="screen sc-listing" id="s-listing" data-rail="none" data-chrome="corporate">
+
+  <div class="lst__hero">
+    <div class="lst__heroText">
+      <h1 class="lst__heroTitle">TRACTORS FOR<br><b>EVERY POSSIBILITY</b></h1>
+      <p class="lst__heroSub">Powerful. Reliable. Built for Real Fields.</p>
+      <div class="trust lst__trust">
+        <span class="trust__item"><svg class="i"><use href="#i-leaf"></use></svg>Higher<br>Productivity</span>
+        <i class="trust__sep"></i>
+        <span class="trust__item"><svg class="i"><use href="#i-shield"></use></svg>Rugged &amp;<br>Reliable</span>
+        <i class="trust__sep"></i>
+        <span class="trust__item"><svg class="i"><use href="#i-gear"></use></svg>Advanced<br>Technology</span>
+        <i class="trust__sep"></i>
+        <span class="trust__item"><svg class="i"><use href="#i-users"></use></svg>Farmers<br>First</span>
+        <i class="trust__sep"></i>
+        <span class="trust__item"><svg class="i"><use href="#i-globe"></use></svg>A Greener<br>Tomorrow</span>
+      </div>
+    </div>
+    <img class="lst__heroImg" src="assets/img/product/front-left.webp" alt="STANDARD tractor" width="1100" height="743">
+    <div class="script lst__script">Fields Today.<br>A Better Tomorrow.
+      <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+    </div>
+  </div>
+
+  <div class="lst__crumbbar">
+    <nav class="crumbs"><a href="#listing">Home</a><svg class="i i--xs"><use href="#i-chev-r"></use></svg>
+      <a href="#listing">Products</a><svg class="i i--xs"><use href="#i-chev-r"></use></svg><b>Tractors</b></nav>
+    <span class="t-sm t-muted">Showing 1&ndash;8 of 18 tractors</span>
+  </div>
+
+  <div class="lst__body">
+
+    <!-- ---- filters ------------------------------------------------------- -->
+    <aside class="panel lst__filters">
+      <div class="u-between lst__filtersHead">
+        <span class="t-h3">Filters</span>
+        <a class="lst__clear" href="#" data-inert="Demo build &mdash; filtering ships with the Laravel release.">Clear All</a>
+      </div>
+      <div class="scroll-y lst__filtersBody">
+        <div class="fgroup">
+          <div class="fgroup__h">Horsepower (HP) <svg class="i i--xs"><use href="#i-chev-u"></use></svg></div>
+          <label class="fopt"><input type="checkbox"><span>20 &ndash; 30 HP</span><i>(3)</i></label>
+          <label class="fopt"><input type="checkbox"><span>31 &ndash; 40 HP</span><i>(5)</i></label>
+          <label class="fopt"><input type="checkbox"><span>41 &ndash; 50 HP</span><i>(6)</i></label>
+          <label class="fopt"><input type="checkbox"><span>51 &ndash; 60 HP</span><i>(3)</i></label>
+          <label class="fopt"><input type="checkbox"><span>Above 60 HP</span><i>(1)</i></label>
+        </div>
+        <div class="fgroup">
+          <div class="fgroup__h">Application <svg class="i i--xs"><use href="#i-chev-u"></use></svg></div>
+          <label class="fopt"><input type="checkbox"><span>Agriculture</span><i>(15)</i></label>
+          <label class="fopt"><input type="checkbox"><span>Horticulture</span><i>(4)</i></label>
+          <label class="fopt"><input type="checkbox"><span>Haulage</span><i>(2)</i></label>
+          <label class="fopt"><input type="checkbox"><span>Specialized</span><i>(2)</i></label>
+        </div>
+        <div class="fgroup">
+          <div class="fgroup__h">Drive Type <svg class="i i--xs"><use href="#i-chev-u"></use></svg></div>
+          <label class="fopt"><input type="checkbox"><span>2WD</span><i>(14)</i></label>
+          <label class="fopt"><input type="checkbox"><span>4WD</span><i>(4)</i></label>
+        </div>
+        <div class="fgroup">
+          <div class="fgroup__h">Transmission <svg class="i i--xs"><use href="#i-chev-u"></use></svg></div>
+          <label class="fopt"><input type="checkbox"><span>Manual</span><i>(16)</i></label>
+          <label class="fopt"><input type="checkbox"><span>Synchromesh</span><i>(2)</i></label>
+        </div>
+        <div class="fgroup">
+          <div class="fgroup__h">Fuel Type <svg class="i i--xs"><use href="#i-chev-u"></use></svg></div>
+          <label class="fopt"><input type="checkbox"><span>Diesel</span><i>(18)</i></label>
+        </div>
+      </div>
+      <button class="btn btn--dark btn--block lst__apply" type="button" data-inert="Demo build &mdash; filtering ships with the Laravel release.">
+        <svg class="i i--sm"><use href="#i-filter"></use></svg> Apply Filters
+      </button>
+    </aside>
+
+    <!-- ---- catalogue ----------------------------------------------------- -->
+    <div class="lst__main">
+      <div class="lst__head">
+        <h2 class="lst__title">Our Tractor Range</h2>
+        <p class="lst__lead">Choose from our wide range of powerful and fuel-efficient tractors built for every need.</p>
+      </div>
+
+      <div class="lst__tools">
+        <label class="lst__search">
+          <svg class="i i--sm"><use href="#i-search"></use></svg>
+          <input type="search" placeholder="Search by model name or keyword..." aria-label="Search models">
+        </label>
+        <span class="lst__toolLbl">Sort By</span>
+        <select class="lst__select" aria-label="Sort by"><option>Featured</option><option>Horsepower</option><option>Newest</option></select>
+        <span class="lst__toolLbl">Show</span>
+        <select class="lst__select" aria-label="Page size"><option>12 per page</option><option>24 per page</option></select>
+        <span class="lst__toolLbl">View</span>
+        <div class="lst__viewtog">
+          <button class="is-active" type="button" aria-label="Grid view"><svg class="i i--sm"><use href="#i-grid"></use></svg></button>
+          <button type="button" aria-label="List view" data-inert="Demo build &mdash; list view ships with the Laravel release."><svg class="i i--sm"><use href="#i-list"></use></svg></button>
+        </div>
+        <a class="btn btn--primary lst__cmpBtn" href="#compare" data-goto="compare">
+          <svg class="i i--sm"><use href="#i-scale"></use></svg> <span data-compare-count="Compare (%d)">Compare (0)</span>
+        </a>
+      </div>
+
+      <div class="lst__grid">
+
+        <article class="pcard">
+          <span class="badge badge--bestseller pcard__badge">Best Seller</span>
+          <div class="pcard__img"><img src="assets/img/product/front-left.webp" alt="STANDARD DI 470" decoding="async" width="1100" height="743"></div>
+          <h3 class="pcard__name">DI 470</h3>
+          <p class="pcard__tag">Power for Every Field</p>
+          <ul class="pcard__specs">
+            <li><svg class="i i--xs"><use href="#i-gear"></use></svg>47 HP</li>
+            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>8F + 2R</li>
+            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>1800 kg</li>
+            <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
+          </ul>
+          <label class="pcard__cmp"><input type="checkbox" data-compare checked><span>Compare</span></label>
+          <div class="pcard__acts">
+            <a class="btn btn--ghost btn--sm" href="#overview" data-goto="overview">View Details</a>
+            <a class="btn btn--deep btn--sm" href="#overview" data-goto="overview">Explore <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="pcard">
+          <span class="badge badge--new pcard__badge">New Launch</span>
+          <div class="pcard__img"><img src="assets/img/product/front-right.webp" alt="STANDARD DI 550" decoding="async" width="1100" height="743"></div>
+          <h3 class="pcard__name">DI 550</h3>
+          <p class="pcard__tag">More Power. More Possibilities.</p>
+          <ul class="pcard__specs">
+            <li><svg class="i i--xs"><use href="#i-gear"></use></svg>55 HP</li>
+            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>12F + 3R</li>
+            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>2100 kg</li>
+            <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
+          </ul>
+          <label class="pcard__cmp"><input type="checkbox" data-compare checked><span>Compare</span></label>
+          <div class="pcard__acts">
+            <a class="btn btn--ghost btn--sm" href="#overview" data-goto="overview">View Details</a>
+            <a class="btn btn--deep btn--sm" href="#overview" data-goto="overview">Explore <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="pcard">
+          <span class="badge badge--popular pcard__badge">Popular</span>
+          <div class="pcard__img"><img src="assets/img/product/front-left.webp" alt="STANDARD DI 350" decoding="async" width="1100" height="743"></div>
+          <h3 class="pcard__name">DI 350</h3>
+          <p class="pcard__tag">Performance You Can Trust</p>
+          <ul class="pcard__specs">
+            <li><svg class="i i--xs"><use href="#i-gear"></use></svg>35 HP</li>
+            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>8F + 2R</li>
+            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>1600 kg</li>
+            <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
+          </ul>
+          <label class="pcard__cmp"><input type="checkbox" data-compare><span>Compare</span></label>
+          <div class="pcard__acts">
+            <a class="btn btn--ghost btn--sm" href="#overview" data-goto="overview">View Details</a>
+            <a class="btn btn--deep btn--sm" href="#overview" data-goto="overview">Explore <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="pcard">
+          <span class="badge badge--special pcard__badge">Special Application</span>
+          <div class="pcard__img"><img src="assets/img/product/front-right.webp" alt="STANDARD DI 750 4WD" decoding="async" width="1100" height="743"></div>
+          <h3 class="pcard__name">DI 750 4WD</h3>
+          <p class="pcard__tag">Built for Tough Terrain</p>
+          <ul class="pcard__specs">
+            <li><svg class="i i--xs"><use href="#i-gear"></use></svg>75 HP</li>
+            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>12F + 3R</li>
+            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>2800 kg</li>
+            <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
+          </ul>
+          <label class="pcard__cmp"><input type="checkbox" data-compare><span>Compare</span></label>
+          <div class="pcard__acts">
+            <a class="btn btn--ghost btn--sm" href="#overview" data-goto="overview">View Details</a>
+            <a class="btn btn--deep btn--sm" href="#overview" data-goto="overview">Explore <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="pcard">
+          <span class="badge badge--orchard pcard__badge">Orchard Special</span>
+          <div class="pcard__img"><img src="assets/img/product/left.webp" alt="STANDARD DI 280" decoding="async" width="1100" height="664"></div>
+          <h3 class="pcard__name">DI 280</h3>
+          <p class="pcard__tag">Compact. Capable. Confident.</p>
+          <ul class="pcard__specs">
+            <li><svg class="i i--xs"><use href="#i-gear"></use></svg>28 HP</li>
+            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>8F + 2R</li>
+            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>1400 kg</li>
+            <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
+          </ul>
+          <label class="pcard__cmp"><input type="checkbox" data-compare><span>Compare</span></label>
+          <div class="pcard__acts">
+            <a class="btn btn--ghost btn--sm" href="#overview" data-goto="overview">View Details</a>
+            <a class="btn btn--deep btn--sm" href="#overview" data-goto="overview">Explore <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="pcard">
+          <span class="badge badge--value pcard__badge">Value Choice</span>
+          <div class="pcard__img"><img src="assets/img/product/front-left.webp" alt="STANDARD DI 320" decoding="async" width="1100" height="743"></div>
+          <h3 class="pcard__name">DI 320</h3>
+          <p class="pcard__tag">Smart Choice for Growing Farmers</p>
+          <ul class="pcard__specs">
+            <li><svg class="i i--xs"><use href="#i-gear"></use></svg>32 HP</li>
+            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>8F + 2R</li>
+            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>1500 kg</li>
+            <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
+          </ul>
+          <label class="pcard__cmp"><input type="checkbox" data-compare checked><span>Compare</span></label>
+          <div class="pcard__acts">
+            <a class="btn btn--ghost btn--sm" href="#overview" data-goto="overview">View Details</a>
+            <a class="btn btn--deep btn--sm" href="#overview" data-goto="overview">Explore <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="pcard">
+          <span class="badge badge--heavy pcard__badge">Heavy Duty</span>
+          <div class="pcard__img"><img src="assets/img/product/right.webp" alt="STANDARD DI 605" decoding="async" width="1100" height="664"></div>
+          <h3 class="pcard__name">DI 605</h3>
+          <p class="pcard__tag">For Bigger Dreams</p>
+          <ul class="pcard__specs">
+            <li><svg class="i i--xs"><use href="#i-gear"></use></svg>60 HP</li>
+            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>12F + 3R</li>
+            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>2400 kg</li>
+            <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
+          </ul>
+          <label class="pcard__cmp"><input type="checkbox" data-compare><span>Compare</span></label>
+          <div class="pcard__acts">
+            <a class="btn btn--ghost btn--sm" href="#overview" data-goto="overview">View Details</a>
+            <a class="btn btn--deep btn--sm" href="#overview" data-goto="overview">Explore <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+          </div>
+        </article>
+
+        <article class="pcard">
+          <span class="badge badge--premium pcard__badge">Premium</span>
+          <div class="pcard__img"><img src="assets/img/product/front-right.webp" alt="STANDARD DI 650" decoding="async" width="1100" height="743"></div>
+          <h3 class="pcard__name">DI 650</h3>
+          <p class="pcard__tag">Next Level Performance</p>
+          <ul class="pcard__specs">
+            <li><svg class="i i--xs"><use href="#i-gear"></use></svg>65 HP</li>
+            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>12F + 3R</li>
+            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>2500 kg</li>
+            <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
+          </ul>
+          <label class="pcard__cmp"><input type="checkbox" data-compare checked><span>Compare</span></label>
+          <div class="pcard__acts">
+            <a class="btn btn--ghost btn--sm" href="#overview" data-goto="overview">View Details</a>
+            <a class="btn btn--deep btn--sm" href="#overview" data-goto="overview">Explore <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 02 OVERVIEW -->
+<section class="screen sc-overview" id="s-overview" data-rail="solid" data-chrome="corporate">
+
+  <!-- ---- hero + key specifications ------------------------------------- -->
+  <div class="ov__top">
+    <div class="ov__hero">
+      <nav class="crumbs crumbs--on-dark ov__crumbs">
+        <a href="#listing" data-goto="listing">Home</a><svg class="i i--xs"><use href="#i-chev-r"></use></svg>
+        <a href="#listing" data-goto="listing">Products</a><svg class="i i--xs"><use href="#i-chev-r"></use></svg>
+        <a href="#listing" data-goto="listing">Tractors</a><svg class="i i--xs"><use href="#i-chev-r"></use></svg><b>DI 470</b>
+      </nav>
+
+      <div class="ov__heroText">
+        <span class="ov__kicker">STANDARD<sup>&reg;</sup></span>
+        <h1 class="ov__model"><span>DI</span> <b>470</b></h1>
+        <h2 class="ov__tagline">Power for Every Field</h2>
+        <p class="ov__copy">The STANDARD DI 470 is a reliable and fuel-efficient tractor designed to deliver consistent performance across a wide range of agricultural applications. Built for Indian farmers, it combines power, durability and comfort to help you achieve more, every day.</p>
+        <div class="ov__cta">
+          <a class="btn btn--accent" href="#enquire" data-goto="enquire">Enquire Now <svg class="i i--sm"><use href="#i-arrow-r"></use></svg></a>
+          <a class="btn btn--ghost" href="#brochure" data-goto="brochure"><svg class="i i--sm"><use href="#i-download"></use></svg> Download Brochure</a>
+        </div>
+      </div>
+
+      <img class="ov__heroImg" src="assets/img/product/overview.png" alt="STANDARD DI 470 tractor" width="1672" height="941" fetchpriority="high">
+
+      <div class="script ov__script">Fields Today.<br>A Better Tomorrow.
+        <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+      </div>
+
+      <div class="trust ov__trust">
+        <span class="trust__item"><svg class="i i--sm"><use href="#i-leaf"></use></svg>Higher<br>Productivity</span>
+        <i class="trust__sep"></i>
+        <span class="trust__item"><svg class="i i--sm"><use href="#i-shield"></use></svg>Rugged &amp;<br>Reliable</span>
+        <i class="trust__sep"></i>
+        <span class="trust__item"><svg class="i i--sm"><use href="#i-fuel"></use></svg>Fuel Efficient</span>
+        <i class="trust__sep"></i>
+        <span class="trust__item"><svg class="i i--sm"><use href="#i-gear"></use></svg>Low<br>Maintenance</span>
+        <i class="trust__sep"></i>
+        <span class="trust__item"><svg class="i i--sm"><use href="#i-users"></use></svg>Farmer<br>Focused</span>
+      </div>
+    </div>
+
+    <aside class="panel ov__keyspec">
+      <div class="panel__head ov__keyspecHead">
+        <span class="panel__title">Key Specifications</span>
+        <span class="panel__sub">(at a glance)</span>
+      </div>
+      <div class="panel__body kv">
+        <div class="kv__row"><span class="kv__ico"><svg class="i i--lg"><use href="#i-gear"></use></svg></span>
+          <span class="kv__txt"><b class="kv__k">41 &ndash; 50 HP</b><span class="kv__v">Horsepower Range</span></span></div>
+        <div class="kv__row"><span class="kv__ico"><svg class="i i--lg"><use href="#i-engine"></use></svg></span>
+          <span class="kv__txt"><b class="kv__k">4 Cylinder</b><span class="kv__v">Diesel Engine</span></span></div>
+        <div class="kv__row"><span class="kv__ico"><svg class="i i--lg"><use href="#i-gearbox"></use></svg></span>
+          <span class="kv__txt"><b class="kv__k">8F + 2R</b><span class="kv__v">Transmission</span></span></div>
+        <div class="kv__row"><span class="kv__ico"><svg class="i i--lg"><use href="#i-drive"></use></svg></span>
+          <span class="kv__txt"><b class="kv__k">2WD / 4WD</b><span class="kv__v">Drive Type (Variant)</span></span></div>
+        <div class="kv__row"><span class="kv__ico"><svg class="i i--lg"><use href="#i-fuel"></use></svg></span>
+          <span class="kv__txt"><b class="kv__k">Fuel Efficient</b><span class="kv__v">For Lower Operating Cost</span></span></div>
+      </div>
+      <div class="panel__foot">
+        <a class="btn btn--primary btn--block" href="#specs" data-goto="specs">Full Specifications <svg class="i i--sm"><use href="#i-arrow-r"></use></svg></a>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ---- view strip ----------------------------------------------------- -->
+  <div class="ov__strip">
+    <div class="thumbstrip ov__thumbs">
+      <button class="thumb is-active" type="button" data-view="front"><span class="thumb__img"><img src="assets/img/product/overview-thumb.webp" alt=""></span><span class="thumb__label">Front View</span></button>
+      <button class="thumb" type="button" data-view="left"><span class="thumb__img"><img src="assets/img/product/left-thumb.webp" alt=""></span><span class="thumb__label">Side View</span></button>
+      <button class="thumb" type="button" data-view="rear"><span class="thumb__img"><img src="assets/img/product/rear-thumb.webp" alt=""></span><span class="thumb__label">Rear View</span></button>
+      <button class="thumb" type="button" data-view="top"><span class="thumb__img"><img src="assets/img/product/top-thumb.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+      <button class="thumb" type="button" data-view="engine"><span class="thumb__img"><img src="assets/img/product/engine-thumb.webp" alt=""></span><span class="thumb__label">Engine</span></button>
+      <button class="thumb" type="button" data-view="operator"><span class="thumb__img"><img src="assets/img/product/operator-thumb.webp" alt=""></span><span class="thumb__label">Operator Station</span></button>
+      <button class="thumb" type="button" data-view="hydraulics"><span class="thumb__img"><img src="assets/img/product/hydraulics-thumb.webp" alt=""></span><span class="thumb__label">Hydraulics</span></button>
+      <button class="thumb" type="button" data-view="field"><span class="thumb__img"><img src="assets/img/product/field-thumb.webp" alt=""></span><span class="thumb__label">Field Application</span></button>
+    </div>
+    <a class="ov__go360" href="#view360" data-goto="view360">
+      <span class="ov__go360Ico"><svg class="i i--xl"><use href="#i-cube"></use></svg></span>
+      <span class="ov__go360Txt">View in<br><b>360&deg;</b></span>
+      <svg class="i i--sm"><use href="#i-arrow-r"></use></svg>
+    </a>
+  </div>
+
+  <!-- ---- three panels --------------------------------------------------- -->
+  <div class="ov__panels">
+
+    <section class="panel panel--tint ov__perf">
+      <div class="panel__body ov__perfBody">
+        <h3 class="ov__perfTitle">Built for Performance.<br>Designed for You.</h3>
+        <p class="ov__perfCopy">Whether it&rsquo;s ploughing, sowing, hauling or harvesting, the DI 470 is engineered to handle your everyday farming needs with ease and efficiency.</p>
+      </div>
+      <div class="ov__perfMedia">
+        <img src="assets/img/scene/field-work.webp" alt="Field" decoding="async">
+        <div class="ov__perfMini">
+          <span><svg class="i i--sm"><use href="#i-sprout"></use></svg>Stronger<br>Farms</span>
+          <i></i>
+          <span><svg class="i i--sm"><use href="#i-users"></use></svg>Prosperous<br>Communities</span>
+          <i></i>
+          <span><svg class="i i--sm"><use href="#i-leaf"></use></svg>A Greener<br>Tomorrow</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel ov__high">
+      <div class="panel__head"><span class="panel__title">Key Highlights</span></div>
+      <div class="panel__body ov__highGrid">
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-engine"></use></svg></span><span class="hltile__t">Powerful</span><span class="hltile__s">Engine</span></div>
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-gear"></use></svg></span><span class="hltile__t">Advanced</span><span class="hltile__s">Transmission</span></div>
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-compare"></use></svg></span><span class="hltile__t">Robust Build</span><span class="hltile__s">Quality</span></div>
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-leaf"></use></svg></span><span class="hltile__t">Fuel</span><span class="hltile__s">Efficient</span></div>
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-seat"></use></svg></span><span class="hltile__t">Comfortable</span><span class="hltile__s">Operator Station</span></div>
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-bolt"></use></svg></span><span class="hltile__t">High Lifting</span><span class="hltile__s">Capacity</span></div>
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-wrench"></use></svg></span><span class="hltile__t">Easy</span><span class="hltile__s">Maintenance</span></div>
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-shield"></use></svg></span><span class="hltile__t">Reliable</span><span class="hltile__s">Performance</span></div>
+      </div>
+    </section>
+
+    <div class="ov__right">
+      <section class="panel ov__apps">
+        <div class="panel__head"><span class="panel__title">Made for Multiple Applications</span></div>
+        <div class="panel__body ov__appsGrid">
+          <figure><span class="mframe"><img src="assets/img/scene/cultivation.webp" alt="" decoding="async"></span><figcaption>Cultivation</figcaption></figure>
+          <figure><span class="mframe"><img src="assets/img/scene/sowing.webp" alt="" decoding="async"></span><figcaption>Sowing</figcaption></figure>
+          <figure><span class="mframe"><img src="assets/img/scene/haulage.webp" alt="" decoding="async"></span><figcaption>Haulage</figcaption></figure>
+          <figure><span class="mframe"><img src="assets/img/scene/harvesting.webp" alt="" decoding="async"></span><figcaption>Harvesting</figcaption></figure>
+          <figure><span class="mframe"><img src="assets/img/scene/inter-cultivation.webp" alt="" decoding="async"></span><figcaption>Inter-cultivation</figcaption></figure>
+        </div>
+      </section>
+
+      <a class="ov__watch mframe" href="#videos" data-goto="videos">
+        <img src="assets/img/scene/action.webp" alt="" decoding="async">
+        <span class="ov__watchOverlay">
+          <span class="ov__watchPlay"><svg class="i i--lg i--fill"><use href="#i-play-f"></use></svg></span>
+          <span class="ov__watchTxt">
+            <b>Watch the DI 470<br>in Action</b>
+            <span>See how the DI 470 helps farmers achieve more, every day.</span>
+          </span>
+        </span>
+        <span class="mframe__dur">02:18</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== 03 360° VIEW -->
+<!-- Live 3D. The model, the HDRI and the camera presets all come from
+     assets/js/config.js → viewer3d. Swap the .glb to change the product. -->
+<section class="screen sc-360" id="s-view360" data-rail="overlay" data-chrome="product">
+
+  <div class="v360" data-fs>
+
+    <header class="v360__head">
+      <span class="v360__headTitle"><svg class="v360__glyph" viewBox="-1.2 -0.5 47.4 23.7" aria-hidden="true"><use href="#i-360"></use></svg> VIEW</span>
+      <span class="v360__headSub">DRAG &nbsp;&bull;&nbsp; ROTATE &nbsp;&bull;&nbsp; EXPLORE</span>
+    </header>
+
+    <div class="script v360__script">Powering<br>Progress<br>in Every Field
+      <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+    </div>
+
+    <!-- Pre-rendered turntable. data-position on each marker is a FRACTION of the
+         product's bounding box - x 0=left 1=right, y 0=front 1=rear, z 0=ground
+         1=roofline - not a distance, so swapping the 3D model does not fling the
+         markers into mid-air. tools/turntable.py resolves them against the real
+         bbox and projects them through the render camera for every frame into
+         assets/data/hotspots-360.json. Edit here, then re-run the renderer. -->
+    <div class="v360__stage" data-spin360 data-ar data-alt="STANDARD DI 470 — interactive 360° view"
+         data-orbit="45deg 78deg 112%" data-fov="26deg" data-target="0m 5.4m 0m">
+      <img class="v360__fallback" src="assets/img/spin/f001.webp" alt="STANDARD DI 470">
+      <span class="v360__loader"><i></i><i></i><i></i></span>
+
+      <button class="hotspot" type="button" data-hs="exhaust" data-position="0.36 0.30 0.96"
+              data-title="Exhaust" data-img="assets/img/product/grille-thumb.webp"
+              data-text="High-mount exhaust routes emissions clear of the operator while keeping noise low in long working shifts.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Exhaust</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="air" data-side="left" data-position="0.44 0.17 0.88"
+              data-title="Air Cleaner" data-img="assets/img/product/engine-thumb.webp"
+              data-text="Prevents dust and dirt from entering the engine, ensuring longer engine life and better performance in tough field conditions.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Air Cleaner</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="grille" data-side="left" data-position="0.50 0.02 0.46"
+              data-title="Front Grille" data-img="assets/img/product/grille-thumb.webp"
+              data-text="Stylish, rugged grille protects the radiator core and channels clean air for efficient cooling.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Front Grille</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="engine" data-position="0.84 0.33 0.44"
+              data-title="Engine" data-img="assets/img/product/engine-thumb.webp"
+              data-text="3-cylinder, 4-stroke DI engine delivering 47 HP @ 2000 RPM with an inline injection pump for lower running cost.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Engine</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="operator" data-position="0.50 0.62 0.70"
+              data-title="Operator Station" data-img="assets/img/product/operator-thumb.webp"
+              data-text="Ergonomic seat, clear instrument cluster and easy-reach controls designed for comfort across long working hours.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Operator Station</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="hyd" data-position="0.50 0.97 0.28"
+              data-title="Hydraulics" data-img="assets/img/product/hydraulics-thumb.webp"
+              data-text="1500 kg lift capacity with position &amp; draft control and a Category II three-point linkage for every implement.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Hydraulics</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="ftyre" data-side="left" data-position="0.88 0.16 0.16"
+              data-title="Front Tyre" data-img="assets/img/product/front-thumb.webp"
+              data-text="7.50 – 16 front tyres give precise steering response and a stable footprint on uneven ground.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Front Tyre</span>
+      </button>
+
+      <button class="hotspot" type="button" data-hs="rtyre" data-position="0.92 0.72 0.34"
+              data-title="Rear Tyre" data-img="assets/img/product/rear-thumb.webp"
+              data-text="16.9 – 28 rear tyres deliver better traction and higher productivity in wet, loose and tilled soil.">
+        <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+        <span class="hotspot__chip">Rear Tyre</span>
+      </button>
+    </div>
+
+    <div class="ctrlstack v360__ctrl">
+      <button class="ctrlstack__btn" type="button" data-vc="full"><svg class="i"><use href="#i-maximize"></use></svg>Full Screen</button>
+      <button class="ctrlstack__btn" type="button" data-vc="rotate"><svg class="i"><use href="#i-rotate"></use></svg>Auto Rotate</button>
+      <button class="ctrlstack__btn" type="button" data-vc="reset"><svg class="v360__glyphSm" viewBox="-1.2 -0.5 47.4 23.7"><use href="#i-360"></use></svg>Reset View</button>
+      <!-- The spin set has no AR of its own, so AR gets an explicit launcher.
+           It loads <model-viewer> and the .glb only when tapped. -->
+      <button class="ctrlstack__btn" type="button" data-ar-launch><svg class="i"><use href="#i-ar"></use></svg>View in AR</button>
+    </div>
+
+    <div class="hintpill v360__hint">
+      <svg class="i i--lg"><use href="#i-ar"></use></svg>
+      <span class="hintpill__t">Drag to rotate</span>
+    </div>
+
+    <div class="plate v360__plate">
+      <span class="plate__t">STANDARD</span>
+      <span class="plate__s">TRUST &nbsp;|&nbsp; DURABILITY &nbsp;|&nbsp; PERFORMANCE</span>
+    </div>
+
+    <div class="v360__arc">
+      <svg viewBox="0 0 520 60" aria-hidden="true">
+        <path d="M18 18q242 44 484 0" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".92"/>
+        <path d="M18 18 34 8M18 18l16 12M502 18l-16-10M502 18l-16 12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".92"/>
+      </svg>
+      <span>360&deg;</span>
+    </div>
+  </div>
+
+  <div class="thumbstrip v360__thumbs">
+    <button class="thumb" type="button" data-view="front" data-frame="0"><span class="thumb__img"><img src="assets/img/spin/thumb-front.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb is-active" type="button" data-view="front-left" data-frame="1"><span class="thumb__img"><img src="assets/img/spin/thumb-front-left.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left" data-frame="2"><span class="thumb__img"><img src="assets/img/spin/thumb-left.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left" data-frame="4"><span class="thumb__img"><img src="assets/img/spin/thumb-rear-left.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear" data-frame="5"><span class="thumb__img"><img src="assets/img/spin/thumb-rear.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right" data-frame="6"><span class="thumb__img"><img src="assets/img/spin/thumb-rear-right.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right" data-frame="8"><span class="thumb__img"><img src="assets/img/spin/thumb-right.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right" data-frame="9"><span class="thumb__img"><img src="assets/img/spin/thumb-front-right.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top" data-frame="top"><span class="thumb__img"><img src="assets/img/spin/thumb-top.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+  </div>
+</section>
+
+<!-- ====================================================== 04 EXPLODED VIEW -->
+<section class="screen sc-diagram sc-exploded" id="s-exploded" data-rail="solid" data-chrome="product">
+
+  <header class="dg__head">
+    <div class="dg__headText">
+      <h1 class="dg__title">Exploded-View Diagram</h1>
+      <p class="dg__sub">Assembly / Parts View</p>
+      <p class="dg__copy">Explore the STANDARD DI 470 in detail. See how every component fits together to deliver power, reliability and performance.</p>
+    </div>
+    <div class="band dg__band">
+      <span class="band__t">STANDARD DI 470</span>
+      <i class="band__rule"></i>
+      <span class="band__s">ENGINEERED FOR DURABILITY.<br>BUILT FOR REAL FIELDS.</span>
+    </div>
+  </header>
+
+  <div class="dg__body">
+
+    <!-- diagram canvas: real markers over the product render -->
+    <figure class="dg__canvas" data-explode>
+      <div class="dg__media artfit"><div class="dg__frame artfit__in">
+      <img class="dg__art" src="assets/img/product/cutaway.webp" alt="STANDARD DI 470 assembly diagram" decoding="async">
+      <div class="hotlayer">
+      <span class="pin pin--1" style="left:24%;top:35%"><b>1</b></span>
+      <span class="pin pin--2" style="left:28%;top:22%"><b>2</b></span>
+      <span class="pin pin--3" style="left:40%;top:20%"><b>3</b></span>
+      <span class="pin pin--4" style="left:42%;top:36%"><b>4</b></span>
+      <span class="pin pin--5" style="left:13%;top:52%"><b>5</b></span>
+      <span class="pin pin--6" style="left:29%;top:53%"><b>6</b></span>
+      <span class="pin pin--7" style="left:43%;top:53%"><b>7</b></span>
+      <span class="pin pin--8" style="left:59%;top:52%"><b>8</b></span>
+      <span class="pin pin--9" style="left:74%;top:46%"><b>9</b></span>
+      <span class="pin pin--10" style="left:66%;top:66%"><b>10</b></span>
+      <span class="pin pin--11" style="left:28%;top:78%"><b>11</b></span>
+      <span class="pin pin--12" style="left:79%;top:67%"><b>12</b></span>
+      <span class="pin pin--13" style="left:62%;top:24%"><b>13</b></span>
+      <span class="pin pin--14" style="left:80%;top:29%"><b>14</b></span>
+      <span class="pin pin--15" style="left:88%;top:47%"><b>15</b></span>
+      <span class="pin pin--16" style="left:51%;top:40%"><b>16</b></span>
+      <span class="pin pin--17" style="left:42%;top:66%"><b>17</b></span>
+      </div>
+      </div></div>
+      <figcaption class="script dg__script">Powering<br>Progress<br>in Every Field
+        <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+      </figcaption>
+    </figure>
+
+    <!-- parts list: a real table, never an image -->
+    <aside class="dg__side">
+      <div class="panel dg__parts">
+        <div class="panel__head"><span class="panel__title">Parts List (Major Assemblies)</span></div>
+        <div class="panel__body scroll-y dg__partsBody">
+          <table class="tbl tbl--parts">
+            <thead><tr><th>No.</th><th>Assembly / Part</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><i class="pno pno--1">1</i></td><td>Hood &amp; Bonnet</td><td>Engine cover with grille</td></tr>
+              <tr><td><i class="pno pno--2">2</i></td><td>Air Intake</td><td>Air cleaner with pre-cleaner</td></tr>
+              <tr><td><i class="pno pno--3">3</i></td><td>Exhaust System</td><td>Silencer and exhaust pipe</td></tr>
+              <tr><td><i class="pno pno--4">4</i></td><td>Fuel Tank</td><td>Diesel tank with mounting</td></tr>
+              <tr><td><i class="pno pno--5">5</i></td><td>Radiator &amp; Cooling</td><td>Radiator, fan, hoses</td></tr>
+              <tr><td><i class="pno pno--6">6</i></td><td>Engine Assembly</td><td>3-cylinder, 4-stroke diesel</td></tr>
+              <tr><td><i class="pno pno--7">7</i></td><td>Clutch Assembly</td><td>Single / Dual clutch (as per variant)</td></tr>
+              <tr><td><i class="pno pno--8">8</i></td><td>Transmission</td><td>Gearbox with gear train</td></tr>
+              <tr><td><i class="pno pno--9">9</i></td><td>Hydraulic System</td><td>Hydraulic lift and control valve</td></tr>
+              <tr><td><i class="pno pno--10">10</i></td><td>Rear Axle</td><td>Final drive &amp; differential</td></tr>
+              <tr><td><i class="pno pno--11">11</i></td><td>Front Axle</td><td>Steering axle and linkage</td></tr>
+              <tr><td><i class="pno pno--12">12</i></td><td>Wheels &amp; Tyres</td><td>Front and rear wheels</td></tr>
+              <tr><td><i class="pno pno--13">13</i></td><td>Operator Station</td><td>Seat, steering, controls</td></tr>
+              <tr><td><i class="pno pno--14">14</i></td><td>Fender &amp; ROPS</td><td>Fenders and safety frame</td></tr>
+              <tr><td><i class="pno pno--15">15</i></td><td>Three-Point Linkage</td><td>Lower links, top link, stabilizers</td></tr>
+              <tr><td><i class="pno pno--16">16</i></td><td>Electrical System</td><td>Battery, wiring, lights, sensors</td></tr>
+              <tr><td><i class="pno pno--17">17</i></td><td>Chassis / Frame</td><td>Main frame structure</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <a class="dg__manual" href="#brochure" data-goto="brochure">
+        <span class="dg__manualIco"><svg class="i i--xl"><use href="#i-download"></use></svg></span>
+        <span><b>Download Parts Manual (PDF)</b><span>Detailed exploded view with part numbers</span></span>
+      </a>
+    </aside>
+  </div>
+
+  <!-- assembly cards -->
+  <div class="dg__cards">
+    <article class="panel dg__card" style="--bar:#D62222">
+      <div class="panel__bar"><i class="num">6</i> Engine Assembly</div>
+      <div class="dg__cardImg"><img src="assets/img/part/part-engine.webp" alt="" decoding="async"></div>
+    </article>
+    <article class="panel dg__card" style="--bar:#F2600C">
+      <div class="panel__bar"><i class="num">8</i> Transmission Assembly</div>
+      <div class="dg__cardImg"><img src="assets/img/part/part-gearbox.webp" alt="" decoding="async"></div>
+    </article>
+    <article class="panel dg__card" style="--bar:#0A6DF0">
+      <div class="panel__bar"><i class="num">9</i> Hydraulic System</div>
+      <div class="dg__cardImg"><img src="assets/img/part/part-axle-rear.webp" alt="" decoding="async"></div>
+    </article>
+    <article class="panel dg__card" style="--bar:#12B23A">
+      <div class="panel__bar"><i class="num">11</i> Front Axle Assembly</div>
+      <div class="dg__cardImg"><img src="assets/img/part/part-front-axle.webp" alt="" decoding="async"></div>
+    </article>
+    <article class="panel dg__card" style="--bar:#7B2FD6">
+      <div class="panel__bar"><i class="num">15</i> Three-Point Linkage</div>
+      <div class="dg__cardImg"><img src="assets/img/part/part-linkage.webp" alt="" decoding="async"></div>
+    </article>
+    <article class="panel dg__card" style="--bar:#E0A006">
+      <div class="panel__bar"><i class="num">12</i> Wheel Assembly</div>
+      <div class="dg__cardImg"><img src="assets/img/part/part-wheel.webp" alt="" decoding="async"></div>
+    </article>
+  </div>
+</section>
+
+<!-- =================================================== 05 SCHEMATIC DIAGRAM -->
+<section class="screen sc-diagram sc-schematic" id="s-schematic" data-rail="solid" data-chrome="product">
+
+  <header class="dg__head">
+    <div class="dg__headText">
+      <h1 class="dg__title">Schematic Diagram (Systems View)</h1>
+      <p class="dg__sub">Understand How the STANDARD DI 470 Works Together</p>
+      <p class="dg__copy">This schematic shows the major systems and how they interact to deliver power, control, hydraulic output and electrical support for reliable performance in every field.</p>
+    </div>
+    <div class="band dg__band dg__band--split">
+      <div>
+        <span class="band__t">STANDARD DI 470</span>
+        <span class="band__s">SIMPLE. STRONG. DEPENDABLE.</span>
+      </div>
+      <i class="dg__bandRule"></i>
+      <div><span class="band__s band__s--lg">BUILT<br>FOR EVERY FIELD</span></div>
+    </div>
+  </header>
+
+  <div class="dg__body">
+
+    <figure class="dg__canvas sch__canvas">
+      <div class="dg__media artfit"><div class="dg__frame artfit__in">
+      <!-- The systems artwork carries the colour-keyed routing itself, so the
+           screen supplies the callouts and the legend beside it, not a second
+           set of pipes drawn over the first. -->
+      <img class="dg__art" src="assets/img/product/schematic.webp" alt="STANDARD DI 470 systems schematic" decoding="async">
+
+      <span class="cal cal--air"    style="left:19.1%;top:16.9%">Air Intake</span>
+      <span class="cal cal--exh"    style="left:33.2%;top:17.1%">Exhaust</span>
+      <span class="cal cal--fuel"   style="left:46.9%;top:19.5%">Fuel System</span>
+      <span class="cal cal--op"     style="left:71.3%;top:15.5%">Operator Station</span>
+      <span class="cal cal--elec"   style="left:60.9%;top:33.8%">Electrical System</span>
+      <span class="cal cal--hyd"    style="left:87.0%;top:32.8%">Hydraulics<br>(3-Point Linkage)</span>
+      <span class="cal cal--eng"    style="left:12.4%;top:35.9%">Engine</span>
+      <span class="cal cal--cool"   style="left:10.5%;top:46.2%">Cooling System</span>
+      <span class="cal cal--clutch" style="left:36.7%;top:70.2%">Clutch</span>
+      <span class="cal cal--trans"  style="left:48.7%;top:69.1%">Transmission</span>
+      <span class="cal cal--faxle"  style="left:29.2%;top:75.6%">Front Axle</span>
+      <span class="cal cal--raxle"  style="left:63.2%;top:74.9%">Rear Axle</span>
+      </div></div>
+
+      <figcaption class="script dg__script">Powering<br>Progress<br>in Every Field
+        <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+      </figcaption>
+    </figure>
+
+    <aside class="panel sch__legend">
+      <div class="panel__head"><span class="panel__title">System Color Guide</span></div>
+      <div class="panel__body sch__legendBody">
+        <div class="sch__row"><i style="background:var(--sys-engine)"></i><span><b>Engine System</b>Combustion &amp; Power</span></div>
+        <div class="sch__row"><i style="background:var(--sys-transmission)"></i><span><b>Transmission System</b>Power Transfer</span></div>
+        <div class="sch__row"><i style="background:var(--sys-hydraulic)"></i><span><b>Hydraulic System</b>Lifting &amp; Implement Control</span></div>
+        <div class="sch__row"><i style="background:var(--sys-fuel)"></i><span><b>Fuel System</b>Fuel Supply</span></div>
+        <div class="sch__row"><i style="background:var(--sys-cooling)"></i><span><b>Cooling System</b>Heat Management</span></div>
+        <div class="sch__row"><i style="background:var(--sys-electrical)"></i><span><b>Electrical System</b>Power &amp; Controls</span></div>
+        <div class="sch__row"><i style="background:var(--sys-controls)"></i><span><b>Operator Controls</b>Steering, Brakes, PTO Engagement</span></div>
+        <div class="sch__row"><i style="background:var(--sys-air)"></i><span><b>Air Intake &amp; Exhaust System</b>Clean Air In, Emissions Out</span></div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="dg__cards sch__cards">
+    <article class="panel dg__card sch__card" style="--bar:var(--sys-engine)">
+      <div class="panel__bar"><svg class="i i--sm"><use href="#i-engine"></use></svg> Engine System</div>
+      <div class="sch__cardImg"><img src="assets/img/part/part-engine.webp" alt="" decoding="async"></div>
+      <ul class="dotlist sch__list">
+        <li>3 Cylinder, 4 Stroke</li><li>2933 cc, 47 HP @ 2000 RPM</li>
+        <li>Inline Injection Pump</li><li>Dry Type Air Cleaner</li>
+      </ul>
+    </article>
+    <article class="panel dg__card sch__card" style="--bar:var(--sys-transmission)">
+      <div class="panel__bar"><svg class="i i--sm"><use href="#i-gearbox"></use></svg> Transmission System</div>
+      <div class="sch__cardImg"><img src="assets/img/part/part-gearbox.webp" alt="" decoding="async"></div>
+      <ul class="dotlist sch__list">
+        <li>Dual Clutch (Independent PTO)</li><li>8 Forward + 2 Reverse</li>
+        <li>Sliding Mesh Gearbox</li><li>Max Speed 30.5 km/h</li>
+      </ul>
+    </article>
+    <article class="panel dg__card sch__card" style="--bar:var(--sys-hydraulic)">
+      <div class="panel__bar"><svg class="i i--sm"><use href="#i-lift"></use></svg> Hydraulic System</div>
+      <div class="sch__cardImg"><img src="assets/img/part/part-linkage.webp" alt="" decoding="async"></div>
+      <ul class="dotlist sch__list">
+        <li>Lifting Capacity 1500 kg</li><li>Position &amp; Draft Control</li>
+        <li>3-Point Linkage (Category II)</li><li>High Efficiency Gear Pump</li>
+      </ul>
+    </article>
+    <article class="panel dg__card sch__card" style="--bar:var(--sys-fuel)">
+      <div class="panel__bar"><svg class="i i--sm"><use href="#i-fuel"></use></svg> Fuel System</div>
+      <div class="sch__cardImg"><img src="assets/img/part/part-fueltank.webp" alt="" decoding="async"></div>
+      <ul class="dotlist sch__list">
+        <li>Fuel Tank Capacity 60 Litres</li><li>Inline Injection System</li>
+        <li>Fuel Filter with Water Separator</li><li>Reliable for Long Hours</li>
+      </ul>
+    </article>
+    <article class="panel dg__card sch__card" style="--bar:var(--sys-cooling)">
+      <div class="panel__bar"><svg class="i i--sm"><use href="#i-radiator"></use></svg> Cooling System</div>
+      <div class="sch__cardImg"><img src="assets/img/part/part-radiator.webp" alt="" decoding="async"></div>
+      <ul class="dotlist sch__list">
+        <li>Water Cooled</li><li>High Efficiency Radiator</li>
+        <li>Forced Circulation (Water Pump)</li><li>Overheat Protection</li>
+      </ul>
+    </article>
+    <article class="panel dg__card sch__card" style="--bar:var(--sys-electrical)">
+      <div class="panel__bar"><svg class="i i--sm"><use href="#i-bolt"></use></svg> Electrical System</div>
+      <div class="sch__cardImg"><img src="assets/img/part/part-battery.webp" alt="" decoding="async"></div>
+      <ul class="dotlist sch__list">
+        <li>12V, 75Ah Battery</li><li>Alternator</li>
+        <li>Lights, Indicators, Horn</li><li>Safety Start System</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- ================================================= 06 ENGINEERING DRAWING -->
+<section class="screen sc-diagram sc-drawing" id="s-drawing" data-rail="solid" data-chrome="product">
+
+  <header class="dg__head">
+    <div class="dg__headText">
+      <h1 class="dg__title">Engineering Drawing / Blueprint</h1>
+      <p class="dg__sub">Physical Dimension View</p>
+      <p class="dg__copy">Accurate dimensions for planning, transport, operation and attachment compatibility. All dimensions are in millimetres (mm) unless otherwise stated.</p>
+    </div>
+    <div class="band dg__band">
+      <span class="band__t">STANDARD DI 470</span>
+      <i class="band__rule"></i>
+      <span class="band__s">BUILT TO PERFORM.<br>DESIGNED FOR REAL FIELDS.</span>
+    </div>
+    <span class="dw__note"><b>All dimensions are in mm</b><span>(For reference only)</span></span>
+  </header>
+
+  <div class="dw__grid">
+
+    <figure class="panel dw__view">
+      <figcaption class="dw__cap">FRONT VIEW</figcaption>
+      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:.867">
+          <img src="assets/img/part/bp-front.webp" alt="Front view blueprint" decoding="async">
+        </div>
+        <span class="dv dv--tl"><b>2160</b><i>Overall Height</i></span>
+        <span class="dv dv--br"><b>1980</b><i>Overall Width</i></span>
+        <span class="dv dv--bl"><b>1580</b><i>Front Track</i></span>
+      </div>
+    </figure>
+
+    <figure class="panel dw__view dw__view--side">
+      <figcaption class="dw__cap">SIDE VIEW (LEFT)</figcaption>
+      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:1.992">
+          <img src="assets/img/part/bp-side.webp" alt="Side view blueprint" decoding="async">
+        </div>
+        <span class="dv dv--tl"><b>1340</b><i>Height to Steering Wheel</i></span>
+        <span class="dv dv--bl"><b>2180</b><i>Wheelbase</i></span>
+        <span class="dv dv--br"><b>4205</b><i>Overall Length</i></span>
+      </div>
+    </figure>
+
+    <figure class="panel dw__view">
+      <figcaption class="dw__cap">REAR VIEW</figcaption>
+      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:1.099">
+          <img src="assets/img/part/bp-rear.webp" alt="Rear view blueprint" decoding="async">
+        </div>
+        <span class="dv dv--tl"><b>410</b><i>Ground Clearance</i></span>
+        <span class="dv dv--bl"><b>1670</b><i>Rear Track</i></span>
+        <span class="dv dv--br"><b>1980</b><i>Overall Width</i></span>
+      </div>
+    </figure>
+
+    <figure class="panel dw__view dw__view--top">
+      <figcaption class="dw__cap">TOP VIEW</figcaption>
+      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:1.712">
+          <img src="assets/img/part/bp-top.webp" alt="Top view blueprint" decoding="async">
+        </div>
+        <span class="dv dv--tl"><b>1980</b><i>Overall Width</i></span>
+        <span class="dv dv--br"><b>4205</b><i>Overall Length</i></span>
+      </div>
+    </figure>
+
+    <div class="panel dw__key">
+      <div class="panel__bar">KEY DIMENSIONS</div>
+      <div class="panel__body dw__keyBody">
+        <table class="tbl tbl--spec">
+          <thead><tr><th>Parameter</th><th>Dimension (mm)</th></tr></thead>
+          <tbody>
+            <tr><td>Overall Length</td><td>4205</td></tr>
+            <tr><td>Overall Width</td><td>1980</td></tr>
+            <tr><td>Overall Height</td><td>2160</td></tr>
+            <tr><td>Wheelbase</td><td>2180</td></tr>
+            <tr><td>Front Track Width</td><td>1580</td></tr>
+            <tr><td>Rear Track Width</td><td>1670</td></tr>
+            <tr><td>Ground Clearance</td><td>410</td></tr>
+            <tr><td>Front Tyre Size</td><td>7.50 &ndash; 16</td></tr>
+            <tr><td>Rear Tyre Size</td><td>16.9 &ndash; 28</td></tr>
+            <tr><td>Height to Steering Wheel</td><td>1340</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel dw__detail">
+      <div class="panel__head"><span class="panel__title">DETAILED VIEWS</span></div>
+      <div class="panel__body dw__detailGrid">
+        <figure><figcaption>FRONT AXLE (SECTION)</figcaption>
+          <span class="dw__mini"><img src="assets/img/part/bp-axle.webp" alt="" decoding="async"></span>
+          <span class="dw__miniDim"><b>1580</b><i>(Track Width)</i></span></figure>
+        <figure><figcaption>REAR HITCH (3-POINT LINKAGE)</figcaption>
+          <span class="dw__mini"><img src="assets/img/part/bp-hitch.webp" alt="" decoding="async"></span>
+          <span class="dw__miniDim"><b>610 &ndash; 915</b><i>(Adjustable)</i></span></figure>
+        <figure><figcaption>TYRE DIMENSIONS</figcaption>
+          <span class="dw__mini"><img src="assets/img/part/bp-tyres.webp" alt="" decoding="async"></span>
+          <span class="dw__miniDim"><b>7.50&ndash;16 / 16.9&ndash;28</b><i>(Front / Rear)</i></span></figure>
+      </div>
+    </div>
+  </div>
+
+  <div class="dw__foot">
+    <span class="dw__footBrand"><svg class="i i--xl"><use href="#i-ruler"></use></svg><b>Precision Engineering</b><span>for a Stronger Tomorrow</span></span>
+    <div class="dw__footItems">
+      <span><svg class="i i--sm"><use href="#i-gear"></use></svg>Optimized Dimensions<br>for Indian Fields</span>
+      <span><svg class="i i--sm"><use href="#i-shield"></use></svg>Robust &amp; Reliable<br>Design</span>
+      <span><svg class="i i--sm"><use href="#i-tractor"></use></svg>Easy Attachment<br>Compatibility</span>
+      <span><svg class="i i--sm"><use href="#i-wrench"></use></svg>Built for Performance<br>and Durability</span>
+    </div>
+    <span class="dw__footNote">Note: Dimensions are approximate and may vary based on tyre size, optional equipment and configuration. &nbsp;|&nbsp; STANDARD DI 470 &ndash; Engineering Drawing &nbsp;|&nbsp; Rev. 01</span>
+  </div>
+</section>
+
+<!-- =========================================================== 07 EXTERIOR -->
+<section class="screen sc-hot sc-exterior" id="s-exterior" data-rail="overlay" data-chrome="product">
+  <div class="ht__stage" data-fs>
+
+    <header class="ht__head">
+      <h1 class="ht__title">Exterior View</h1>
+      <p class="ht__sub">Rugged. Reliable. Ready for Every Field.</p>
+    </header>
+
+    <div class="script ht__script">Powering<br>Progress<br>in Every Field
+      <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+    </div>
+
+    <div class="ht__media artfit">
+      <div class="ht__frame artfit__in">
+        <img class="ht__art" data-view-target src="assets/img/product/front-left.webp" alt="STANDARD DI 470 exterior" decoding="async">
+        <div class="hotlayer">
+          <button class="hotspot" type="button" style="left:28%;top:8%" data-title="Exhaust" data-img="assets/img/part/part-exhaust.webp"
+                  data-text="High-mount exhaust keeps emissions clear of the operator and holds noise down through long shifts.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Exhaust</b><span>High performance, low noise</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:17%;top:16%" data-title="Air Cleaner" data-img="assets/img/part/part-aircleaner.webp"
+                  data-text="Dry-type air cleaner with pre-cleaner keeps dust out of the engine for longer life in dry field conditions."><span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span></button>
+          <button class="hotspot" type="button" data-side="left" style="left:16%;top:43%" data-title="Front Grille" data-img="assets/img/product/grille.webp"
+                  data-text="Stylish, rugged grille protects the radiator core while channelling clean air for efficient cooling.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Front Grille</b><span>Stylish &amp; rugged design</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:43%;top:47%" data-title="Engine Bay" data-img="assets/img/part/part-engine.webp"
+                  data-text="47 HP direct-injection engine mounted for easy service access and balanced weight distribution."><span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span></button>
+          <button class="hotspot" type="button" style="left:74%;top:26%" data-title="Fender &amp; ROPS" data-img="assets/img/part/part-cab.webp"
+                  data-text="Wide fenders and a foldable roll-over protection structure keep the operator protected in every condition."><span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span></button>
+          <button class="hotspot" type="button" data-side="left" style="left:86%;top:60%" data-title="Rear Tyre" data-img="assets/img/part/part-wheel.webp"
+                  data-text="16.9 &ndash; 28 rear tyres deliver better traction and higher productivity in wet, loose and tilled soil.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Rear Tyre</b><span>Better traction for higher productivity</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:10%;top:74%" data-title="Front Tyre" data-img="assets/img/part/part-wheel.webp"
+                  data-text="7.50 &ndash; 16 front tyres give precise steering response and a stable footprint on uneven ground."><span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ctrlstack ht__ctrl">
+      <button class="ctrlstack__btn" type="button" data-vc="full"><svg class="i"><use href="#i-maximize"></use></svg>Fullscreen</button>
+      <button class="ctrlstack__btn" type="button" data-vc="rotate"><svg class="i"><use href="#i-rotate"></use></svg>Auto Rotate</button>
+      <button class="ctrlstack__btn" type="button" data-vc="reset"><svg class="v360__glyphSm" viewBox="-1.2 -0.5 47.4 23.7"><use href="#i-360"></use></svg>Reset View</button>
+      <!-- The spin set has no AR of its own, so AR gets an explicit launcher.
+           It loads <model-viewer> and the .glb only when tapped. -->
+      <button class="ctrlstack__btn" type="button" data-ar-launch><svg class="i"><use href="#i-ar"></use></svg>View in AR</button>
+    </div>
+
+    <div class="plate plate--row ht__plate">
+      <svg class="i i--xl"><use href="#i-tractor"></use></svg>
+      <span><span class="plate__t">DI 470</span><span class="plate__s">Power &nbsp;|&nbsp; Performance &nbsp;|&nbsp; Profitability</span></span>
+    </div>
+
+    <div class="ht__rotate">
+      <svg viewBox="0 0 320 44" aria-hidden="true">
+        <path d="M14 26q146 26 292 0" fill="none" stroke="#1A3A5C" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M14 26 26 17M14 26l12 10M306 26l-12-9M306 26l-12 10" fill="none" stroke="#1A3A5C" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      <b>360&deg;</b>
+      <span>Drag to rotate &nbsp;|&nbsp; Click on hotspots to explore</span>
+    </div>
+
+    <a class="hintpill ht__ar" href="#view360" data-goto="view360">
+      <svg class="i i--lg"><use href="#i-ar"></use></svg>
+      <span><span class="hintpill__t">View in your space</span><span class="hintpill__s">AR</span></span>
+    </a>
+  </div>
+
+  <div class="thumbstrip ht__thumbs">
+    <button class="thumb is-active" type="button" data-view="front"><span class="thumb__img"><img src="assets/img/product/front-thumb.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb" type="button" data-view="front-left"><span class="thumb__img"><img src="assets/img/product/front-left-thumb.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left"><span class="thumb__img"><img src="assets/img/product/left-thumb.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left"><span class="thumb__img"><img src="assets/img/product/rear-left-thumb.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear"><span class="thumb__img"><img src="assets/img/product/rear-thumb.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right"><span class="thumb__img"><img src="assets/img/product/rear-right-thumb.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right"><span class="thumb__img"><img src="assets/img/product/right-thumb.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right"><span class="thumb__img"><img src="assets/img/product/front-right-thumb.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top"><span class="thumb__img"><img src="assets/img/product/top-thumb.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+  </div>
+</section>
+
+<!-- ============================================================= 08 ENGINE -->
+<section class="screen sc-hot sc-engine" id="s-engine" data-rail="overlay" data-chrome="product">
+  <div class="ht__stage" data-fs>
+
+    <header class="ht__head ht__head--copy">
+      <h1 class="ht__title">Engine View</h1>
+      <p class="ht__sub">Power that Drives Progress</p>
+      <p class="ht__copy">Reliable, fuel-efficient and designed for tough conditions, the STANDARD engine delivers consistent performance in every field.</p>
+    </header>
+
+    <div class="script ht__script">Powering<br>Progress<br>in Every Field
+      <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+    </div>
+
+    <div class="ht__media artfit">
+      <div class="ht__frame artfit__in">
+        <img class="ht__art ht__art--wide" data-view-target src="assets/img/product/engine.webp" alt="STANDARD DI 470 engine" decoding="async">
+        <div class="hotlayer">
+          <button class="hotspot" type="button" style="left:55%;top:12%" data-title="Exhaust" data-img="assets/img/part/part-exhaust.webp"
+                  data-text="Efficient emission control with a high-mount silencer that keeps the working area clear.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Exhaust</b><span>Efficient emission control</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:34%;top:26%" data-title="Air Cleaner" data-img="assets/img/part/part-aircleaner.webp"
+                  data-text="Dry-type air cleaner with pre-cleaner: cleaner air in, longer engine life out.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Air Cleaner</b><span>Cleaner air, longer engine life</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:29%;top:49%" data-title="Radiator" data-img="assets/img/part/part-radiator.webp"
+                  data-text="High-efficiency radiator with forced water circulation keeps the engine cool even in harsh conditions.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Radiator</b><span>Keeps engine cool even in harsh conditions</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:44%;top:53%" data-title="Engine Block" data-img="assets/img/part/part-engine.webp"
+                  data-text="Robust cast block, 3 cylinders, 2933 cc, tuned for high torque at low revs.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Engine Block</b><span>Robust and durable design</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:52%;top:38%" data-title="Fuel Injection Pump" data-img="assets/img/part/part-engine.webp"
+                  data-text="Inline injection pump delivers precise fuel metering for better mileage and lower running cost.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Fuel Injection Pump</b><span>Precise fuel delivery for better mileage</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:58%;top:62%" data-title="Alternator" data-img="assets/img/part/part-battery.webp"
+                  data-text="Reliable power supply for lights, indicators and electrical accessories.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Alternator</b><span>Reliable power supply</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:46%;top:63%" data-title="Oil Filter" data-img="assets/img/part/part-engine.webp"
+                  data-text="Full-flow oil filter keeps lubricant clean for longer engine life between services.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Oil Filter</b><span>Cleaner oil for longer engine life</span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="panel sidepane ht__side">
+      <div class="panel__body speclist">
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-gear"></use></svg><span><b>47 HP</b><span>Engine Power</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-fuel"></use></svg><span><b>Fuel Efficient</b><span>Lower Operating Cost</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-leaf"></use></svg><span><b>Low Emission</b><span>Cleaner &amp; Greener</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-shield"></use></svg><span><b>High Durability</b><span>Built for Tough Conditions</span></span></div>
+      </div>
+    </aside>
+
+    <div class="plate plate--row ht__plate">
+      <svg class="i i--xl"><use href="#i-gear"></use></svg>
+      <span><span class="plate__t">DI 470 Engine</span><span class="plate__s">Performance &nbsp;|&nbsp; Efficiency &nbsp;|&nbsp; Reliability</span></span>
+    </div>
+
+    <div class="hintpill ht__hint">
+      <svg class="v360__glyphSm" viewBox="-1.2 -0.5 47.4 23.7"><use href="#i-360"></use></svg>
+      <span><span class="hintpill__t">Drag to rotate</span><span class="hintpill__s">Explore every detail</span></span>
+    </div>
+  </div>
+
+  <div class="thumbstrip ht__thumbs ht__thumbs--wide">
+    <button class="thumb" type="button" data-view="front"><span class="thumb__img"><img src="assets/img/product/front-thumb.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb" type="button" data-view="front-left"><span class="thumb__img"><img src="assets/img/product/front-left-thumb.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left"><span class="thumb__img"><img src="assets/img/product/left-thumb.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left"><span class="thumb__img"><img src="assets/img/product/rear-left-thumb.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear"><span class="thumb__img"><img src="assets/img/product/rear-thumb.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right"><span class="thumb__img"><img src="assets/img/product/rear-right-thumb.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right"><span class="thumb__img"><img src="assets/img/product/right-thumb.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right"><span class="thumb__img"><img src="assets/img/product/front-right-thumb.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top"><span class="thumb__img"><img src="assets/img/product/top-thumb.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+    <button class="thumb is-active" type="button" data-view="engine"><span class="thumb__img"><img src="assets/img/product/engine-thumb.webp" alt=""></span><span class="thumb__label">Engine</span></button>
+    <button class="thumb" type="button" data-view="cutaway"><span class="thumb__img"><img src="assets/img/product/cutaway-thumb.webp" alt=""></span><span class="thumb__label">Cutaway View</span></button>
+  </div>
+</section>
+
+<!-- =================================================== 09 OPERATOR STATION -->
+<section class="screen sc-hot sc-operator" id="s-operator" data-rail="overlay" data-chrome="product">
+  <div class="ht__stage" data-fs>
+
+    <header class="ht__head ht__head--copy">
+      <h1 class="ht__title">Operator Station</h1>
+      <p class="ht__sub">Comfort. Control. Confidence.</p>
+      <p class="ht__copy">Designed for long hours and higher productivity, the STANDARD operator station offers superior comfort, easy controls and excellent visibility.</p>
+    </header>
+
+    <div class="script ht__script">Powering<br>Progress<br>in Every Field
+      <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+    </div>
+
+    <div class="ht__media artfit">
+      <div class="ht__frame artfit__in">
+        <img class="ht__art ht__art--wide" data-view-target src="assets/img/product/operator.webp" alt="STANDARD DI 470 operator station" decoding="async">
+        <div class="hotlayer">
+          <button class="hotspot" type="button" style="left:68.7%;top:18.8%" data-title="Rear View Mirror" data-img="assets/img/part/part-cab.webp"
+                  data-text="Wide-angle mirror gives a clear view of the implement and trailer for safer operations.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Rear View Mirror</b><span>Wide view for safer operations</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:44.7%;top:27.8%" data-title="Instrument Cluster" data-img="assets/img/part/part-cab.webp"
+                  data-text="Clear, easy-to-read analogue and digital display for speed, RPM, fuel and service alerts.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Instrument Cluster</b><span>Clear, easy-to-read display for better control</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:59.1%;top:37.1%" data-title="Steering Wheel" data-img="assets/img/part/part-cab.webp"
+                  data-text="Ergonomic steering wheel with a comfortable grip and optional power steering for effortless turning.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Steering Wheel</b><span>Ergonomic design for comfortable grip</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:33.1%;top:39.7%" data-title="Gear Lever" data-img="assets/img/part/part-gearbox.webp"
+                  data-text="Smooth, precise shifting across 8 forward and 2 reverse gears with a sliding-mesh gearbox.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Gear Lever</b><span>Smooth &amp; precise shifting</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:68.0%;top:46.2%" data-title="PTO Lever" data-img="assets/img/part/part-linkage.webp"
+                  data-text="Independent PTO engagement makes running multiple implements quick and simple.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>PTO Lever</b><span>Easy engagement for multiple implements</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:34.6%;top:60.6%" data-title="Foot Pedals" data-img="assets/img/part/part-chassis.webp"
+                  data-text="Well-spaced clutch and brake pedals reduce fatigue over a long working day.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Foot Pedals</b><span>Well-spaced pedals for ease of use</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:71.3%;top:58.2%" data-title="Hydraulic Control Lever" data-img="assets/img/part/part-linkage.webp"
+                  data-text="Position and draft control levers sit within easy reach for quick, accurate implement adjustment.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Hydraulic Control Lever</b><span>Conveniently placed for quick operation</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:52.7%;top:66.2%" data-title="Comfortable Seat" data-img="assets/img/part/part-cab.webp"
+                  data-text="Adjustable cushioned seat with lumbar support, tuned for long hours in the field.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Comfortable Seat</b><span>Adjustable seat with cushion for long hours</span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="panel sidepane ht__side">
+      <div class="panel__head"><span class="panel__title">Operator Comfort<br>Highlights</span></div>
+      <div class="panel__body speclist">
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-seat"></use></svg><span><b>Ergonomic Seating</b></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-eye"></use></svg><span><b>Excellent Visibility</b></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-sliders"></use></svg><span><b>Easy-to-Reach Controls</b></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-shield"></use></svg><span><b>Safe &amp; Comfortable</b></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-clock"></use></svg><span><b>Designed for<br>Long Working Hours</b></span></div>
+      </div>
+    </aside>
+
+    <div class="plate plate--row ht__plate">
+      <svg class="i i--xl"><use href="#i-seat"></use></svg>
+      <span><span class="plate__t">STANDARD DI 470</span><span class="plate__s">Comfort Meets Productivity</span></span>
+    </div>
+
+    <div class="hintpill ht__hint">
+      <svg class="v360__glyphSm" viewBox="-1.2 -0.5 47.4 23.7"><use href="#i-360"></use></svg>
+      <span><span class="hintpill__t">Drag to rotate</span><span class="hintpill__s">Explore operator station</span></span>
+    </div>
+  </div>
+
+  <div class="thumbstrip ht__thumbs ht__thumbs--wide">
+    <button class="thumb" type="button" data-view="front"><span class="thumb__img"><img src="assets/img/product/front-thumb.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb" type="button" data-view="front-left"><span class="thumb__img"><img src="assets/img/product/front-left-thumb.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left"><span class="thumb__img"><img src="assets/img/product/left-thumb.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left"><span class="thumb__img"><img src="assets/img/product/rear-left-thumb.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear"><span class="thumb__img"><img src="assets/img/product/rear-thumb.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right"><span class="thumb__img"><img src="assets/img/product/rear-right-thumb.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right"><span class="thumb__img"><img src="assets/img/product/right-thumb.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right"><span class="thumb__img"><img src="assets/img/product/front-right-thumb.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top"><span class="thumb__img"><img src="assets/img/product/top-thumb.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+    <button class="thumb" type="button" data-view="engine"><span class="thumb__img"><img src="assets/img/product/engine-thumb.webp" alt=""></span><span class="thumb__label">Engine</span></button>
+    <button class="thumb is-active" type="button" data-view="operator"><span class="thumb__img"><img src="assets/img/product/operator-thumb.webp" alt=""></span><span class="thumb__label">Operator Station</span></button>
+    <button class="thumb" type="button" data-view="hydraulics"><span class="thumb__img"><img src="assets/img/product/hydraulics-thumb.webp" alt=""></span><span class="thumb__label">Hydraulics</span></button>
+  </div>
+</section>
+
+<!-- ========================================================= 10 HYDRAULICS -->
+<section class="screen sc-hot sc-hydraulics" id="s-hydraulics" data-rail="overlay" data-chrome="product">
+  <div class="ht__stage" data-fs>
+
+    <header class="ht__head ht__head--copy">
+      <h1 class="ht__title">Hydraulics</h1>
+      <p class="ht__sub">Power to Do More</p>
+      <p class="ht__copy">The STANDARD DI 470 comes with a robust and reliable hydraulic system, designed to deliver superior lifting capacity, smooth control and versatility for a wide range of implements.</p>
+    </header>
+
+    <div class="ht__media artfit">
+      <div class="ht__frame artfit__in">
+        <img class="ht__art ht__art--wide" data-view-target src="assets/img/product/hydraulics.webp" alt="STANDARD DI 470 hydraulics" decoding="async">
+        <div class="hotlayer">
+          <button class="hotspot" type="button" style="left:51.0%;top:15.4%" data-title="Top Link" data-img="assets/img/part/part-linkage.webp"
+                  data-text="Adjustable top link sets implement pitch precisely for different tools and soil conditions.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Top Link</b><span>Adjustable for different implements</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:64.5%;top:22.5%" data-title="Hydraulic Control Valve" data-img="assets/img/part/part-linkage.webp"
+                  data-text="Position and draft control valve for smooth, precise implement handling in every pass.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Hydraulic Control Valve</b><span>Smooth and precise implement control</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:39.8%;top:41.0%" data-title="Lift Arms" data-img="assets/img/part/part-linkage.webp"
+                  data-text="Heavy-duty lift arms rated for 1500 kg at the lower links.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Lift Arms</b><span>Strong and durable for heavy implements</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:65.7%;top:40.6%" data-title="Quick Couplers" data-img="assets/img/part/part-gearbox.webp"
+                  data-text="Dual remote valves with quick couplers make connecting hydraulic implements a one-hand job.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Quick Couplers</b><span>Easy connection for hydraulic implements</span></span>
+          </button>
+          <button class="hotspot" type="button" style="left:54.9%;top:60.8%" data-title="PTO &amp; Hydraulic Integration" data-img="assets/img/part/part-axle-rear.webp"
+                  data-text="Independent PTO works alongside the hydraulics so multi-implement operations stay efficient.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>PTO &amp; Hydraulic Integration</b><span>Designed for efficient multi-implement usage</span></span>
+          </button>
+          <button class="hotspot" type="button" data-side="left" style="left:36.1%;top:76.1%" data-title="Lower Link Arms" data-img="assets/img/part/part-linkage.webp"
+                  data-text="Category II lower links, heavy-duty and adjustable for a wide range of attachments.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-plus"></use></svg></span>
+            <span class="hotspot__note"><b>Lower Link Arms</b><span>Heavy-duty and adjustable</span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel hy__mini">
+      <div class="panel__body speclist">
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-lift"></use></svg><span><b>Higher Lifting Capacity</b></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-sliders"></use></svg><span><b>Smooth &amp; Precise Control</b></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-shield"></use></svg><span><b>Built for Tough Conditions</b></span></div>
+      </div>
+    </div>
+
+    <aside class="panel sidepane sidepane--wide ht__side">
+      <div class="panel__head"><span class="panel__title">Hydraulics at a Glance</span></div>
+      <div class="panel__body speclist">
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-lift"></use></svg><span><b>Lifting Capacity</b><span>1500 kg</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-schema"></use></svg><span><b>3-Point Linkage</b><span>Category II</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-gauge"></use></svg><span><b>Control Type</b><span>Position &amp; Draft Control</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-valve"></use></svg><span><b>Remote Valves</b><span>Dual (Standard)</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-pump"></use></svg><span><b>Hydraulic Pump</b><span>High Efficiency</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-tractor"></use></svg><span><b>Implement Compatibility</b><span>Rotavator, Plough, Cultivator, Trailer and more</span></span></div>
+      </div>
+      <div class="script hy__script">Powering<br>Progress<br>in Every Field
+        <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+      </div>
+    </aside>
+
+    <div class="plate plate--row ht__plate">
+      <svg class="i i--xl"><use href="#i-tractor"></use></svg>
+      <span><span class="plate__t">1500 kg</span><span class="plate__s">Lifting Capacity &nbsp;&bull;&nbsp; Versatility for Every Field</span></span>
+    </div>
+  </div>
+
+  <div class="thumbstrip ht__thumbs ht__thumbs--wide">
+    <button class="thumb" type="button" data-view="front"><span class="thumb__img"><img src="assets/img/product/front-thumb.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb" type="button" data-view="front-left"><span class="thumb__img"><img src="assets/img/product/front-left-thumb.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left"><span class="thumb__img"><img src="assets/img/product/left-thumb.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left"><span class="thumb__img"><img src="assets/img/product/rear-left-thumb.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear"><span class="thumb__img"><img src="assets/img/product/rear-thumb.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right"><span class="thumb__img"><img src="assets/img/product/rear-right-thumb.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right"><span class="thumb__img"><img src="assets/img/product/right-thumb.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right"><span class="thumb__img"><img src="assets/img/product/front-right-thumb.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top"><span class="thumb__img"><img src="assets/img/product/top-thumb.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+    <button class="thumb" type="button" data-view="engine"><span class="thumb__img"><img src="assets/img/product/engine-thumb.webp" alt=""></span><span class="thumb__label">Engine</span></button>
+    <button class="thumb" type="button" data-view="operator"><span class="thumb__img"><img src="assets/img/product/operator-thumb.webp" alt=""></span><span class="thumb__label">Operator Station</span></button>
+    <button class="thumb is-active" type="button" data-view="hydraulics"><span class="thumb__img"><img src="assets/img/product/hydraulics-thumb.webp" alt=""></span><span class="thumb__label">Hydraulics</span></button>
+    <button class="thumb" type="button" data-view="cutaway"><span class="thumb__img"><img src="assets/img/product/cutaway-thumb.webp" alt=""></span><span class="thumb__label">Cutaway View</span></button>
+  </div>
+</section>
+
+<!-- =========================================================== 11 FEATURES -->
+<section class="screen sc-hot sc-features" id="s-features" data-rail="overlay" data-chrome="product">
+  <div class="ht__stage" data-fs>
+
+    <header class="ht__head ht__head--copy">
+      <h1 class="ht__title">Features</h1>
+      <p class="ht__sub">Engineered for Performance. Designed for You.</p>
+      <p class="ht__copy">The STANDARD DI 470 combines power, reliability and modern features to help you achieve higher productivity and profitability in every field.</p>
+    </header>
+
+    <div class="ht__media artfit">
+      <div class="ht__frame artfit__in">
+        <img class="ht__art" data-view-target src="assets/img/product/showcase.webp" alt="STANDARD DI 470 features" decoding="async">
+        <div class="hotlayer hotlayer--icons">
+          <button class="hotspot hotspot--card" type="button" style="left:35%;top:13%" data-title="High Mount Exhaust" data-img="assets/img/part/part-exhaust.webp"
+                  data-text="Cleaner emission and lower noise, routed clear of the operator seat.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-info"></use></svg></span>
+            <span class="hotspot__note"><b>High Mount Exhaust</b><span>Cleaner emission, low noise</span></span>
+          </button>
+          <button class="hotspot hotspot--card" type="button" style="left:60%;top:29%" data-title="Ergonomic Seat" data-img="assets/img/part/part-cab.webp"
+                  data-text="Cushioned, adjustable seat built for comfort across long working hours.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-seat"></use></svg></span>
+            <span class="hotspot__note"><b>Ergonomic Seat</b><span>Comfort for long working hours</span></span>
+          </button>
+          <button class="hotspot hotspot--card" type="button" style="left:70%;top:21%" data-title="Robust ROPS" data-img="assets/img/part/part-cab.webp"
+                  data-text="Foldable roll-over protection structure, standard on every variant.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-shield"></use></svg></span>
+            <span class="hotspot__note"><b>Robust ROPS</b><span>Safety and durability</span></span>
+          </button>
+          <button class="hotspot hotspot--card" type="button" data-side="left" style="left:28%;top:25%" data-title="Air Cleaner" data-img="assets/img/part/part-aircleaner.webp"
+                  data-text="Dry-type air cleaner with pre-cleaner for longer engine life in dusty conditions.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-aircleaner"></use></svg></span>
+            <span class="hotspot__note"><b>Air Cleaner</b><span>Longer engine life in dusty conditions</span></span>
+          </button>
+          <button class="hotspot hotspot--card" type="button" data-side="left" style="left:25%;top:44%" data-title="Stylish Front Grille" data-img="assets/img/part/part-radiator.webp"
+                  data-text="Modern grille design with a larger open area for better cooling airflow.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-grille"></use></svg></span>
+            <span class="hotspot__note"><b>Stylish Front Grille</b><span>Modern design with better cooling</span></span>
+          </button>
+          <button class="hotspot hotspot--card" type="button" data-side="left" style="left:41%;top:52%" data-title="Powerful DI Engine" data-img="assets/img/part/part-engine.webp"
+                  data-text="High torque, fuel-efficient direct injection engine rated at 47 HP.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-engine"></use></svg></span>
+            <span class="hotspot__note"><b>Powerful DI Engine</b><span>High torque, fuel efficient</span></span>
+          </button>
+          <button class="hotspot hotspot--card" type="button" style="left:72%;top:47%" data-title="Advanced Hydraulics" data-img="assets/img/part/part-linkage.webp"
+                  data-text="1500 kg lift with position and draft control for multiple implements.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-lift"></use></svg></span>
+            <span class="hotspot__note"><b>Advanced Hydraulics</b><span>High lifting capacity for multiple implements</span></span>
+          </button>
+          <button class="hotspot hotspot--card" type="button" style="left:52%;top:56%" data-title="Durable Transmission" data-img="assets/img/part/part-gearbox.webp"
+                  data-text="8 forward + 2 reverse sliding-mesh gearbox with smooth, precise shifting.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-gear"></use></svg></span>
+            <span class="hotspot__note"><b>Durable Transmission</b><span>Smooth and precise gear shifting</span></span>
+          </button>
+          <button class="hotspot hotspot--card" type="button" data-side="left" style="left:31%;top:70%" data-title="Heavy Duty Front Axle" data-img="assets/img/part/part-front-axle.webp"
+                  data-text="Reinforced front axle and steering linkage built for tough terrain.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-drive"></use></svg></span>
+            <span class="hotspot__note"><b>Heavy Duty Front Axle</b><span>Stronger. Smoother. Built for tough terrain.</span></span>
+          </button>
+          <button class="hotspot hotspot--card" type="button" style="left:74%;top:66%" data-title="Larger Tyres" data-img="assets/img/part/part-wheel.webp"
+                  data-text="16.9 &ndash; 28 rear tyres for better traction and higher productivity.">
+            <span class="hotspot__dot"><svg class="i"><use href="#i-tyre"></use></svg></span>
+            <span class="hotspot__note"><b>Larger Tyres</b><span>Better traction, higher productivity</span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="panel sidepane sidepane--wide ft__side">
+      <div class="panel__head"><span class="panel__title">Key Features at a Glance</span></div>
+      <div class="panel__body ft__grid">
+        <div class="stat"><svg class="i i--xl"><use href="#i-engine"></use></svg><span class="stat__v">47 HP</span><span class="stat__l">Powerful Engine</span></div>
+        <div class="stat"><svg class="i i--xl"><use href="#i-lift"></use></svg><span class="stat__v">1500 kg</span><span class="stat__l">Lifting Capacity</span></div>
+        <div class="stat"><svg class="i i--xl"><use href="#i-fuel"></use></svg><span class="stat__v">Fuel Efficient</span><span class="stat__l">Lower Operating Cost</span></div>
+        <div class="stat"><svg class="i i--xl"><use href="#i-steering"></use></svg><span class="stat__v">Power Steering</span><span class="stat__l">Easy Handling</span></div>
+        <div class="stat"><svg class="i i--xl"><use href="#i-schema"></use></svg><span class="stat__v">Multi-Implement</span><span class="stat__l">Compatibility</span></div>
+        <div class="stat"><svg class="i i--xl"><use href="#i-shield"></use></svg><span class="stat__v">Robust Build</span><span class="stat__l">For Tough Conditions</span></div>
+        <div class="stat"><svg class="i i--xl"><use href="#i-seat"></use></svg><span class="stat__v">Ergonomic Design</span><span class="stat__l">Comfort &amp; Safety</span></div>
+        <div class="stat"><svg class="i i--xl"><use href="#i-wrench"></use></svg><span class="stat__v">Low Maintenance</span><span class="stat__l">Higher Uptime</span></div>
+      </div>
+      <div class="ft__banner">
+        <img src="assets/img/bg/crop-rows-sm.webp" alt="" decoding="async">
+        <span class="script script--light">Powering<br>Progress<br>in Every Field
+          <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+        </span>
+      </div>
+    </aside>
+  </div>
+
+  <div class="thumbstrip ht__thumbs ht__thumbs--wide">
+    <button class="thumb" type="button" data-view="front"><span class="thumb__img"><img src="assets/img/product/front-thumb.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb" type="button" data-view="front-left"><span class="thumb__img"><img src="assets/img/product/front-left-thumb.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left"><span class="thumb__img"><img src="assets/img/product/left-thumb.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left"><span class="thumb__img"><img src="assets/img/product/rear-left-thumb.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear"><span class="thumb__img"><img src="assets/img/product/rear-thumb.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right"><span class="thumb__img"><img src="assets/img/product/rear-right-thumb.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right"><span class="thumb__img"><img src="assets/img/product/right-thumb.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right"><span class="thumb__img"><img src="assets/img/product/front-right-thumb.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top"><span class="thumb__img"><img src="assets/img/product/top-thumb.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+    <button class="thumb" type="button" data-view="engine"><span class="thumb__img"><img src="assets/img/product/engine-thumb.webp" alt=""></span><span class="thumb__label">Engine</span></button>
+    <button class="thumb" type="button" data-view="operator"><span class="thumb__img"><img src="assets/img/product/operator-thumb.webp" alt=""></span><span class="thumb__label">Operator Station</span></button>
+    <button class="thumb" type="button" data-view="hydraulics"><span class="thumb__img"><img src="assets/img/product/hydraulics-thumb.webp" alt=""></span><span class="thumb__label">Hydraulics</span></button>
+    <button class="thumb is-active" type="button" data-view="showcase"><span class="thumb__img"><img src="assets/img/product/showcase-thumb.webp" alt=""></span><span class="thumb__label">Features</span></button>
+  </div>
+</section>
+
+<!-- ===================================================== 12 SPECIFICATIONS -->
+<section class="screen sc-specs" id="s-specs" data-rail="overlay" data-chrome="product">
+  <div class="sp__body">
+
+    <div class="sp__intro">
+      <h1 class="sp__title">STANDARD DI 470</h1>
+      <p class="sp__sub">Specifications</p>
+      <p class="sp__tag">Proven Performance. Built for Every Field.</p>
+      <p class="sp__copy">Explore the detailed specifications of the STANDARD DI 470, engineered for power, reliability and productivity.</p>
+      <img class="sp__art" src="assets/img/product/front-left.webp" alt="STANDARD DI 470" decoding="async">
+      <div class="script sp__script">Powering<br>Progress<br>in Every Field
+        <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+      </div>
+      <div class="sp__stats">
+        <span><svg class="i i--lg"><use href="#i-engine"></use></svg><b>47 HP</b><i>Power</i></span>
+        <span><svg class="i i--lg"><use href="#i-gear"></use></svg><b>1500 kg</b><i>Lifting Capacity</i></span>
+        <span><svg class="i i--lg"><use href="#i-fuel"></use></svg><b>Fuel Efficient</b><i>Lower Operating Cost</i></span>
+        <span><svg class="i i--lg"><use href="#i-shield"></use></svg><b>Built for</b><i>Tough Conditions</i></span>
+      </div>
+    </div>
+
+    <div class="sp__tables">
+      <div class="panel sp__tbl">
+        <div class="panel__bar"><svg class="i i--sm"><use href="#i-engine"></use></svg> ENGINE</div>
+        <table class="tbl tbl--spec">
+          <tbody>
+            <tr><td>Model</td><td>STANDARD S325</td></tr>
+            <tr><td>Type</td><td>3 Cylinder, 4 Stroke, Naturally Aspirated</td></tr>
+            <tr><td>Displacement</td><td>2933 cc</td></tr>
+            <tr><td>Rated Power</td><td>47 HP (35 kW) @ 2000 RPM</td></tr>
+            <tr><td>Max Torque</td><td>195 Nm @ 1400 RPM</td></tr>
+            <tr><td>Cooling System</td><td>Water Cooled</td></tr>
+            <tr><td>Air Cleaner</td><td>Dry Type with Pre-cleaner</td></tr>
+            <tr><td>Fuel Injection</td><td>Inline Injection Pump</td></tr>
+            <tr><td>Emission Norms</td><td>CPCB Stage V (BS-V)</td></tr>
+            <tr><td>Fuel Tank Capacity</td><td>60 Litres</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel sp__tbl">
+        <div class="panel__bar"><svg class="i i--sm"><use href="#i-gearbox"></use></svg> TRANSMISSION</div>
+        <table class="tbl tbl--spec">
+          <tbody>
+            <tr><td>Clutch</td><td>Dual Clutch (Independent PTO)</td></tr>
+            <tr><td>Gearbox</td><td>8 Forward + 2 Reverse</td></tr>
+            <tr><td>Transmission Type</td><td>Sliding Mesh</td></tr>
+            <tr><td>Max Speed (Forward)</td><td>30.5 km/h</td></tr>
+            <tr><td>Max Speed (Reverse)</td><td>12.5 km/h</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel sp__tbl">
+        <div class="panel__bar"><svg class="i i--sm"><use href="#i-schema"></use></svg> HYDRAULICS</div>
+        <table class="tbl tbl--spec">
+          <tbody>
+            <tr><td>Lifting Capacity</td><td>1500 kg (at lower links)</td></tr>
+            <tr><td>Hydraulic System</td><td>Position &amp; Draft Control</td></tr>
+            <tr><td>3-Point Linkage</td><td>Category II</td></tr>
+            <tr><td>Hydraulic Pump</td><td>High Efficiency Gear Pump</td></tr>
+            <tr><td>Remote Valves</td><td>2 (Standard)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel sp__tbl">
+        <div class="panel__bar"><svg class="i i--sm"><use href="#i-ruler"></use></svg> DIMENSIONS &amp; WEIGHT</div>
+        <table class="tbl tbl--spec">
+          <tbody>
+            <tr><td>Overall Length</td><td>3680 mm</td></tr>
+            <tr><td>Overall Width</td><td>1730 mm</td></tr>
+            <tr><td>Overall Height (with ROPS)</td><td>2240 mm</td></tr>
+            <tr><td>Wheelbase</td><td>2130 mm</td></tr>
+            <tr><td>Ground Clearance</td><td>420 mm</td></tr>
+            <tr><td>Turning Radius (with Brakes)</td><td>3.2 m</td></tr>
+            <tr><td>Weight (Kerb)</td><td>1990 kg</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel sp__tbl">
+        <div class="panel__bar"><svg class="i i--sm"><use href="#i-tyre"></use></svg> TYRES</div>
+        <table class="tbl tbl--spec">
+          <tbody>
+            <tr><td>Front Tyre</td><td>6.00 &ndash; 16</td></tr>
+            <tr><td>Rear Tyre</td><td>13.6 &ndash; 28</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel sp__tbl">
+        <div class="panel__bar"><svg class="i i--sm"><use href="#i-dots"></use></svg> OTHERS</div>
+        <table class="tbl tbl--spec">
+          <tbody>
+            <tr><td>Steering</td><td>Power / Mechanical (Optional)</td></tr>
+            <tr><td>Brakes</td><td>Oil Immersed Multi Disc</td></tr>
+            <tr><td>Electricals</td><td>12V, 75Ah Battery, Alternator</td></tr>
+            <tr><td>ROPS</td><td>Foldable (Standard)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel sp__actions">
+        <a href="#brochure" data-goto="brochure"><svg class="i i--lg"><use href="#i-download-box"></use></svg><span>Download Full Specifications<br>(PDF)</span></a>
+        <i></i>
+        <a href="#compare" data-goto="compare"><svg class="i i--lg"><use href="#i-doc"></use></svg><span>Compare Models</span></a>
+        <i></i>
+        <a href="#enquire" data-goto="enquire"><svg class="i i--lg"><use href="#i-quote"></use></svg><span>Request a Quote</span></a>
+        <i></i>
+        <a href="#enquire" data-goto="enquire"><svg class="i i--lg"><use href="#i-mail"></use></svg><span>Talk to an Expert</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="thumbstrip ht__thumbs ht__thumbs--wide">
+    <button class="thumb" type="button" data-view="front"><span class="thumb__img"><img src="assets/img/product/front-thumb.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb" type="button" data-view="front-left"><span class="thumb__img"><img src="assets/img/product/front-left-thumb.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left"><span class="thumb__img"><img src="assets/img/product/left-thumb.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left"><span class="thumb__img"><img src="assets/img/product/rear-left-thumb.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear"><span class="thumb__img"><img src="assets/img/product/rear-thumb.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right"><span class="thumb__img"><img src="assets/img/product/rear-right-thumb.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right"><span class="thumb__img"><img src="assets/img/product/right-thumb.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right"><span class="thumb__img"><img src="assets/img/product/front-right-thumb.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top"><span class="thumb__img"><img src="assets/img/product/top-thumb.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+    <button class="thumb" type="button" data-view="engine"><span class="thumb__img"><img src="assets/img/product/engine-thumb.webp" alt=""></span><span class="thumb__label">Engine</span></button>
+    <button class="thumb" type="button" data-view="operator"><span class="thumb__img"><img src="assets/img/product/operator-thumb.webp" alt=""></span><span class="thumb__label">Operator Station</span></button>
+    <button class="thumb" type="button" data-view="hydraulics"><span class="thumb__img"><img src="assets/img/product/hydraulics-thumb.webp" alt=""></span><span class="thumb__label">Hydraulics</span></button>
+    <button class="thumb is-active" type="button" data-view="cutaway"><span class="thumb__img"><img src="assets/img/product/cutaway-thumb.webp" alt=""></span><span class="thumb__label">Specifications</span></button>
+  </div>
+</section>
+
+<!-- ============================================================= 13 VIDEOS -->
+<section class="screen sc-videos" id="s-videos" data-rail="overlay" data-chrome="product">
+
+  <!-- Hero band. The poster/video bleeds past the screen padding on three
+       sides; the intro copy and the playlist float on top of it. -->
+  <div class="vd__top">
+
+    <header class="vd__intro">
+      <h1 class="vd__title">Videos</h1>
+      <p class="vd__sub">See Performance in Action</p>
+      <p class="vd__copy">Watch the STANDARD DI 470 in real conditions. Explore detailed videos on features, operations, maintenance and more.</p>
+    </header>
+
+    <!-- Player. Source is the public demo clip declared in assets/js/config.js -->
+    <figure class="vd__player" data-player data-fs>
+      <video class="vd__video" playsinline preload="none"
+             poster="assets/img/scene/action.webp"
+             src="https://threejs.org/examples/textures/MaryOculus.webm"></video>
+      <span class="vd__flag">BUILT STRONGER<br>FOR A BRIGHTER<br>TOMORROW</span>
+      <span class="vd__wordmark">
+        <span>STANDARD</span>
+        <b>DI 470</b>
+        <svg class="vd__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+        <i>POWERING<br>PROGRESS<br>IN EVERY FIELD</i>
+      </span>
+      <button class="vd__big" type="button" data-pp aria-label="Play video"><svg class="i i--xl i--fill"><use href="#i-play-f"></use></svg></button>
+      <div class="vd__bar">
+        <button type="button" data-pp aria-label="Play"><svg class="i i--sm i--fill"><use href="#i-play-f"></use></svg></button>
+        <span class="vd__time" data-time>0:00 / 2:18</span>
+        <span class="vd__track" data-track><i data-fill></i><b data-knob></b></span>
+        <button type="button" data-mute aria-label="Mute"><svg class="i i--sm"><use href="#i-volume"></use></svg></button>
+        <button type="button" data-vc="full" aria-label="Fullscreen"><svg class="i i--sm"><use href="#i-expand"></use></svg></button>
+        <button type="button" data-inert="Demo build &mdash; quality settings ship with the Laravel release." aria-label="Settings"><svg class="i i--sm"><use href="#i-settings"></use></svg></button>
+      </div>
+    </figure>
+
+    <aside class="panel vd__playlist">
+      <div class="panel__head u-between"><span class="panel__title">Video Playlist</span><span class="panel__sub">10 Videos</span></div>
+      <div class="panel__body scroll-y vd__list">
+        <button class="vd__item is-active" type="button" data-inert="Demo build &mdash; playlist switching ships with the Laravel release.">
+          <span class="vd__thumb"><img src="assets/img/scene/action.webp" alt="" decoding="async"><i>2:18</i></span>
+          <span class="vd__badge"><svg class="i i--fill"><use href="#i-play-f"></use></svg></span>
+          <span class="vd__meta"><b>1. Product Overview</b><span>Meet the STANDARD DI 470</span></span>
+          <svg class="i"><use href="#i-chev-r"></use></svg>
+        </button>
+        <button class="vd__item" type="button" data-inert="Demo build &mdash; playlist switching ships with the Laravel release.">
+          <span class="vd__thumb"><img src="assets/img/scene/walkaround.webp" alt="" decoding="async"><i>1:45</i></span>
+          <span class="vd__badge"><svg class="i i--fill"><use href="#i-play-f"></use></svg></span>
+          <span class="vd__meta"><b>2. 360&deg; Walkaround</b><span>Complete exterior view</span></span>
+          <svg class="i"><use href="#i-chev-r"></use></svg>
+        </button>
+        <button class="vd__item" type="button" data-inert="Demo build &mdash; playlist switching ships with the Laravel release.">
+          <span class="vd__thumb"><img src="assets/img/part/part-radiator.webp" alt="" decoding="async"><i>2:32</i></span>
+          <span class="vd__badge"><svg class="i i--fill"><use href="#i-play-f"></use></svg></span>
+          <span class="vd__meta"><b>3. Engine Details</b><span>Power and performance</span></span>
+          <svg class="i"><use href="#i-chev-r"></use></svg>
+        </button>
+        <button class="vd__item" type="button" data-inert="Demo build &mdash; playlist switching ships with the Laravel release.">
+          <span class="vd__thumb"><img src="assets/img/part/part-cab.webp" alt="" decoding="async"><i>1:58</i></span>
+          <span class="vd__badge"><svg class="i i--fill"><use href="#i-play-f"></use></svg></span>
+          <span class="vd__meta"><b>4. Operator Station</b><span>Comfort and control</span></span>
+          <svg class="i"><use href="#i-chev-r"></use></svg>
+        </button>
+        <button class="vd__item" type="button" data-inert="Demo build &mdash; playlist switching ships with the Laravel release.">
+          <span class="vd__thumb"><img src="assets/img/part/part-linkage.webp" alt="" decoding="async"><i>2:10</i></span>
+          <span class="vd__badge"><svg class="i i--fill"><use href="#i-play-f"></use></svg></span>
+          <span class="vd__meta"><b>5. Hydraulics in Action</b><span>Lifting power made easy</span></span>
+          <svg class="i"><use href="#i-chev-r"></use></svg>
+        </button>
+        <button class="vd__item" type="button" data-inert="Demo build &mdash; playlist switching ships with the Laravel release.">
+          <span class="vd__thumb"><img src="assets/img/scene/field-work.webp" alt="" decoding="async"><i>2:46</i></span>
+          <span class="vd__badge"><svg class="i i--fill"><use href="#i-play-f"></use></svg></span>
+          <span class="vd__meta"><b>6. Field Performance</b><span>Real farming conditions</span></span>
+          <svg class="i"><use href="#i-chev-r"></use></svg>
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="vd__more">
+    <h2 class="vd__moreTitle">Explore More Videos</h2>
+    <div class="vd__grid">
+      <a class="vd__card" href="#videos" data-inert="Demo build &mdash; video library ships with the Laravel release.">
+        <span class="mframe"><img src="assets/img/scene/action.webp" alt="" decoding="async"><span class="mframe__play"><svg class="i i--lg i--fill"><use href="#i-play-f"></use></svg></span><span class="mframe__dur">2:18</span></span>
+        <span class="vd__cardTxt"><b>Product Overview</b><span>Meet the STANDARD DI 470</span></span>
+      </a>
+      <!-- Live 360° video. Plays a public equirectangular clip on a video
+           sphere (three.js); drag inside the frame to look around. -->
+      <div class="vd__card vd__card--360">
+        <span class="mframe" data-360video>
+          <img src="assets/img/scene/walkaround.webp" alt="" decoding="async">
+          <button class="mframe__play" type="button" data-play360 aria-label="Play 360 degree video"><svg class="i i--lg i--fill"><use href="#i-play-f"></use></svg></button>
+          <span class="vd__badge360"><svg class="v360__glyphSm" viewBox="-1.2 -0.5 47.4 23.7"><use href="#i-360"></use></svg></span>
+          <span class="mframe__dur">1:45</span>
+        </span>
+        <span class="vd__cardTxt"><b>360&deg; Walkaround</b><span>Complete exterior view</span></span>
+      </div>
+      <a class="vd__card" href="#videos" data-inert="Demo build &mdash; video library ships with the Laravel release.">
+        <span class="mframe"><img src="assets/img/part/part-radiator.webp" alt="" decoding="async"><span class="mframe__play"><svg class="i i--lg i--fill"><use href="#i-play-f"></use></svg></span><span class="mframe__dur">2:32</span></span>
+        <span class="vd__cardTxt"><b>Engine Details</b><span>Power and performance</span></span>
+      </a>
+      <a class="vd__card" href="#videos" data-inert="Demo build &mdash; video library ships with the Laravel release.">
+        <span class="mframe"><img src="assets/img/part/part-cab.webp" alt="" decoding="async"><span class="mframe__play"><svg class="i i--lg i--fill"><use href="#i-play-f"></use></svg></span><span class="mframe__dur">1:58</span></span>
+        <span class="vd__cardTxt"><b>Operator Station</b><span>Comfort and control</span></span>
+      </a>
+      <a class="vd__card" href="#videos" data-inert="Demo build &mdash; video library ships with the Laravel release.">
+        <span class="mframe"><img src="assets/img/part/part-linkage.webp" alt="" decoding="async"><span class="mframe__play"><svg class="i i--lg i--fill"><use href="#i-play-f"></use></svg></span><span class="mframe__dur">2:10</span></span>
+        <span class="vd__cardTxt"><b>Hydraulics in Action</b><span>Lifting power made easy</span></span>
+      </a>
+      <a class="vd__card" href="#videos" data-inert="Demo build &mdash; video library ships with the Laravel release.">
+        <span class="mframe"><img src="assets/img/scene/field-work.webp" alt="" decoding="async"><span class="mframe__play"><svg class="i i--lg i--fill"><use href="#i-play-f"></use></svg></span><span class="mframe__dur">2:46</span></span>
+        <span class="vd__cardTxt"><b>Field Performance</b><span>Real farming conditions</span></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="vd__strip">
+    <span><svg class="i i--xl"><use href="#i-chart"></use></svg><b>Real Field Performance</b><i>See it work where it matters</i></span>
+    <span><svg class="i i--xl"><use href="#i-users"></use></svg><b>Expert Explanations</b><i>Understand every feature</i></span>
+    <span><svg class="i i--xl"><use href="#i-wrench"></use></svg><b>Maintenance Guides</b><i>Keep it running longer</i></span>
+    <span><svg class="i i--xl"><use href="#i-award"></use></svg><b>Customer Stories</b><i>Real farmers. Real success.</i></span>
+    <div class="script vd__script">Powering<br>Progress<br>in Every Field
+      <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 14 GALLERY -->
+<section class="screen sc-gallery" id="s-gallery" data-rail="overlay" data-chrome="product">
+
+  <header class="gl__head">
+    <div class="gl__headText">
+      <h1 class="gl__title">Gallery</h1>
+      <p class="gl__sub">A Closer Look at Excellence</p>
+      <p class="gl__copy">Explore the STANDARD DI 470 from every angle. Real images. Real performance. Real fields.</p>
+    </div>
+    <div class="script gl__script">Powering<br>Progress<br>in Every Field
+      <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+    </div>
+    <div class="band gl__band">
+      <span class="band__t">STANDARD<br>DI 470</span>
+      <i class="band__rule"></i>
+      <span class="band__s">STRONGER TRACTORS<br>BRIGHTER TOMORROWS</span>
+    </div>
+  </header>
+
+  <div class="gl__tools" data-filter-group="gl-grid">
+    <button class="chip is-active" type="button" data-filter="all">All</button>
+    <button class="chip" type="button" data-filter="exterior">Exterior</button>
+    <button class="chip" type="button" data-filter="engine">Engine</button>
+    <button class="chip" type="button" data-filter="operator">Operator Station</button>
+    <button class="chip" type="button" data-filter="hydraulics">Hydraulics</button>
+    <button class="chip" type="button" data-filter="action">In Action</button>
+    <button class="chip" type="button" data-filter="attach">Attachments</button>
+    <button class="chip" type="button" data-filter="detail">Details</button>
+    <a class="btn btn--ghost gl__dl" href="#" data-inert="Demo build &mdash; bulk download ships with the Laravel release.">
+      <svg class="i i--sm"><use href="#i-download"></use></svg><span>Download Images<br><i>(High Resolution)</i></span>
+    </a>
+  </div>
+
+  <!-- Each frame carries its own [data-zoom] button; core.js opens the shot in
+       a 16:9 lightbox with a blurred copy of the same image behind it. -->
+  <div class="gl__grid" id="gl-grid">
+    <figure class="mframe gl__big" data-cat="exterior action"><img src="assets/img/scene/action.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/scene/action.webp" data-zoom-cap="Front-Right View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Front-Right View full screen</span></button><figcaption class="mframe__cap">Front-Right View</figcaption></figure>
+    <figure class="mframe mframe--fit" data-cat="exterior"><img src="assets/img/product/front.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/product/front.webp" data-zoom-cap="Front View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Front View full screen</span></button><figcaption class="mframe__cap">Front View</figcaption></figure>
+    <figure class="mframe mframe--fit" data-cat="exterior hydraulics"><img src="assets/img/product/rear.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/product/rear.webp" data-zoom-cap="Rear View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Rear View full screen</span></button><figcaption class="mframe__cap">Rear View</figcaption></figure>
+    <figure class="mframe" data-cat="exterior"><img src="assets/img/scene/walkaround.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/scene/walkaround.webp" data-zoom-cap="Side View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Side View full screen</span></button><figcaption class="mframe__cap">Side View</figcaption></figure>
+    <figure class="mframe mframe--fit" data-cat="exterior detail"><img src="assets/img/product/top.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/product/top.webp" data-zoom-cap="Top View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Top View full screen</span></button><figcaption class="mframe__cap">Top View</figcaption></figure>
+  </div>
+
+  <div class="gl__strip">
+    <figure data-cat="detail"><span class="mframe"><img src="assets/img/product/grille.webp" alt="" decoding="async"></span><figcaption>Stylish Front Grille</figcaption></figure>
+    <figure data-cat="detail"><span class="mframe"><img src="assets/img/part/part-headlamp.webp" alt="" decoding="async"></span><figcaption>LED Headlamp</figcaption></figure>
+    <figure data-cat="engine"><span class="mframe"><img src="assets/img/product/engine.webp" alt="" decoding="async"></span><figcaption>Engine View</figcaption></figure>
+    <figure data-cat="operator"><span class="mframe"><img src="assets/img/product/operator.webp" alt="" decoding="async"></span><figcaption>Operator Station</figcaption></figure>
+    <figure data-cat="hydraulics"><span class="mframe"><img src="assets/img/part/part-linkage.webp" alt="" decoding="async"></span><figcaption>Hydraulic Linkage</figcaption></figure>
+    <figure data-cat="detail"><span class="mframe"><img src="assets/img/part/part-wheel.webp" alt="" decoding="async"></span><figcaption>Rear Tyre</figcaption></figure>
+    <figure data-cat="detail"><span class="mframe"><img src="assets/img/part/part-tyre-front.webp" alt="" decoding="async"></span><figcaption>Front Tyre</figcaption></figure>
+    <figure data-cat="action attach"><span class="mframe"><img src="assets/img/scene/field-work.webp" alt="" decoding="async"></span><figcaption>In Action</figcaption></figure>
+  </div>
+
+  <div class="thumbstrip ht__thumbs ht__thumbs--wide">
+    <button class="thumb" type="button" data-view="front"><span class="thumb__img"><img src="assets/img/product/front-thumb.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb" type="button" data-view="front-left"><span class="thumb__img"><img src="assets/img/product/front-left-thumb.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left"><span class="thumb__img"><img src="assets/img/product/left-thumb.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left"><span class="thumb__img"><img src="assets/img/product/rear-left-thumb.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear"><span class="thumb__img"><img src="assets/img/product/rear-thumb.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right"><span class="thumb__img"><img src="assets/img/product/rear-right-thumb.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right"><span class="thumb__img"><img src="assets/img/product/right-thumb.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right"><span class="thumb__img"><img src="assets/img/product/front-right-thumb.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top"><span class="thumb__img"><img src="assets/img/product/top-thumb.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+    <button class="thumb" type="button" data-view="engine"><span class="thumb__img"><img src="assets/img/product/engine-thumb.webp" alt=""></span><span class="thumb__label">Engine</span></button>
+    <button class="thumb" type="button" data-view="operator"><span class="thumb__img"><img src="assets/img/product/operator-thumb.webp" alt=""></span><span class="thumb__label">Operator Station</span></button>
+    <button class="thumb" type="button" data-view="hydraulics"><span class="thumb__img"><img src="assets/img/product/hydraulics-thumb.webp" alt=""></span><span class="thumb__label">Hydraulics</span></button>
+    <button class="thumb is-active" type="button" data-view="field"><span class="thumb__img"><img src="assets/img/product/field-thumb.webp" alt=""></span><span class="thumb__label">Gallery</span></button>
+  </div>
+</section>
+
+<!-- =========================================================== 15 BROCHURE -->
+<section class="screen sc-brochure" id="s-brochure" data-rail="overlay" data-chrome="product">
+
+  <div class="br__top">
+    <div class="br__intro">
+      <h1 class="br__title">Brochure</h1>
+      <p class="br__sub">Discover the STANDARD DI 470</p>
+      <p class="br__copy">Download our latest brochure to explore full features, specifications, and why the STANDARD DI 470 is the trusted choice for progressive farmers.</p>
+
+      <div class="br__feats">
+        <span><svg class="i i--xl"><use href="#i-book"></use></svg><b>Detailed<br>Information</b></span>
+        <span><svg class="i i--xl"><use href="#i-gear"></use></svg><b>High-Quality<br>Images</b></span>
+        <span><svg class="i i--xl"><use href="#i-doc"></use></svg><b>Easy to Download<br>&amp; Share</b></span>
+        <span><svg class="i i--xl"><use href="#i-leaf"></use></svg><b>Built for<br>Your Tomorrow</b></span>
+      </div>
+
+      <div class="script br__script">Powering<br>Progress<br>in Every Field
+        <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+      </div>
+
+      <div class="br__acts">
+        <a class="btn btn--primary btn--lg" href="#" data-inert="Demo build &mdash; the PDF is attached in the Laravel release.">
+          <svg class="i i--lg"><use href="#i-download"></use></svg>
+          <span>Download Brochure (PDF)<i>12.5 MB</i></span>
+        </a>
+        <a class="btn btn--ghost btn--lg" href="#" data-inert="Demo build &mdash; inline preview ships with the Laravel release."><svg class="i i--sm"><use href="#i-eye"></use></svg> Preview Brochure</a>
+        <a class="btn btn--ghost btn--lg" href="#" data-inert="Demo build &mdash; sharing ships with the Laravel release."><svg class="i i--sm"><use href="#i-compare"></use></svg> Share</a>
+      </div>
+    </div>
+
+    <!-- brochure mock-up: real CSS 3D, not an image of a brochure -->
+    <div class="br__mock">
+      <div class="br__spread">
+        <div class="br__page br__page--l">
+          <span class="br__pageTitle">BUILT<br>FOR EVERY FIELD</span>
+          <span class="br__pageCopy">The STANDARD DI 470 combines power, reliability and modern technology to help you achieve higher productivity and profitability.</span>
+          <img class="br__pageImg" src="assets/img/scene/field-work.webp" alt="" decoding="async">
+          <ul class="br__pageList">
+            <li><svg class="i i--xs"><use href="#i-engine"></use></svg>High Performance Engine</li>
+            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>Superior Lifting Capacity</li>
+            <li><svg class="i i--xs"><use href="#i-gear"></use></svg>Smooth &amp; Reliable Operation</li>
+            <li><svg class="i i--xs"><use href="#i-wrench"></use></svg>Low Maintenance</li>
+            <li><svg class="i i--xs"><use href="#i-shield"></use></svg>Built for Tough Conditions</li>
+          </ul>
+        </div>
+        <div class="br__page br__page--r">
+          <span class="br__pageTitle br__pageTitle--light">POWERING<br>PROGRESS<br>IN EVERY FIELD</span>
+          <img class="br__pageHero" src="assets/img/scene/dusk-run.webp" alt="" decoding="async">
+          <span class="br__pageBrand"><svg class="i i--lg"><use href="#i-tractor"></use></svg> STANDARD</span>
+        </div>
+      </div>
+      <div class="br__cover">
+        <span class="br__coverBrand"><svg class="i i--lg"><use href="#i-tractor"></use></svg> STANDARD</span>
+        <span class="br__coverTitle">STANDARD<br><b>DI 470</b></span>
+        <img class="br__coverImg" src="assets/img/scene/action.webp" alt="" decoding="async">
+        <span class="br__coverFoot"><b>Power<br>Reliability<br>Productivity</b><i>For a Brighter Tomorrow</i></span>
+        <span class="br__coverBar">
+          <span><svg class="i i--xs"><use href="#i-users"></use></svg>STRONGER FARMERS</span>
+          <span><svg class="i i--xs"><use href="#i-leaf"></use></svg>HEALTHIER FIELDS</span>
+          <span><svg class="i i--xs"><use href="#i-globe"></use></svg>BRIGHTER TOMORROW</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="br__preview">
+    <h2 class="br__previewTitle">Brochure Preview <i>(12 Pages)</i></h2>
+    <div class="br__pages scroll-y">
+      <figure><span class="br__pg br__pg--cover"><b>STANDARD DI 470</b><img src="assets/img/scene/action.webp" alt="" decoding="async"></span><figcaption>Page 1<i>Cover</i></figcaption></figure>
+      <figure><span class="br__pg"><b>BUILT FOR A BETTER TOMORROW</b><img src="assets/img/scene/field-work.webp" alt="" decoding="async"></span><figcaption>Page 2<i>Introduction</i></figcaption></figure>
+      <figure><span class="br__pg"><b>POWER MEETS PERFORMANCE</b><img src="assets/img/part/part-radiator.webp" alt="" decoding="async"></span><figcaption>Page 3<i>Engine</i></figcaption></figure>
+      <figure><span class="br__pg"><b>COMFORT THAT WORKS HARDER</b><img src="assets/img/part/part-cab.webp" alt="" decoding="async"></span><figcaption>Page 4<i>Operator Station</i></figcaption></figure>
+      <figure><span class="br__pg"><b>LIFT HIGHER ACHIEVE MORE</b><img src="assets/img/part/part-linkage.webp" alt="" decoding="async"></span><figcaption>Page 5<i>Hydraulics</i></figcaption></figure>
+      <figure><span class="br__pg"><b>FEATURES THAT MAKE A DIFFERENCE</b><img src="assets/img/product/front-left.webp" alt="" decoding="async"></span><figcaption>Page 6<i>Features</i></figcaption></figure>
+      <figure><span class="br__pg"><b>SPECIFICATIONS AT A GLANCE</b><img src="assets/img/part/bp-side.webp" alt="" decoding="async"></span><figcaption>Page 7<i>Specifications</i></figcaption></figure>
+      <figure><span class="br__pg"><b>IN ACTION IN YOUR FIELDS</b><img src="assets/img/scene/cultivation.webp" alt="" decoding="async"></span><figcaption>Page 8<i>Gallery</i></figcaption></figure>
+      <figure><span class="br__pg"><b>TRUSTED BY FARMERS</b><img src="assets/img/scene/harvesting.webp" alt="" decoding="async"></span><figcaption>Page 9<i>Customer Stories</i></figcaption></figure>
+      <figure><span class="br__pg"><b>SERVICED AND SUPPORTED</b><img src="assets/img/part/part-gearbox.webp" alt="" decoding="async"></span><figcaption>Page 10<i>After Sales</i></figcaption></figure>
+      <figure><span class="br__pg"><b>A GREENER BRIGHTER TOMORROW</b><img src="assets/img/scene/haulage.webp" alt="" decoding="async"></span><figcaption>Page 11<i>Sustainability</i></figcaption></figure>
+      <figure><span class="br__pg br__pg--end"><b>STANDARD</b><span>Let&rsquo;s Build a Better Tomorrow Together</span></span><figcaption>Page 12<i>Contact Us</i></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="thumbstrip ht__thumbs ht__thumbs--wide">
+    <button class="thumb" type="button" data-view="front"><span class="thumb__img"><img src="assets/img/product/front-thumb.webp" alt=""></span><span class="thumb__label">Front</span></button>
+    <button class="thumb" type="button" data-view="front-left"><span class="thumb__img"><img src="assets/img/product/front-left-thumb.webp" alt=""></span><span class="thumb__label">Front-Left</span></button>
+    <button class="thumb" type="button" data-view="left"><span class="thumb__img"><img src="assets/img/product/left-thumb.webp" alt=""></span><span class="thumb__label">Left</span></button>
+    <button class="thumb" type="button" data-view="rear-left"><span class="thumb__img"><img src="assets/img/product/rear-left-thumb.webp" alt=""></span><span class="thumb__label">Rear-Left</span></button>
+    <button class="thumb" type="button" data-view="rear"><span class="thumb__img"><img src="assets/img/product/rear-thumb.webp" alt=""></span><span class="thumb__label">Rear</span></button>
+    <button class="thumb" type="button" data-view="rear-right"><span class="thumb__img"><img src="assets/img/product/rear-right-thumb.webp" alt=""></span><span class="thumb__label">Rear-Right</span></button>
+    <button class="thumb" type="button" data-view="right"><span class="thumb__img"><img src="assets/img/product/right-thumb.webp" alt=""></span><span class="thumb__label">Right</span></button>
+    <button class="thumb" type="button" data-view="front-right"><span class="thumb__img"><img src="assets/img/product/front-right-thumb.webp" alt=""></span><span class="thumb__label">Front-Right</span></button>
+    <button class="thumb" type="button" data-view="top"><span class="thumb__img"><img src="assets/img/product/top-thumb.webp" alt=""></span><span class="thumb__label">Top View</span></button>
+    <button class="thumb" type="button" data-view="engine"><span class="thumb__img"><img src="assets/img/product/engine-thumb.webp" alt=""></span><span class="thumb__label">Engine</span></button>
+    <button class="thumb" type="button" data-view="operator"><span class="thumb__img"><img src="assets/img/product/operator-thumb.webp" alt=""></span><span class="thumb__label">Operator Station</span></button>
+    <button class="thumb" type="button" data-view="hydraulics"><span class="thumb__img"><img src="assets/img/product/hydraulics-thumb.webp" alt=""></span><span class="thumb__label">Hydraulics</span></button>
+    <button class="thumb is-active" type="button" data-view="grille"><span class="thumb__img"><img src="assets/img/product/grille-thumb.webp" alt=""></span><span class="thumb__label">Brochure</span></button>
+  </div>
+</section>
+
+<!-- ============================================================ 16 COMPARE -->
+<section class="screen sc-compare" id="s-compare" data-rail="none" data-chrome="corporate">
+
+  <header class="cp__hero">
+    <div class="cp__heroText">
+      <nav class="crumbs crumbs--on-dark"><a href="#listing" data-goto="listing">Home</a><svg class="i i--xs"><use href="#i-chev-r"></use></svg>
+        <a href="#listing" data-goto="listing">Products</a><svg class="i i--xs"><use href="#i-chev-r"></use></svg>
+        <a href="#listing" data-goto="listing">Tractors</a><svg class="i i--xs"><use href="#i-chev-r"></use></svg><b>Compare</b></nav>
+      <h1 class="cp__title">Compare Tractors</h1>
+      <p class="cp__sub">Find the right tractor for your needs. Compare features, specifications and choose the best fit for your farm.</p>
+    </div>
+    <div class="trust cp__trust">
+      <span class="trust__item"><svg class="i i--sm"><use href="#i-leaf"></use></svg>Higher<br>Productivity</span>
+      <i class="trust__sep"></i>
+      <span class="trust__item"><svg class="i i--sm"><use href="#i-shield"></use></svg>Rugged &amp;<br>Reliable</span>
+      <i class="trust__sep"></i>
+      <span class="trust__item"><svg class="i i--sm"><use href="#i-gear"></use></svg>Advanced<br>Technology</span>
+      <i class="trust__sep"></i>
+      <span class="trust__item"><svg class="i i--sm"><use href="#i-globe"></use></svg>A Greener<br>Tomorrow</span>
+    </div>
+    <div class="script script--light cp__script">Fields Today.<br>A Better Tomorrow.
+      <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+    </div>
+  </header>
+
+  <div class="cp__body">
+
+    <aside class="cp__side">
+      <div class="panel cp__picker">
+        <div class="panel__head cp__pickerHead">
+          <span class="panel__title">Select Models to Compare</span>
+          <span class="panel__sub">(up to 4 models)</span>
+        </div>
+        <label class="cp__search"><svg class="i i--sm"><use href="#i-search"></use></svg>
+          <input type="search" placeholder="Search models..." aria-label="Search models"></label>
+        <div class="panel__body scroll-y cp__models">
+          <label class="fopt"><input type="checkbox"><span>DI 220</span></label>
+          <label class="fopt"><input type="checkbox" checked><span>DI 320</span></label>
+          <label class="fopt"><input type="checkbox" checked><span>DI 470</span></label>
+          <label class="fopt"><input type="checkbox" checked><span>DI 550</span></label>
+          <label class="fopt"><input type="checkbox" checked><span>DI 650</span></label>
+          <label class="fopt"><input type="checkbox"><span>DI 750 4WD</span></label>
+          <label class="fopt"><input type="checkbox"><span>DI 280</span></label>
+          <label class="fopt"><input type="checkbox"><span>DI 350</span></label>
+          <label class="fopt"><input type="checkbox"><span>DI 605</span></label>
+          <label class="fopt"><input type="checkbox"><span>Other Models</span></label>
+        </div>
+        <button class="btn btn--primary btn--block" type="button" data-inert="Demo build &mdash; live comparison ships with the Laravel release.">Compare Selected (4)</button>
+        <div class="cp__links">
+          <a href="#" data-inert="Demo build."><svg class="i i--sm"><use href="#i-x"></use></svg>Clear All</a>
+          <a href="#" data-inert="Demo build."><svg class="i i--sm"><use href="#i-download"></use></svg>Download Comparison (PDF)</a>
+          <a href="#" data-inert="Demo build."><svg class="i i--sm"><use href="#i-compare"></use></svg>Share Comparison</a>
+          <a href="#enquire" data-goto="enquire"><svg class="i i--sm"><use href="#i-quote"></use></svg>Get a Quote</a>
+          <a href="#enquire" data-goto="enquire"><svg class="i i--sm"><use href="#i-headset"></use></svg>Talk to Our Expert</a>
+        </div>
+      </div>
+      <a class="cp__promo mframe" href="#overview" data-goto="overview">
+        <img src="assets/img/scene/cultivation.webp" alt="" decoding="async">
+        <span class="cp__promoTxt">Right Tractor.<br>Brighter Tomorrow.</span>
+      </a>
+    </aside>
+
+    <div class="panel cp__tableWrap">
+      <div class="scroll-y cp__scroll">
+        <table class="cp__table">
+          <thead>
+            <tr>
+              <th class="cp__rowHead"></th>
+              <th><span class="cp__col">
+                <button class="cp__close" type="button" data-inert="Demo build." aria-label="Remove"><svg class="i i--xs"><use href="#i-x"></use></svg></button>
+                <b>DI 320</b><i>Smart Choice for Growing Farmers</i>
+                <img src="assets/img/product/front-left.webp" alt="" decoding="async"></span></th>
+              <th><span class="cp__col">
+                <span class="badge badge--bestseller cp__flag">Best Seller</span>
+                <button class="cp__close" type="button" data-inert="Demo build." aria-label="Remove"><svg class="i i--xs"><use href="#i-x"></use></svg></button>
+                <b>DI 470</b><i>Power for Every Field</i>
+                <img src="assets/img/product/front-left.webp" alt="" decoding="async"></span></th>
+              <th><span class="cp__col">
+                <button class="cp__close" type="button" data-inert="Demo build." aria-label="Remove"><svg class="i i--xs"><use href="#i-x"></use></svg></button>
+                <b>DI 550</b><i>More Power. More Possibilities.</i>
+                <img src="assets/img/product/front-right.webp" alt="" decoding="async"></span></th>
+              <th><span class="cp__col">
+                <span class="badge badge--new cp__flag">High Performance</span>
+                <button class="cp__close" type="button" data-inert="Demo build." aria-label="Remove"><svg class="i i--xs"><use href="#i-x"></use></svg></button>
+                <b>DI 650</b><i>Next Level Performance</i>
+                <img src="assets/img/product/front-right.webp" alt="" decoding="async"></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th>Model</th><td>DI 320</td><td>DI 470</td><td>DI 550</td><td>DI 650</td></tr>
+            <tr><th>Horsepower</th><td>31 &ndash; 40 HP</td><td>41 &ndash; 50 HP</td><td>51 &ndash; 60 HP</td><td>60+ HP</td></tr>
+            <tr><th>Engine</th><td>3 Cylinder, Diesel</td><td>4 Cylinder, Diesel</td><td>4 Cylinder, Diesel</td><td>4 Cylinder, Turbo Diesel</td></tr>
+            <tr><th>Displacement</th><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td></tr>
+            <tr><th>Transmission</th><td>8F + 2R</td><td>8F + 2R</td><td>12F + 3R</td><td>12F + 3R</td></tr>
+            <tr><th>Drive Type</th><td>2WD</td><td>2WD / 4WD (Variant)</td><td>2WD / 4WD (Variant)</td><td>2WD / 4WD (Variant)</td></tr>
+            <tr><th>Lifting Capacity</th><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td></tr>
+            <tr><th>Hydraulics</th><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td></tr>
+            <tr><th>PTO</th><td>540 RPM</td><td>540 RPM</td><td>540 RPM</td><td>540 RPM</td></tr>
+            <tr><th>Fuel Tank Capacity</th><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td></tr>
+            <tr><th>Operating Weight</th><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td><td class="cp__na">Data not provided</td></tr>
+            <tr class="cp__tall"><th>Key Features</th>
+              <td><ul class="cp__feats"><li>Compact and maneuverable</li><li>Fuel efficient</li><li>Ideal for small &amp; medium farms</li><li>Easy maintenance</li></ul></td>
+              <td><ul class="cp__feats"><li>High performance engine</li><li>Suitable for multiple applications</li><li>Robust and reliable</li><li>Popular in all terrains</li></ul></td>
+              <td><ul class="cp__feats"><li>Higher power and productivity</li><li>Ideal for heavy-duty operations</li><li>Advanced hydraulics (variant)</li><li>Built for long hours</li></ul></td>
+              <td><ul class="cp__feats"><li>Maximum performance</li><li>Suitable for large-scale farming</li><li>Tough on terrain</li><li>Designed for the future</li></ul></td>
+            </tr>
+            <tr><th>Applications</th>
+              <td>Cultivation, Haulage, Spraying</td>
+              <td>Cultivation, Haulage, PTO Driven Implements</td>
+              <td>Tillage, Haulage, Harvesting, Commercial Applications</td>
+              <td>Heavy Tillage, Large Implements, Commercial Use</td></tr>
+            <tr class="cp__acts"><th>Actions</th>
+              <td><a class="btn btn--primary btn--sm btn--block" href="#overview" data-goto="overview">View Details <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a><label class="pcard__cmp"><input type="checkbox" checked><span>Keep in Comparison</span></label></td>
+              <td><a class="btn btn--primary btn--sm btn--block" href="#overview" data-goto="overview">View Details <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a><label class="pcard__cmp"><input type="checkbox" checked><span>Keep in Comparison</span></label></td>
+              <td><a class="btn btn--primary btn--sm btn--block" href="#overview" data-goto="overview">View Details <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a><label class="pcard__cmp"><input type="checkbox" checked><span>Keep in Comparison</span></label></td>
+              <td><a class="btn btn--primary btn--sm btn--block" href="#overview" data-goto="overview">View Details <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a><label class="pcard__cmp"><input type="checkbox" checked><span>Keep in Comparison</span></label></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cp__cta">
+        <svg class="i i--xl"><use href="#i-scale"></use></svg>
+        <span><b>Not sure which tractor is right for you?</b><i>Talk to our experts and get a personalized recommendation.</i></span>
+        <a class="btn btn--accent" href="#enquire" data-goto="enquire"><svg class="i i--sm"><use href="#i-headset"></use></svg> Get Expert Advice</a>
+        <a class="btn btn--ghost" href="#enquire" data-goto="enquire"><svg class="i i--sm"><use href="#i-doc"></use></svg> Request a Quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================== 17 VARIANTS -->
+<!-- No reference screen supplied for this rail item; built with the same
+     design system so the dashboard has no dead links. -->
+<section class="screen sc-variants" id="s-variants" data-rail="solid" data-chrome="product">
+  <header class="vr__head">
+    <div>
+      <h1 class="dg__title">DI 470 Variants</h1>
+      <p class="dg__sub">One Platform. Four Ways to Work.</p>
+      <p class="dg__copy">Every DI 470 variant shares the same 47 HP engine and 1500 kg hydraulics. Pick the drive, transmission and tyre package that matches your fields.</p>
+    </div>
+    <div class="band dg__band">
+      <span class="band__t">STANDARD DI 470</span>
+      <i class="band__rule"></i>
+      <span class="band__s">CHOOSE YOUR CONFIGURATION.</span>
+    </div>
+  </header>
+
+  <div class="vr__grid">
+    <article class="panel vr__card">
+      <span class="badge badge--bestseller vr__flag">Best Seller</span>
+      <div class="vr__img"><img src="assets/img/product/front-left.webp" alt="" decoding="async"></div>
+      <div class="vr__body">
+        <h3 class="vr__name">DI 470 &middot; 2WD</h3>
+        <p class="vr__tag">The everyday workhorse</p>
+        <ul class="speclist">
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-drive"></use></svg><span><b>2WD</b><span>Drive Type</span></span></li>
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-gearbox"></use></svg><span><b>8F + 2R</b><span>Sliding Mesh</span></span></li>
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-tyre"></use></svg><span><b>13.6 &ndash; 28</b><span>Rear Tyres</span></span></li>
+        </ul>
+      </div>
+      <a class="btn btn--primary btn--block vr__cta" href="#specs" data-goto="specs">View Specifications <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+    </article>
+
+    <article class="panel vr__card">
+      <span class="badge badge--popular vr__flag">Popular</span>
+      <div class="vr__img"><img src="assets/img/product/front-right.webp" alt="" decoding="async"></div>
+      <div class="vr__body">
+        <h3 class="vr__name">DI 470 &middot; 4WD</h3>
+        <p class="vr__tag">Traction for tough ground</p>
+        <ul class="speclist">
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-drive"></use></svg><span><b>4WD</b><span>Drive Type</span></span></li>
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-gearbox"></use></svg><span><b>8F + 2R</b><span>Sliding Mesh</span></span></li>
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-tyre"></use></svg><span><b>16.9 &ndash; 28</b><span>Rear Tyres</span></span></li>
+        </ul>
+      </div>
+      <a class="btn btn--primary btn--block vr__cta" href="#specs" data-goto="specs">View Specifications <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+    </article>
+
+    <article class="panel vr__card">
+      <span class="badge badge--orchard vr__flag">Orchard</span>
+      <div class="vr__img"><img src="assets/img/product/left.webp" alt="" decoding="async"></div>
+      <div class="vr__body">
+        <h3 class="vr__name">DI 470 &middot; Narrow</h3>
+        <p class="vr__tag">Built for row spacing</p>
+        <ul class="speclist">
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-drive"></use></svg><span><b>2WD Narrow</b><span>Drive Type</span></span></li>
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-ruler"></use></svg><span><b>1480 mm</b><span>Overall Width</span></span></li>
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-tyre"></use></svg><span><b>12.4 &ndash; 28</b><span>Rear Tyres</span></span></li>
+        </ul>
+      </div>
+      <a class="btn btn--primary btn--block vr__cta" href="#specs" data-goto="specs">View Specifications <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+    </article>
+
+    <article class="panel vr__card">
+      <span class="badge badge--premium vr__flag">Premium</span>
+      <div class="vr__img"><img src="assets/img/product/right.webp" alt="" decoding="async"></div>
+      <div class="vr__body">
+        <h3 class="vr__name">DI 470 &middot; Power+</h3>
+        <p class="vr__tag">Synchromesh &amp; power steering</p>
+        <ul class="speclist">
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-drive"></use></svg><span><b>4WD</b><span>Drive Type</span></span></li>
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-gearbox"></use></svg><span><b>12F + 3R</b><span>Synchromesh</span></span></li>
+          <li class="speclist__row"><svg class="i i--sm"><use href="#i-steering"></use></svg><span><b>Power Steering</b><span>Standard</span></span></li>
+        </ul>
+      </div>
+      <a class="btn btn--primary btn--block vr__cta" href="#specs" data-goto="specs">View Specifications <svg class="i i--xs"><use href="#i-arrow-r"></use></svg></a>
+    </article>
+  </div>
+
+  <div class="vr__foot">
+    <span><svg class="i i--lg"><use href="#i-info"></use></svg>All variants share the same 47 HP engine, 1500 kg lift and Category II linkage.</span>
+    <a class="btn btn--ghost" href="#compare" data-goto="compare"><svg class="i i--sm"><use href="#i-scale"></use></svg> Compare Variants</a>
+    <a class="btn btn--accent" href="#enquire" data-goto="enquire"><svg class="i i--sm"><use href="#i-mail"></use></svg> Enquire Now</a>
+  </div>
+</section>
+
+<!-- ============================================================ 18 ENQUIRE -->
+<section class="screen sc-enquire" id="s-enquire" data-rail="solid" data-chrome="product">
+  <div class="eq__grid">
+
+    <div class="eq__intro">
+      <h1 class="dg__title">Enquire Now</h1>
+      <p class="dg__sub">Talk to a STANDARD Expert</p>
+      <p class="dg__copy">Tell us about your fields and we will recommend the right DI 470 configuration, connect you to your nearest dealer and share current offers.</p>
+      <ul class="eq__points">
+        <li><svg class="i i--lg"><use href="#i-headset"></use></svg><span><b>Expert Advice</b><span>A product specialist calls you back within one working day.</span></span></li>
+        <li><svg class="i i--lg"><use href="#i-pin"></use></svg><span><b>Nearest Dealer</b><span>Over 1,200 touchpoints across India.</span></span></li>
+        <li><svg class="i i--lg"><use href="#i-quote"></use></svg><span><b>Transparent Quote</b><span>On-road price, finance options and delivery timeline.</span></span></li>
+      </ul>
+      <div class="script eq__script">Fields Today.<br>A Better Tomorrow.
+        <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+      </div>
+    </div>
+
+    <form class="panel eq__form" novalidate>
+      <div class="panel__head"><span class="panel__title">Request a Call Back</span><span class="panel__sub">All fields marked * are required</span></div>
+      <div class="panel__body eq__fields">
+        <label class="eq__f"><span>Full Name *</span><input type="text" placeholder="Your name" required></label>
+        <label class="eq__f"><span>Mobile Number *</span><input type="tel" placeholder="10-digit mobile number" required></label>
+        <label class="eq__f"><span>Email</span><input type="email" placeholder="you@example.com"></label>
+        <label class="eq__f"><span>State *</span><select required><option>Select state</option><option>Maharashtra</option><option>Punjab</option><option>Tamil Nadu</option><option>Uttar Pradesh</option></select></label>
+        <label class="eq__f"><span>District *</span><input type="text" placeholder="Your district" required></label>
+        <label class="eq__f"><span>Model of Interest</span><select><option>DI 470</option><option>DI 320</option><option>DI 550</option><option>DI 650</option></select></label>
+        <label class="eq__f eq__f--wide"><span>Primary Application</span>
+          <select><option>Cultivation</option><option>Sowing</option><option>Haulage</option><option>Harvesting</option><option>Inter-cultivation</option></select></label>
+        <label class="eq__f eq__f--wide"><span>Message</span><textarea rows="3" placeholder="Tell us about your land size, crops and current equipment."></textarea></label>
+        <label class="eq__consent"><input type="checkbox"><span>I agree to be contacted by STANDARD and its authorised dealers about this enquiry.</span></label>
+      </div>
+      <div class="panel__foot eq__actions">
+        <button class="btn btn--ghost btn--sm" type="button" aria-disabled="true" disabled title="Add to Cart is disabled in this static demo">
+          <svg class="i i--sm"><use href="#i-cart"></use></svg> Add to Cart
+        </button>
+        <button class="btn btn--primary" type="button" data-inert="Demo build &mdash; form submission ships with the Laravel release.">
+          Submit Enquiry <svg class="i i--sm"><use href="#i-arrow-r"></use></svg>
+        </button>
+      </div>
+    </form>
+
+    <aside class="panel eq__contact">
+      <div class="panel__head"><span class="panel__title">Other Ways to Reach Us</span></div>
+      <div class="panel__body speclist">
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-phone"></use></svg><span><b>1800 000 470</b><span>Toll-free, 8am &ndash; 8pm</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-mail"></use></svg><span><b>care@standard.example</b><span>Replies within 24 hours</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-pin"></use></svg><span><b>Find a Dealer</b><span>1,200+ touchpoints across India</span></span></div>
+        <div class="speclist__row"><svg class="i i--lg"><use href="#i-headset"></use></svg><span><b>Service Support</b><span>Genuine parts &amp; trained technicians</span></span></div>
+      </div>
+      <a class="eq__promo mframe" href="#overview" data-goto="overview">
+        <img src="assets/img/scene/harvesting.webp" alt="" decoding="async">
+        <span class="eq__promoTxt">Right Tractor.<br>Brighter Tomorrow.</span>
+      </a>
+    </aside>
+  </div>
+</section>
+
+    </div><!-- /.screens -->
+  </div><!-- /.stage__main -->
+
+  <!-- ===================== FOOTER BAR ==================================== -->
+  <footer class="footbar" id="footbar" data-off="view360">
+    <a class="brand brand--on-dark brand--sm" href="#listing" data-goto="listing">
+      <!-- BRAND MARK SLOT — same slot as the top bar; see parts/03-app-chrome.html. -->
+      <span class="brand__mark brand__logo">
+        <img class="brand__logoImg" src="" alt="" onerror="this.removeAttribute('src')">
+        <svg class="brand__logoPh" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-image"></use></svg>
+      </span>
+      <span class="brand__text"><span class="brand__name">STANDARD</span><span class="brand__tag">BUILT FOR A BETTER TOMORROW</span></span>
+    </a>
+
+    <div class="footbar__items" data-on="listing">
+      <span class="footbar__item"><svg class="i"><use href="#i-chart"></use></svg>Wide Product Range</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-pin"></use></svg>Pan India Dealer Network</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Genuine Parts Support</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-wrench"></use></svg>Expert Service</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Trusted by 1,00,000+ Farmers</span>
+    </div>
+
+    <div class="footbar__items" data-on="compare">
+      <span class="footbar__item"><svg class="i"><use href="#i-tractor"></use></svg>Trusted by<br>1,00,000+ Farmers</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-chart"></use></svg>Pan India<br>Dealer Network</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Genuine Parts<br>&amp; Service</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Sustainable Farming</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-globe"></use></svg>A Greener Tomorrow</span>
+    </div>
+
+    <div class="footbar__items" data-on="overview enquire variants">
+      <span class="footbar__item"><svg class="i"><use href="#i-pin"></use></svg>Wide Dealer Network<br>Across India</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Genuine Parts<br>&amp; Service</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-headset"></use></svg>Expert Support</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Sustainable Farming<br>A Greener Tomorrow</span>
+    </div>
+
+    <div class="footbar__items" data-on="exploded schematic drawing">
+      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Reliable Performance</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-shield"></use></svg>Built to Last</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Supports Farmers</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Trusted by Generations</span>
+    </div>
+
+    <div class="footbar__items" data-on="exterior gallery operator">
+      <span class="footbar__item"><svg class="i"><use href="#i-shield"></use></svg>Durable by Design</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Trusted by Farmers</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-wrench"></use></svg>Backed by Service</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-globe"></use></svg>Trusted Worldwide</span>
+    </div>
+
+    <div class="footbar__items" data-on="engine videos features specs hydraulics brochure">
+      <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Strong Roots</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Farmers First</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Technology for Tomorrow</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-globe"></use></svg>A Sustainable Future</span>
+    </div>
+
+    <a class="btn btn--accent footbar__cta" data-on="listing" href="#" data-inert="Demo build &mdash; dealer locator ships with the Laravel release.">
+      <svg class="i i--sm"><use href="#i-pin"></use></svg> Find a Dealer Near You
+    </a>
+    <a class="btn btn--ghost footbar__cta" data-on="exterior engine operator hydraulics features specs gallery brochure videos" href="#enquire" data-goto="enquire">
+      <svg class="i i--sm"><use href="#i-phone"></use></svg> Talk to Our Experts
+    </a>
+
+    <div class="footbar__flash" data-on="overview compare exploded schematic drawing enquire variants">
+      <div class="script script--light">Fields Today.<br>A Better Tomorrow.
+        <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /.stage -->
+
+<div class="toaster" id="toaster" aria-live="polite"></div>
+<!-- Runtime. Source lives in assets/js/_source/core.js — rebuild with terser. -->
+<script src="assets/js/core.min.js" defer></script>
+
+</body>
+</html>

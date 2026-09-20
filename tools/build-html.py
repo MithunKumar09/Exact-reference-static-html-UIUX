@@ -1,23 +1,24 @@
 """
-STANDARD · page builder — assembles index.html from the parts/ folder
+STANDARD · single-file packer — index.html + parts/  ->  standalone.html
 ==============================================================================
-index.html is a build output. The thing to edit is parts/*.html.
+index.html is NOT generated: it is the shell you edit, and at runtime it fetches
+parts/*.html and assembles them in the browser. Nothing here is needed to work
+on the site — edit a part, reload the page.
 
-    python tools/build-html.py            # parts/  ->  index.html
-    python tools/build-html.py --check    # exit 1 if index.html is stale
-    python tools/build-html.py --force    # overwrite hand-edits to index.html
+This script exists for the one thing fetch() cannot do: open the demo straight
+off the filesystem (double-click, USB stick, e-mail, the zip). It inlines the
+parts into the shell and writes a self-contained standalone.html.
 
-The page is one hash-routed document: every screen shares a DOM with the rail,
-the topbar and the router in assets/js/core.min.js, so the parts cannot be
-separate pages. They are concatenated verbatim — no templating, no markers, no
-rewriting — which keeps index.html byte-for-byte what it has always been and
-keeps it openable straight off the filesystem.
+    python tools/build-html.py            # index.html + parts/  ->  standalone.html
+    python tools/build-html.py --check    # exit 1 if standalone.html is stale
 
-Order is the PARTS list below, not the directory listing. Adding a screen means
-adding its file here.
+The part list is NOT duplicated here — it is read out of the PARTS array in
+index.html, so the shell stays the single registry. The parts are concatenated
+verbatim, in that order, with no templating and no rewriting: they are fragments
+that only balance once joined (parts/03 opens .stage, parts/09 closes it).
 """
 
-import hashlib, sys, difflib
+import re, sys
 from pathlib import Path
 
 #  Part names and diff output carry em dashes and degree signs; a legacy
@@ -28,94 +29,84 @@ for _stream in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
-ROOT  = Path(__file__).resolve().parent.parent
+ROOT      = Path(__file__).resolve().parent.parent
 PARTS_DIR = ROOT / "parts"
-OUT   = ROOT / "index.html"
-STAMP = PARTS_DIR / ".last-build.sha256"
+SHELL     = ROOT / "index.html"
+OUT       = ROOT / "standalone.html"
 
-#  Concatenated in exactly this order.
-PARTS = [
-    "01-document-head.html",          # doctype, <head>, stylesheets, <body>
-    "02-icon-sprite.html",            # <symbol id="i-*"> sprite
-    "03-app-chrome.html",             # stage, topbar, tabnav, rail
-    "04-listing-overview.html",       # 01 Listing · 02 Overview
-    "05-view-360.html",               # 03 360 View
-    "06-diagrams.html",               # 04 Exploded · 05 Schematic · 06 Drawing
-    "07-detail-screens.html",         # 07 Exterior … 11 Features
-    "08-content-screens.html",        # 12 Specs · 13 Videos · 14 Gallery · 15 Brochure
-    "09-compare-enquire-footer.html", # 16 Compare · 17 Variants · 18 Enquire, footer
-]
+BEGIN = "<!-- parts:begin"
+END   = "<!-- parts:end -->"
+CRLF  = "\r\n"
 
 
-def read_parts():
-    """Concatenate the parts in PARTS order, as bytes. Missing file = hard stop."""
-    missing = [p for p in PARTS if not (PARTS_DIR / p).is_file()]
+def read_shell():
+    """index.html, plus the bounds of the loader block the parts replace."""
+    text = SHELL.read_bytes().decode("utf-8")
+    try:
+        head = text.index(BEGIN)
+        tail = text.index(END) + len(END)
+    except ValueError:
+        sys.exit(f"build-html: {SHELL.name} has no {BEGIN} … {END} block to replace.")
+    return text, head, tail
+
+
+def part_list(text):
+    """The PARTS array in the shell's loader is the one registry of pieces."""
+    m = re.search(r"var PARTS\s*=\s*\[(.*?)\]\s*;", text, re.S)
+    if not m:
+        sys.exit("build-html: could not find the PARTS array in index.html.")
+    names = re.findall(r"'([^']+)'", m.group(1))
+    if not names:
+        sys.exit("build-html: the PARTS array in index.html is empty.")
+    return names
+
+
+def runtime_src(text):
+    m = re.search(r"var RUNTIME\s*=\s*'([^']+)'", text)
+    return m.group(1) if m else "assets/js/core.min.js"
+
+
+def build():
+    text, head, tail = read_shell()
+    names = part_list(text)
+
+    missing = [n for n in names if not (ROOT / n).is_file()]
     if missing:
         sys.exit("build-html: missing part(s): " + ", ".join(missing))
 
-    stray = sorted(
-        f.name for f in PARTS_DIR.glob("*.html") if f.name not in PARTS
-    )
+    listed = {n.split("/")[-1] for n in names}
+    stray = sorted(f.name for f in PARTS_DIR.glob("*.html") if f.name not in listed)
     if stray:
-        print("build-html: warning — not in PARTS, so not built in: "
+        print("build-html: warning — not in the PARTS array, so not inlined: "
               + ", ".join(stray), file=sys.stderr)
 
-    return b"".join((PARTS_DIR / p).read_bytes() for p in PARTS)
+    body = "".join((ROOT / n).read_bytes().decode("utf-8") for n in names)
+    runtime = (CRLF + "<!-- Runtime. Source lives in assets/js/_source/core.js — "
+               "rebuild with terser. -->" + CRLF
+               + f'<script src="{runtime_src(text)}" defer></script>')
 
-
-def sha(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
+    return (text[:head] + body.rstrip("\r\n") + runtime + text[tail:]).encode("utf-8"), names
 
 
 def main(argv):
-    check = "--check" in argv
-    force = "--force" in argv
-
-    built = read_parts()
+    built, names = build()
     current = OUT.read_bytes() if OUT.exists() else None
 
-    if check:
+    if "--check" in argv:
         if current == built:
-            print(f"build-html: index.html is up to date ({len(built):,} bytes)")
+            print(f"build-html: standalone.html is up to date ({len(built):,} bytes)")
             return 0
-        print("build-html: index.html is STALE — run python tools/build-html.py",
+        print("build-html: standalone.html is STALE — run python tools/build-html.py",
               file=sys.stderr)
         return 1
 
     if current == built:
-        print(f"build-html: index.html already current ({len(built):,} bytes, "
-              f"{len(PARTS)} parts)")
-        STAMP.write_text(sha(built) + "\n", encoding="utf-8")
+        print(f"build-html: standalone.html already current ({len(built):,} bytes, "
+              f"{len(names)} parts)")
         return 0
 
-    #  index.html differs from the parts. That is normal after editing a part,
-    #  but it also happens when someone edited index.html directly — in which
-    #  case building would silently throw that edit away. Tell them apart with
-    #  the hash written by the previous build.
-    if current is not None and not force:
-        last = STAMP.read_text(encoding="utf-8").strip() if STAMP.exists() else None
-        if last is not None and sha(current) != last:
-            print("build-html: REFUSING to overwrite — index.html has been edited "
-                  "directly since the last build.\n"
-                  "Those edits belong in parts/; move them there, or re-run with "
-                  "--force to discard them.\n"
-                  "What would be lost:\n", file=sys.stderr)
-            diff = difflib.unified_diff(
-                current.decode("utf-8").splitlines(),
-                built.decode("utf-8").splitlines(),
-                fromfile="index.html (on disk)", tofile="index.html (from parts)",
-                lineterm="", n=1,
-            )
-            for i, line in enumerate(diff):
-                if i >= 60:
-                    print("  … diff truncated", file=sys.stderr)
-                    break
-                print("  " + line, file=sys.stderr)
-            return 1
-
     OUT.write_bytes(built)
-    STAMP.write_text(sha(built) + "\n", encoding="utf-8")
-    print(f"build-html: wrote index.html — {len(PARTS)} parts, "
+    print(f"build-html: wrote standalone.html — {len(names)} parts, "
           f"{built.count(bytes([10])):,} lines, {len(built):,} bytes")
     return 0
 

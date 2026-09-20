@@ -4,21 +4,26 @@ A single-page, fully static product experience for the STANDARD DI 470, built to
 fixed **16:9 stage (1600 × 900)** that scales to any screen without scrolling, and
 reflows to a normal scrolling document on tablet and phone.
 
-Open `index.html` directly, or serve the folder over HTTP (recommended — the 3D
-model and video stream want proper MIME types):
+Serve the folder over HTTP and open `index.html`:
 
 ```
 npx serve .        # or: python -m http.server 8080
 ```
+
+A server is required: `index.html` is a shell that loads its screens from
+`parts/` with `fetch()`, which browsers block on `file://`. To hand someone a
+single double-clickable file instead, run `python tools/build-html.py` — it
+writes `standalone.html` with the parts already inlined. (HTTP is what you want
+anyway; the 3D model and the video stream need proper MIME types.)
 
 ---
 
 ## 1. What is where
 
 ```
-index.html                     ← BUILD OUTPUT. Generated; do not edit by hand.
-parts/                         ← EDIT HERE. The nine pieces index.html is built from.
-  01-document-head.html          doctype, <head>, stylesheet links, <body>
+index.html                     ← THE SHELL. <head> + the loader that pulls parts/ in.
+standalone.html                ← BUILD OUTPUT (optional). Same page, parts inlined.
+parts/                         ← EDIT HERE. The eight pieces the shell loads at runtime.
   02-icon-sprite.html            the <symbol id="i-*"> sprite
   03-app-chrome.html             stage, top bar, tab nav, rail
   04-listing-overview.html       01 Listing · 02 Overview
@@ -56,7 +61,7 @@ assets/
   data/
     hotspots-360.json  per-frame marker coordinates, built from the keyframes
 tools/
-  build-html.py      ★ parts/ -> index.html  (run after editing any part)
+  build-html.py        index.html + parts/ -> standalone.html  (offline copy only)
   build-menu-art.py  ★ ONE COMMAND: menu plates in, every shipped still out
   build-spin.py      ★ ONE COMMAND: plates in, finished 360° set out
   key-frames.py        cuts supplied product plates off their black backdrop
@@ -74,22 +79,35 @@ endpoints live in `config.js`. Everything else is engine.
 
 ### Editing the page
 
-`index.html` is generated. Edit the relevant file in `parts/`, then:
+**Edit the file in `parts/` and reload the browser. There is no build step.**
+
+`index.html` holds the `<head>` and a small loader. On load it fetches every
+file in its `PARTS` array, joins them in that order and writes the result into
+`<body>` in one go, then starts `core.min.js` — so the runtime always boots
+against a complete DOM. Adding a screen means adding its file to that array;
+that array is the only registry there is.
+
+The parts are **fragments, not pages**: `parts/03` opens the `<div class="stage">`
+that `parts/09` closes, and they only balance once joined. So never open a part
+on its own, and never reorder the list. The page has to stay one document — it
+is a single hash-routed app where every screen shares a DOM with the rail, the
+top bar and the router in `core.min.js`.
+
+Edit the `<head>` — meta tags, fonts, stylesheet links — in `index.html` itself.
+
+The one thing `fetch()` cannot do is run off the filesystem, so for a
+double-clickable copy — a zip, a USB stick, an e-mail attachment — inline the
+parts into a self-contained file:
 
 ```
-python tools/build-html.py            # parts/  ->  index.html
-python tools/build-html.py --check    # exit 1 if index.html is stale (for CI)
+python tools/build-html.py            # index.html + parts/  ->  standalone.html
+python tools/build-html.py --check    # exit 1 if standalone.html is stale (for CI)
 ```
 
-The build is a plain concatenation in the order listed in `tools/build-html.py`
-— no templating and no rewriting — so `index.html` stays one ordinary file that
-still opens straight off the filesystem. It has to stay one file: the page is a
-single hash-routed document where every screen shares a DOM with the rail, the
-top bar and the router in `core.min.js`, so the parts are not separate pages.
-
-If you edit `index.html` directly, the next build refuses to run and prints what
-your edit was, so nothing is lost silently — move it into the matching part, or
-pass `--force` to discard it.
+That is a plain concatenation with no templating and no rewriting, and it reads
+the part list out of `index.html` rather than keeping its own copy, so the two
+can never drift. `standalone.html` is a derived artifact: never edit it, and
+re-run the packer after changing a part or the shell.
 
 ---
 
@@ -323,9 +341,9 @@ The structure is already shaped for it:
 * Each `<section class="screen" id="s-NAME">` maps to a Blade partial —
   `resources/views/product/_NAME.blade.php`. The split in `parts/` is already
   most of that move.
-* `parts/01`–`03` and the footer in `parts/09` become
-  `layouts/product.blade.php`: the icon sprite, top bar, rail and footer are the
-  layout; the sections are `@include`s.
+* The `<head>` in `index.html`, `parts/02`–`03` and the footer in `parts/09`
+  become `layouts/product.blade.php`: the icon sprite, top bar, rail and footer
+  are the layout; the sections are `@include`s, and Blade replaces the loader.
 * `assets/js/config.js` becomes
   `<script>window.STD_CONFIG = @json($config)</script>` — the object shape is
   already the contract.
