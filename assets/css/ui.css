@@ -492,6 +492,18 @@
   position: absolute; right: .7rem; bottom: .7rem; padding: .2rem .6rem; border-radius: .4rem;
   background: rgba(0,0,0,.7); color: #fff; font-size: 1rem; font-weight: 600;
 }
+/* Zoom affordance. Quiet until the frame is hovered, but never hidden: a
+   touch device has no hover, so an opacity-0 button would be unreachable. */
+.mframe__zoom {
+  position: absolute; right: .7rem; top: .7rem; z-index: 3;
+  width: 3.2rem; height: 3.2rem; border-radius: var(--r-sm);
+  display: grid; place-items: center;
+  background: rgba(9,30,55,.62); color: #fff; backdrop-filter: blur(.5rem);
+  box-shadow: 0 .2rem .8rem rgba(6,22,40,.28);
+  opacity: .78; transition: opacity var(--t-fast) var(--ease), transform var(--t-base) var(--ease-out), background var(--t-fast) var(--ease);
+}
+.mframe:hover .mframe__zoom, .mframe__zoom:focus-visible { opacity: 1; }
+.mframe__zoom:hover { background: var(--c-primary); transform: scale(1.06); }
 
 /* ===========================================================================
    ANGLED HEADER BAND (STANDARD DI 470 — used on diagram screens)
@@ -535,3 +547,59 @@
 @keyframes toast-in { from { opacity: 0; transform: translateY(1.2rem); } to { opacity: 1; transform: none; } }
 .toast.is-out { animation: toast-out var(--t-base) var(--ease) both; }
 @keyframes toast-out { to { opacity: 0; transform: translateY(.8rem); } }
+
+/* ===========================================================================
+   FULLSCREEN
+   Going fullscreen lifts the element out of its screen's paint order, so all
+   that shows behind it is the UA backdrop - black. Hand it the backdrop its
+   own screen was painting. `inherit` copies the parent screen's background
+   longhands wholesale, so each screen keeps its own plate and framing rather
+   than every one of them falling back to a single shared image.
+   ========================================================================= */
+[data-fs]:fullscreen { background: inherit; }
+/* The video player is deliberately navy behind the poster - keep it. */
+.vd__player:fullscreen { background: #0A2540; }
+[data-fs]:fullscreen::backdrop { background: var(--c-deep); }
+
+/* ===========================================================================
+   LIGHTBOX (gallery "view full screen")
+   A fixed 16:9 window over a dimmed page. The plates are a mix of ratios, so
+   the sharp image is contained inside the window and a blurred, cropped copy
+   of the same file fills what is left - no bare letterbox bars, and the frame
+   stays 16:9 whatever it is showing.
+   ========================================================================= */
+.lbox {
+  position: fixed; inset: 0; z-index: 300; display: grid; place-items: center;
+  padding: 2.4rem; background: rgba(6, 20, 38, .82); backdrop-filter: blur(.6rem);
+  opacity: 0; transition: opacity var(--t-base) var(--ease);
+}
+.lbox.is-open { opacity: 1; }
+.lbox__frame {
+  position: relative; overflow: hidden; border-radius: var(--r-lg);
+  width: min(100%, calc((100vh - 4.8rem) * 16 / 9));
+  aspect-ratio: 16 / 9;
+  background: #0A2540; box-shadow: var(--sh-4);
+  transform: scale(.97); transition: transform var(--t-base) var(--ease-out);
+}
+.lbox.is-open .lbox__frame { transform: none; }
+.lbox__blur {
+  position: absolute; inset: -2rem; z-index: 0;
+  background: no-repeat center / cover;
+  filter: blur(2.4rem) saturate(1.1) brightness(.72);
+}
+.lbox__img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; }
+.lbox__cap {
+  position: absolute; left: 1.4rem; bottom: 1.4rem; z-index: 2;
+  padding: .5rem 1.1rem; border-radius: var(--r-sm);
+  background: rgba(9,30,55,.72); backdrop-filter: blur(.4rem);
+  color: #fff; font-size: 1.25rem; font-weight: 600;
+}
+.lbox__close {
+  position: absolute; right: 2rem; top: 2rem; z-index: 4;
+  width: 4.4rem; height: 4.4rem; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(255,255,255,.14); color: #fff; backdrop-filter: blur(.6rem);
+  transition: background var(--t-fast) var(--ease);
+}
+.lbox__close:hover { background: var(--c-primary); }
+/* The page behind must not scroll under the overlay on tablet and phone. */
+html.is-zoomed, html.is-zoomed body { overflow: hidden; }

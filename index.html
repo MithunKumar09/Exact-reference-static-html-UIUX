@@ -650,7 +650,7 @@
 <!-- ========================================================== 03 360° VIEW -->
 <!-- Live 3D. The model, the HDRI and the camera presets all come from
      assets/js/config.js → viewer3d. Swap the .glb to change the product. -->
-<section class="screen sc-360" id="s-view360" data-rail="glass" data-chrome="product">
+<section class="screen sc-360" id="s-view360" data-rail="overlay" data-chrome="product">
 
   <div class="v360" data-fs>
 
@@ -1110,7 +1110,7 @@
 </section>
 
 <!-- =========================================================== 07 EXTERIOR -->
-<section class="screen sc-hot sc-exterior" id="s-exterior" data-rail="glass" data-chrome="product">
+<section class="screen sc-hot sc-exterior" id="s-exterior" data-rail="overlay" data-chrome="product">
   <div class="ht__stage" data-fs>
 
     <header class="ht__head">
@@ -1196,7 +1196,7 @@
 </section>
 
 <!-- ============================================================= 08 ENGINE -->
-<section class="screen sc-hot sc-engine" id="s-engine" data-rail="glass" data-chrome="product">
+<section class="screen sc-hot sc-engine" id="s-engine" data-rail="overlay" data-chrome="product">
   <div class="ht__stage" data-fs>
 
     <header class="ht__head ht__head--copy">
@@ -1288,7 +1288,7 @@
 </section>
 
 <!-- =================================================== 09 OPERATOR STATION -->
-<section class="screen sc-hot sc-operator" id="s-operator" data-rail="glass" data-chrome="product">
+<section class="screen sc-hot sc-operator" id="s-operator" data-rail="overlay" data-chrome="product">
   <div class="ht__stage" data-fs>
 
     <header class="ht__head ht__head--copy">
@@ -1388,7 +1388,7 @@
 </section>
 
 <!-- ========================================================= 10 HYDRAULICS -->
-<section class="screen sc-hot sc-hydraulics" id="s-hydraulics" data-rail="glass" data-chrome="product">
+<section class="screen sc-hot sc-hydraulics" id="s-hydraulics" data-rail="overlay" data-chrome="product">
   <div class="ht__stage" data-fs>
 
     <header class="ht__head ht__head--copy">
@@ -1482,7 +1482,7 @@
 </section>
 
 <!-- =========================================================== 11 FEATURES -->
-<section class="screen sc-hot sc-features" id="s-features" data-rail="glass" data-chrome="product">
+<section class="screen sc-hot sc-features" id="s-features" data-rail="overlay" data-chrome="product">
   <div class="ht__stage" data-fs>
 
     <header class="ht__head ht__head--copy">
@@ -1588,7 +1588,7 @@
 </section>
 
 <!-- ===================================================== 12 SPECIFICATIONS -->
-<section class="screen sc-specs" id="s-specs" data-rail="glass" data-chrome="product">
+<section class="screen sc-specs" id="s-specs" data-rail="overlay" data-chrome="product">
   <div class="sp__body">
 
     <div class="sp__intro">
@@ -1720,7 +1720,7 @@
 </section>
 
 <!-- ============================================================= 13 VIDEOS -->
-<section class="screen sc-videos" id="s-videos" data-rail="glass" data-chrome="product">
+<section class="screen sc-videos" id="s-videos" data-rail="overlay" data-chrome="product">
 
   <!-- Hero band. The poster/video bleeds past the screen padding on three
        sides; the intro copy and the playlist float on top of it. -->
@@ -1847,7 +1847,7 @@
 </section>
 
 <!-- ============================================================ 14 GALLERY -->
-<section class="screen sc-gallery" id="s-gallery" data-rail="glass" data-chrome="product">
+<section class="screen sc-gallery" id="s-gallery" data-rail="overlay" data-chrome="product">
 
   <header class="gl__head">
     <div class="gl__headText">
@@ -1879,12 +1879,14 @@
     </a>
   </div>
 
+  <!-- Each frame carries its own [data-zoom] button; core.js opens the shot in
+       a 16:9 lightbox with a blurred copy of the same image behind it. -->
   <div class="gl__grid" id="gl-grid">
-    <figure class="mframe gl__big" data-cat="exterior action"><img src="assets/img/scene/action.webp" alt="" decoding="async"><figcaption class="mframe__cap">Front-Right View</figcaption></figure>
-    <figure class="mframe mframe--fit" data-cat="exterior"><img src="assets/img/product/front.webp" alt="" decoding="async"><figcaption class="mframe__cap">Front View</figcaption></figure>
-    <figure class="mframe mframe--fit" data-cat="exterior hydraulics"><img src="assets/img/product/rear.webp" alt="" decoding="async"><figcaption class="mframe__cap">Rear View</figcaption></figure>
-    <figure class="mframe" data-cat="exterior"><img src="assets/img/scene/walkaround.webp" alt="" decoding="async"><figcaption class="mframe__cap">Side View</figcaption></figure>
-    <figure class="mframe mframe--fit" data-cat="exterior detail"><img src="assets/img/product/top.webp" alt="" decoding="async"><figcaption class="mframe__cap">Top View</figcaption></figure>
+    <figure class="mframe gl__big" data-cat="exterior action"><img src="assets/img/scene/action.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/scene/action.webp" data-zoom-cap="Front-Right View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Front-Right View full screen</span></button><figcaption class="mframe__cap">Front-Right View</figcaption></figure>
+    <figure class="mframe mframe--fit" data-cat="exterior"><img src="assets/img/product/front.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/product/front.webp" data-zoom-cap="Front View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Front View full screen</span></button><figcaption class="mframe__cap">Front View</figcaption></figure>
+    <figure class="mframe mframe--fit" data-cat="exterior hydraulics"><img src="assets/img/product/rear.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/product/rear.webp" data-zoom-cap="Rear View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Rear View full screen</span></button><figcaption class="mframe__cap">Rear View</figcaption></figure>
+    <figure class="mframe" data-cat="exterior"><img src="assets/img/scene/walkaround.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/scene/walkaround.webp" data-zoom-cap="Side View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Side View full screen</span></button><figcaption class="mframe__cap">Side View</figcaption></figure>
+    <figure class="mframe mframe--fit" data-cat="exterior detail"><img src="assets/img/product/top.webp" alt="" decoding="async"><button class="mframe__zoom" type="button" data-zoom="assets/img/product/top.webp" data-zoom-cap="Top View"><svg class="i i--sm"><use href="#i-expand"></use></svg><span class="u-sr">View Top View full screen</span></button><figcaption class="mframe__cap">Top View</figcaption></figure>
   </div>
 
   <div class="gl__strip">
@@ -1916,7 +1918,7 @@
 </section>
 
 <!-- =========================================================== 15 BROCHURE -->
-<section class="screen sc-brochure" id="s-brochure" data-rail="glass" data-chrome="product">
+<section class="screen sc-brochure" id="s-brochure" data-rail="overlay" data-chrome="product">
 
   <div class="br__top">
     <div class="br__intro">

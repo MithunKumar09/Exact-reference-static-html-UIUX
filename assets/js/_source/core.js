@@ -886,6 +886,73 @@
     }, true);
   }
 
+  /* ------------------------------------------------------- gallery lightbox */
+  /* One overlay, built once and reused. The window is a fixed 16:9 frame: a
+     blurred, cropped copy of the same shot fills it and the sharp image sits
+     on top contained, so plates of any ratio read without bare letterbox
+     bars. Markup lives here rather than in the page because it is furniture,
+     not content - the gallery only supplies [data-zoom] on each frame. */
+  var lbox = null, lboxOpener = null;
+
+  function lboxEl() {
+    if (lbox) return lbox;
+    var el = doc.createElement('div');
+    el.className = 'lbox';
+    el.hidden = true;
+    el.innerHTML =
+      '<figure class="lbox__frame" role="dialog" aria-modal="true" aria-label="Image viewer">' +
+        '<span class="lbox__blur" aria-hidden="true"></span>' +
+        '<img class="lbox__img" alt="">' +
+        '<figcaption class="lbox__cap"></figcaption>' +
+      '</figure>' +
+      '<button class="lbox__close" type="button" aria-label="Close">' +
+        '<svg class="i i--lg"><use href="#i-x"></use></svg></button>';
+    doc.body.appendChild(el);
+    /* Click anywhere off the frame closes, as does the button. */
+    on(el, 'click', function (e) {
+      if (!e.target.closest || e.target.closest('.lbox__close') || !e.target.closest('.lbox__frame')) closeZoom();
+    });
+    lbox = el;
+    return el;
+  }
+
+  function openZoom(src, cap) {
+    if (!src) return;
+    var el = lboxEl();
+    var img = $('.lbox__img', el), capEl = $('.lbox__cap', el);
+    img.src = src; img.alt = cap || '';
+    $('.lbox__blur', el).style.backgroundImage = 'url("' + src + '")';
+    capEl.textContent = cap || '';
+    capEl.hidden = !cap;
+    el.hidden = false;
+    /* next frame, so the opening transition has a start state to run from */
+    win.requestAnimationFrame(function () { el.classList.add('is-open'); });
+    doc.documentElement.classList.add('is-zoomed');
+    $('.lbox__close', el).focus();
+  }
+
+  function closeZoom() {
+    if (!lbox || lbox.hidden) return;
+    lbox.classList.remove('is-open');
+    doc.documentElement.classList.remove('is-zoomed');
+    win.setTimeout(function () {
+      if (lbox && !lbox.classList.contains('is-open')) { lbox.hidden = true; $('.lbox__img', lbox).removeAttribute('src'); }
+    }, 220);
+    if (lboxOpener && lboxOpener.isConnected) lboxOpener.focus();
+    lboxOpener = null;
+  }
+
+  function initZoom() {
+    on(doc, 'click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-zoom]') : null;
+      if (!b) return;
+      e.preventDefault();
+      lboxOpener = b;
+      openZoom(b.getAttribute('data-zoom'), b.getAttribute('data-zoom-cap') || '');
+    });
+    on(doc, 'keydown', function (e) { if (e.key === 'Escape') closeZoom(); });
+  }
+
   /* -------------------------------------------------------------- lifecycle */
   function boot() {
     stage     = $('#stage');
@@ -896,6 +963,7 @@
     initRail(); initLinks(); initHotspots(); initThumbs();
     initViewers(); initSpin360(); initAR(); initViewerControls(); init360Video();
     initFilters(); initCompare(); initInert(); initImageGuards(); initPlayer();
+    initZoom();
 
     go(win.location.hash.slice(1) || CFG.startScreen || 'listing', false);
     doc.documentElement.classList.add('is-ready');

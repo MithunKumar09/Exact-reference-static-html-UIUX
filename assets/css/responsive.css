@@ -59,7 +59,7 @@
   .brand__tag { display: none; }
 
   /* --- master rail becomes a horizontally scrolling icon bar ------------- */
-  .rail, .stage[data-rail="glass"] .rail {
+  .rail {
     position: sticky; inset: auto; top: 6rem; width: 100% !important; height: auto;
     max-height: none; flex-direction: row; border-radius: 0;
     background: linear-gradient(180deg, #0C2742, #0A2540);
@@ -77,8 +77,6 @@
     padding: .5rem .7rem; min-width: 7.6rem; scroll-snap-align: start;
   }
   .rail__item span { opacity: 1 !important; transform: none !important; font-size: .95rem; text-align: center; white-space: normal; line-height: 1.15; }
-  .stage[data-rail="glass"] .rail__item { color: #DCE7F3; border-bottom: 0; }
-  .stage[data-rail="glass"] .rail__item.is-active { background: var(--c-primary); color: #fff; }
 
   /* --- decorative script never earns its space on a small screen --------- */
   .script { display: none; }
@@ -475,9 +473,9 @@
      On a phone the section menu is the primary navigation, so it goes where
      the thumb already is instead of stealing the band under the header.
      Everything else about it — the horizontal scroll, the icon-over-label
-     items, the solid/glass skins — is inherited from the tablet rules. */
+     items, the one navy skin — is inherited from the tablet rules. */
   :root { --railbar-h: 6.2rem; }
-  .rail, .stage[data-rail="glass"] .rail {
+  .rail {
     position: fixed; top: auto; right: 0; bottom: 0; left: 0;
     width: 100% !important; max-height: none;
     padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -522,6 +520,17 @@
   .ov__highGrid, .ov__appsGrid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .ov__thumbs .thumb, .thumbstrip .thumb { flex: 0 0 10rem; height: 8.2rem; }
 
+  /* --- phone hero: "Built for Performance." leads -------------------------
+     On the 16:9 stage the three panels are a row under the hero, and that
+     order is right there. On a phone the spec masthead is a long scroll
+     before anything says what the tractor is for, so the performance panel
+     is promoted to the top. `display: contents` dissolves .ov__panels so its
+     three children become siblings of .ov__top and .ov__strip and can be
+     ordered; everything after it keeps document order. Desktop untouched. */
+  .sc-overview.is-active { display: flex; flex-direction: column; }
+  .ov__panels { display: contents; }
+  .ov__perf { order: -1; }
+
   .v360__headTitle { font-size: 2.7rem; }
   .v360__glyph { width: 6.1rem; height: 3.05rem; }
   .v360__headSub { font-size: 1.2rem; letter-spacing: .08em; }
@@ -532,19 +541,14 @@
   .hy__mini, .ctrlstack { margin-inline: 1.2rem; }
   .ht__plate, .ht__hint, .ht__ar { margin-inline: 1.2rem; }
   .hotspot__note, .hotspot__chip { display: none; }
-  /* Not every small screen reports `hover: none`, so size the markers here too.
-     The mark stays close to its desktop size; .hotspot__dot::after carries the
-     44px tap target, so there is nothing to gain from a bigger circle. */
-  .hotspot__dot {
-    width: 3.2rem; height: 3.2rem;
-    box-shadow: 0 0 0 .25rem rgba(255,255,255,.92), 0 .3rem .9rem rgba(4,60,130,.4);
-  }
-  .hotspot__dot .i { width: 1.5rem; height: 1.5rem; }
-  .hotspot--card .hotspot__dot { width: 3.4rem; height: 3.4rem; }
   .hotcard { width: 24rem; }
   .ctrlstack__btn { flex: 1; width: auto; font-size: 1.05rem; }
   .sc-360 .ctrlstack { margin-inline: 1.2rem; }
   .v360__stage { aspect-ratio: 1.24; }
+  /* The raised turntable is a desktop/tablet composition move — on a phone the
+     stage is its own block, so the frame goes back to dead centre. */
+  .v360__box { top: 50%; }
+  .v360__fallback { top: 52%; }
   .v360__plate, .v360__hint { margin-inline: 1.2rem; }
   .v360__headTitle { font-size: 2.7rem; }
   .hintpill .i { width: 2rem; height: 2rem; }
@@ -622,6 +626,23 @@
   .hotspot__dot .i { width: 1.6rem; height: 1.6rem; }
   .hotspot--card .hotspot__dot { width: 3.6rem; height: 3.6rem; }
   .btn { --btn-h: 4.4rem; }
+}
+
+/* ===========================================================================
+   PHONE MARKERS  —  after TOUCH on purpose
+   A phone reports `hover: none`, so the block above would otherwise hand it
+   the 3.4rem touch mark. On a 360-wide screen eight of those crowd the
+   product; the visible circle shrinks and .hotspot__dot::after keeps the
+   44px tap target, so reach is unchanged.
+   ========================================================================= */
+@media (max-width: 680px) {
+  .hotspot__dot {
+    width: 2.2rem; height: 2.2rem;
+    box-shadow: 0 0 0 .2rem rgba(255,255,255,.92), 0 .25rem .7rem rgba(4,60,130,.4);
+  }
+  .hotspot__dot .i { width: 1.1rem; height: 1.1rem; }
+  .hotspot--card .hotspot__dot { width: 2.4rem; height: 2.4rem; }
+  .hotspot--card .hotspot__dot .i { width: 1.25rem; height: 1.25rem; }
 }
 
 /* ===========================================================================

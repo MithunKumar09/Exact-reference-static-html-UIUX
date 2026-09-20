@@ -73,26 +73,17 @@
 .rail:hover .rail__cta, .rail.is-open .rail__cta, .rail:focus-within .rail__cta { opacity: 1; }
 .rail__cta:hover { background: #6FB0EA; }
 
-/* ---- glass skin (screens that float the menu over imagery) -------------- */
-.stage[data-rail="glass"] .rail {
-  inset: 1.4rem auto auto 1.4rem; bottom: auto; height: auto; max-height: calc(100% - 2.8rem);
-  border-radius: var(--r-lg);
-  background: rgba(255, 255, 255, .93);
-  backdrop-filter: blur(1.4rem);
-  color: var(--c-ink);
-  box-shadow: var(--sh-3);
-}
-.stage[data-rail="glass"] .rail__head { display: none; }
-.stage[data-rail="glass"] .rail__nav { padding: .8rem; gap: .1rem; }
-.stage[data-rail="glass"] .rail__item { color: var(--c-ink-2); border-bottom: .1rem solid var(--c-line-2); border-radius: var(--r-sm); }
-.stage[data-rail="glass"] .rail__item:last-of-type { border-bottom: 0; }
-.stage[data-rail="glass"] .rail__item:hover { background: var(--c-primary-softer); color: var(--c-primary); }
-.stage[data-rail="glass"] .rail__item.is-active { background: var(--c-primary); color: #fff; border-bottom-color: transparent; }
-.stage[data-rail="glass"] .rail__foot { display: none; }
-
 /* ---- content offset ----------------------------------------------------- */
+/* One rail skin, everywhere. What still differs between screens is only who
+   reserves the gutter it stands in:
+     solid   — .screens is pushed clear of the rail (the default below);
+     overlay — the screen paints edge to edge (full-bleed photography, the
+               360 stage, the video hero) and already leaves ~8rem of its own
+               padding for the rail, so pushing .screens as well would inset
+               that content twice.
+   Both render the same navy bar; the attribute only picks who makes room. */
 .screens { flex: 1; min-width: 0; min-height: 0; margin-left: 6.4rem; position: relative; }
-.stage[data-rail="glass"] .screens { margin-left: 0; }
+.stage[data-rail="overlay"] .screens { margin-left: 0; }
 
 /* ---- expand affordance -------------------------------------------------- */
 .rail::after {
@@ -101,7 +92,6 @@
   transition: opacity var(--t-fast) var(--ease); pointer-events: none;
 }
 .rail:hover::after, .rail.is-open::after, .rail:focus-within::after { opacity: 0; }
-.stage[data-rail="glass"] .rail::after { background: rgba(12,39,66,.18); }
 
 /* ---- no rail (corporate screens: listing, compare) ---------------------- */
 .stage[data-rail="none"] .rail { display: none; }

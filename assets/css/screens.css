@@ -283,24 +283,33 @@
 /* ===========================================================================
    03 · 360° VIEW   (live 3D — model-viewer)
    ========================================================================= */
-.sc-360 { grid-template-rows: minmax(0,1fr) 10.2rem; background: var(--bg-pad) center 58% / cover no-repeat; }
+/* The 360 screen carries its own backdrop. Re-pointing --bg-pad here rather
+   than in tokens.css keeps Specs and Exterior on the shared sky pad, and the
+   tablet rule that paints .v360__stage inherits the override for free. */
+.sc-360 {
+  --bg-pad: url("../img/bg/exact-bg.png");
+  grid-template-rows: minmax(0,1fr) 10.2rem;
+  background: var(--bg-pad) center 58% / cover no-repeat;
+}
 
 .v360 { position: relative; min-height: 0; min-width: 0; }
 
+/* Top-left, on the same gutter as .ht__head on the detail screens, so the
+   headline stops sharing the vertical centre line with the turntable. */
 .v360__head {
-  position: absolute; top: 1.2rem; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; z-index: 6; pointer-events: none;
+  position: absolute; top: 1.2rem; left: 8.6rem;
+  display: flex; flex-direction: column; align-items: flex-start; z-index: 6; pointer-events: none;
 }
 .v360__headTitle {
-  display: flex; align-items: center; gap: 1.2rem;
-  font-size: 4.2rem; font-weight: 800; letter-spacing: .04em; color: #16324C; line-height: 1;
+  display: flex; align-items: center; gap: 1rem;
+  font-size: 3.2rem; font-weight: 800; letter-spacing: .04em; color: #16324C; line-height: 1;
 }
 /* The 360 mark is 2:1 and its numerals fill ~65% of the box, so the height is
    set from the adjoining cap height rather than matching it. */
-.v360__glyph { width: 9.6rem; height: 4.8rem; color: #16324C; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.v360__glyph { width: 7.3rem; height: 3.65rem; color: #16324C; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 .v360__glyph text, .v360__glyphSm text { font-size: 21px; }
 .v360__glyphSm { width: 4rem; height: 2rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
-.v360__headSub { font-size: 1.7rem; font-weight: 600; letter-spacing: .12em; color: #2E4C68; margin-top: .3rem; }
+.v360__headSub { font-size: 1.35rem; font-weight: 600; letter-spacing: .12em; color: #2E4C68; margin-top: .3rem; }
 
 .v360__script { position: absolute; right: 3rem; top: 1.2rem; width: 19rem; font-size: 2.3rem; z-index: 6; }
 
@@ -311,7 +320,7 @@
   --min-hotspot-opacity: .35;
 }
 .v360__fallback {
-  position: absolute; left: 50%; top: 52%; transform: translate(-50%,-50%);
+  position: absolute; left: 50%; top: 48%; transform: translate(-50%,-50%);
   max-height: 68%; width: auto; opacity: 1; transition: opacity var(--t-slow) var(--ease);
   filter: drop-shadow(0 2rem 2.4rem rgba(10,40,70,.35));
 }
@@ -320,7 +329,9 @@
    on the stage's empty margins. Every frame shares one canvas size, so the box
    never changes shape and nothing shifts while dragging. */
 .v360__box {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  /* Raised off centre so the arc and the thumb strip get breathing room; the
+     markers ride inside the box, so they travel with it. Phone resets it. */
+  position: absolute; left: 50%; top: 46%; transform: translate(-50%,-50%);
   z-index: 3; cursor: grab; touch-action: pan-y;
   /* The contain-fit of the frame inside the stage, computed outright.
      Clamping an aspect-ratio box with max-width/max-height does NOT feed the
@@ -363,7 +374,7 @@
 @keyframes ld { 0%,100% { opacity: .25; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-.5rem); } }
 
 .v360__ctrl { right: 1.6rem; top: 50%; transform: translateY(-46%); }
-.v360__hint { left: 9rem; bottom: 9.6rem; }
+.v360__hint { left: 8.6rem; bottom: 9.6rem; }
 .v360__plate { right: 1.6rem; bottom: 9.6rem; }
 
 .v360__arc {

@@ -140,7 +140,9 @@ copy-paste template.
 * `data-goto="<screen-id>"` is the entire navigation API. Put it on any element —
   link, button, card — and it routes to `<section id="s-<screen-id>">`.
 * The rail changes skin per screen through `data-rail` on each `<section>`:
-  `solid` (navy), `glass` (floating white card) or `none` (corporate screens).
+  `solid` (navy rail, content pushed clear of it), `overlay` (same navy rail, but
+  the screen is full-bleed and reserves its own gutter) or `none` (corporate
+  screens: listing, compare).
 
 ---
 
