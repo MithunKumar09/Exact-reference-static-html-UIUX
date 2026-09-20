@@ -255,6 +255,28 @@
 /* ===========================================================================
    HOTSPOTS   (reference: HOTSPOT-refer-image-1)
    ========================================================================= */
+/* --- Art frame -------------------------------------------------------------
+   `object-fit: contain` leaves empty margins around the artwork, and those
+   margins move as the viewport changes shape. Anything positioned in per-cent
+   over the picture — hotspots, numbered pins, dimension callouts — therefore
+   drifts off the product the moment the box stops matching the image.
+
+   .artfit makes that box explicit: the parent becomes the query container and
+   the child takes exactly the contain-fit of `--ar` inside `--w` x `--h`
+   (per-cent of the parent, written as plain numbers). Markers live inside it,
+   so they are positioned against the picture and stay put at every width. */
+.artfit { position: absolute; inset: 0; container-type: size; pointer-events: none; }
+.artfit__in {
+  position: absolute; left: calc(50% + var(--dx, 0) * 1%); top: calc(50% + var(--dy, 0) * 1%);
+  transform: translate(-50%, -50%);
+  width:  min(calc(var(--w, 100) * 1cqw), calc(var(--h, 100) * var(--ar, 1.5) * 1cqh));
+  height: min(calc(var(--h, 100) * 1cqh), calc(var(--w, 100) / var(--ar, 1.5) * 1cqw));
+}
+.artfit__in > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+@supports not (width: 1cqw) {
+  .artfit__in { width: calc(var(--w, 100) * 1%); height: auto; aspect-ratio: var(--ar, 1.5); }
+}
+
 .hotlayer { position: absolute; inset: 0; pointer-events: none; }
 .hotlayer .hotspot { pointer-events: auto; }
 

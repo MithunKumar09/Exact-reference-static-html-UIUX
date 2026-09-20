@@ -21,21 +21,25 @@
 .dg__bandRule { width: .3rem; align-self: stretch; margin: 1rem 0; background: var(--c-accent); border-radius: var(--r-pill); }
 .band__s--lg { font-size: 1.85rem; font-weight: 900; line-height: 1.1; }
 
+/* Sits in the empty band between the headline copy (max 62rem) and the
+   corner plate, rather than across either of them. */
 .dw__note {
-  position: absolute; right: 2rem; top: 5.2rem; z-index: 6; text-align: center;
+  position: absolute; left: 64rem; top: 3.2rem; z-index: 6; text-align: center;
   background: #fff; border-radius: var(--r-sm); padding: .4rem 1rem; box-shadow: var(--sh-2);
 }
-.sc-drawing .dg__band { padding-right: 25rem; }
+.sc-drawing .dg__band { padding-right: 4rem; }
 .dw__note b { display: block; font-size: 1.15rem; font-weight: 700; }
 .dw__note span { display: block; font-size: 1rem; color: var(--c-ink-3); }
 
 .dg__body { display: grid; grid-template-columns: minmax(0,1fr) 33rem; gap: 1rem; min-height: 0; }
 
 .dg__canvas { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
-.dg__art {
-  position: absolute; inset: 0; margin: auto;
-  max-width: 96%; max-height: 96%; width: auto; height: auto; object-fit: contain;
-}
+/* The artwork and its numbered pins / system callouts share one box, so a
+   marker sits on the part it names at every viewport — see .artfit, ui.css. */
+.dg__media { z-index: 1; }
+.dg__frame { --ar: 1.5; --w: 97; --h: 97; }
+.dg__art { width: 100%; height: 100%; object-fit: contain; }
+.sch__canvas .dg__frame { --w: 96; --h: 96; }
 .dg__script { position: absolute; left: .4rem; bottom: .4rem; width: 15rem; font-size: 1.9rem; z-index: 4; }
 
 /* ---- numbered pins ------------------------------------------------------ */
@@ -91,17 +95,6 @@
 /* ===========================================================================
    Schematic extras
    ========================================================================= */
-.sch__canvas .dg__art { max-width: 90%; max-height: 90%; }
-.sch__routes { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; opacity: .95; }
-.sch__routes .r-engine       { stroke: var(--sys-engine); }
-.sch__routes .r-transmission { stroke: var(--sys-transmission); }
-.sch__routes .r-hydraulic    { stroke: var(--sys-hydraulic); }
-.sch__routes .r-fuel         { stroke: var(--sys-fuel); }
-.sch__routes .r-cooling      { stroke: var(--sys-cooling); }
-.sch__routes .r-electrical   { stroke: var(--sys-electrical); }
-.sch__routes .r-controls     { stroke: var(--sys-controls); }
-.sch__routes .r-air          { stroke: var(--sys-air); }
-
 .cal {
   position: absolute; transform: translate(-50%,-50%); z-index: 3; text-align: center;
   padding: .3rem .8rem; border-radius: .5rem; background: #fff; white-space: nowrap;
@@ -149,13 +142,25 @@
   align-self: flex-start; padding: .3rem 1.2rem; border-radius: .4rem;
   background: var(--c-primary-band); color: #fff; font-size: 1.1rem; font-weight: 700; letter-spacing: .04em;
 }
-.dw__art { position: relative; flex: 1; min-height: 0; margin-top: .4rem; }
-.dw__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-.dw__dims { position: absolute; inset: 0; width: 100%; height: 100%; }
-.dw__dims .dl path { fill: none; stroke: #C4342A; stroke-width: 1; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-.dv { position: absolute; transform: translate(-50%,-50%); text-align: center; white-space: nowrap; }
-.dv b { display: block; font-size: 1.15rem; font-weight: 700; color: #16324C; }
-.dv i { display: block; font-size: .92rem; font-style: normal; color: var(--c-ink-3); }
+/* The plate is contained inside this box; .artfit gives it a box of exactly
+   its own shape (ui.css) so nothing has to be positioned against the panel's
+   leftover margins. The dimensions are read from the KEY DIMENSIONS table
+   beside them, so they are stated as corner chips rather than as arrows that
+   would have to be re-authored for every plate. */
+.dw__art { position: relative; flex: 1; min-height: 0; margin-top: .4rem; container-type: size; }
+.dw__frame { --w: 92; --h: 88; }
+.dw__frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+
+.dv {
+  position: absolute; z-index: 2; display: block; padding: .18rem .55rem;
+  border-left: .22rem solid #C4342A; background: rgba(255,255,255,.9);
+  border-radius: .2rem; white-space: nowrap; pointer-events: none;
+}
+.dv b { display: block; font-size: 1.15rem; font-weight: 700; line-height: 1.1; color: #16324C; }
+.dv i { display: block; font-size: .92rem; font-style: normal; line-height: 1.15; color: var(--c-ink-3); }
+.dv--tl { left: 0; top: 0; }
+.dv--bl { left: 0; bottom: 0; }
+.dv--br { right: 0; bottom: 0; border-left: 0; border-right: .22rem solid #C4342A; text-align: right; }
 
 .dw__key { grid-column: 2; }
 .dw__key .panel__bar { justify-content: flex-start; font-size: 1.15rem; letter-spacing: .04em; }

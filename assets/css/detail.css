@@ -25,17 +25,25 @@
 
 .ht__script { position: absolute; right: 3rem; top: 1.4rem; width: 18rem; font-size: 2.1rem; z-index: 6; }
 
-/* ---- the product plate --------------------------------------------------- */
+/* ---- the product plate ---------------------------------------------------
+   The picture and its hotspots share one box (.artfit, ui.css), so a marker
+   sits on the part it names at every viewport. --w / --h are the share of the
+   stage the artwork may take, --ar the source image's own ratio. */
+.ht__media { z-index: 1; }
+.ht__frame { --ar: 1.5; --w: 62; --h: 88; }
 .ht__art {
-  position: absolute; left: 52%; top: 50%; transform: translate(-50%,-50%); z-index: 1;
-  max-width: 62%; max-height: 88%; width: auto; height: auto; object-fit: contain;
+  border-radius: var(--r-lg);
   filter: drop-shadow(0 2rem 2.4rem rgba(10,40,70,.3));
   transition: opacity var(--t-base) var(--ease);
 }
-.ht__art--wide { max-width: 60%; max-height: 90%; }
-.sc-engine .ht__art { left: 50%; max-width: 54%; }
-.sc-operator .ht__art { left: 50%; max-width: 56%; }
-.sc-hydraulics .ht__art { left: 50%; max-width: 50%; }
+/* The cut-out plates are 1200x752; the four photographed screens are 3:2.
+   --dx nudges the picture clear of the headline column on the left, which is
+   fixed-width and would otherwise be read through the photograph's edge. */
+.sc-exterior .ht__frame   { --ar: 1.596; --w: 60; --h: 94; --dx: 4; }
+.sc-engine .ht__frame     { --w: 64; --h: 96; --dx: 5; }
+.sc-operator .ht__frame   { --w: 62; --h: 96; --dx: 5; }
+.sc-hydraulics .ht__frame { --w: 58; --h: 96; --dx: 5; }
+.sc-features .ht__frame   { --w: 62; --h: 94; --dx: 5; }
 
 /* ---- side panel ---------------------------------------------------------- */
 .sidepane { position: absolute; right: 1.6rem; top: 1.6rem; width: 24rem; max-height: calc(100% - 3.2rem); z-index: 7; }

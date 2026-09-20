@@ -119,7 +119,7 @@
 
   /* ---- 7. Product imagery (swap folder to re-skin the demo) ----------- */
   --img-dir:      "../img";
-  --bg-hero:      url("../img/bg/field-sunset.png");
+  --bg-hero:      url("../img/bg/hero-field.webp");
   --bg-pad:       url("../img/bg/sky-pad.webp");
   --bg-soil:      url("../img/bg/soil-field.webp");
   --bg-crop:      url("../img/bg/crop-rows.webp");

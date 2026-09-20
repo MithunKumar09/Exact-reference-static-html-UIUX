@@ -304,7 +304,7 @@
 
 .v360__script { position: absolute; right: 3rem; top: 1.2rem; width: 19rem; font-size: 2.3rem; z-index: 6; }
 
-.v360__stage { position: absolute; inset: 0; z-index: 2; }
+.v360__stage { position: absolute; inset: 0; z-index: 2; container-type: size; }
 .v360__stage model-viewer {
   width: 100%; height: 100%; background: transparent;
   --poster-color: transparent; --progress-bar-color: var(--c-primary);
@@ -321,9 +321,17 @@
    never changes shape and nothing shifts while dragging. */
 .v360__box {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-  height: 78%; max-width: 88%; z-index: 3;
-  /* aspect-ratio is pinned from the first loaded frame — see lockRatio() */
-  cursor: grab; touch-action: pan-y;
+  z-index: 3; cursor: grab; touch-action: pan-y;
+  /* The contain-fit of the frame inside the stage, computed outright.
+     Clamping an aspect-ratio box with max-width/max-height does NOT feed the
+     clamp back to the other axis, so either form of "size one side, cap the
+     other" leaves the box the wrong shape on one of the two breakpoints: the
+     frame then letterboxes inside it and every marker — positioned against
+     the box — slides off the part it names. --ar is written by lockRatio()
+     from the first frame that loads; the fallback is the shipped set's. */
+  --ar: 1.596;
+  width:  min(88cqw, calc(78cqh * var(--ar)));
+  height: min(78cqh, calc(88cqw / var(--ar)));
 }
 .v360__stage.is-drag .v360__box { cursor: grabbing; }
 .v360__frame {

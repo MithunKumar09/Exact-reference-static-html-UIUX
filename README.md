@@ -57,6 +57,7 @@ assets/
     hotspots-360.json  per-frame marker coordinates, built from the keyframes
 tools/
   build-html.py      ★ parts/ -> index.html  (run after editing any part)
+  build-menu-art.py  ★ ONE COMMAND: menu plates in, every shipped still out
   build-spin.py      ★ ONE COMMAND: plates in, finished 360° set out
   key-frames.py        cuts supplied product plates off their black backdrop
   pack-frames.py       PNG → webp packer; crops, builds the half-size set
@@ -65,6 +66,7 @@ tools/
   turntable.py         Blender renderer, for when a real 3D model exists
 _reference/                    the supplied UI reference screens (not shipped)
 _source-photography/           the supplied product plates (not shipped)
+all the menu images/           the supplied per-menu photography (not shipped)
 ```
 
 **Rule of thumb:** content lives in `parts/`, colour lives in `tokens.css`,
@@ -183,7 +185,7 @@ exactly when a real 3D model is rendered.
 | **360° / immersive video** | Wired to a public equirectangular demo clip (three.js sample asset) rendered onto a video sphere. Needs a connection. |
 | **Product video player** | Custom control bar (play, scrub, time, mute, fullscreen) over a real `<video>` pointed at a public demo clip. |
 | **The tractor on the 360° screen** | The supplied STANDARD product photography, keyed and size-matched. **One tractor** (generation run 5) — see "One identity" below. |
-| **The tractor everywhere else** | Still the old **placeholder**: a CC-BY low-poly tractor from Poly Pizza, recoloured. Every still in `assets/img/product` and `assets/img/part` was rendered from it, so Exterior / Engine / Gallery do not yet match the 360° screen. |
+| **The tractor everywhere else** | **Real.** The eight named product views are the spin plates themselves, so every card, thumbnail and gallery tile shows the same tractor the turntable does. Engine, Operator Station, Hydraulics, Features, Exploded and Schematic use the supplied per-menu photography; the component close-ups and blueprint views are cropped out of the exploded plate and the drawing sheet. All of it is rebuilt by `tools/build-menu-art.py`. |
 
 ### Rebuilding the spin set from supplied photography
 
@@ -217,6 +219,34 @@ here is run 5 alone. The other 48 plates are kept in
 `_source-photography/rejected-other-tractors/`. Generate every new angle
 image-conditioned on `_source-photography/REFERENCE-PLATE.png`, never from a
 fresh prompt, or the problem comes straight back.
+
+### Rebuilding the menu photography
+
+```
+python tools/build-menu-art.py
+```
+
+That is the whole job. The supplied plates live in `all the menu images/` and
+the script writes every still the page uses: the five photographed screens,
+the two diagram canvases, the four blueprint views and three detail views
+cropped out of the Engineering Drawing sheet, the component close-ups cropped
+out of the exploded plate, the eight named product views taken from the spin
+set, and the tractor-in-field composites.
+
+**Four of the supplied plates have callout cards baked into the pixels**, and
+the lettering in them is generated rather than typeset — it does not spell the
+parts it points at. The page draws its own hotspots over the same positions
+with the real copy, so the baked ones are painted out first: `exemplar_fill()`
+replaces each card with the best-matching block from the same horizontal band
+of the photograph, or of its mirror, which is what makes a symmetric rear view
+fill convincingly. Anything it leaves behind ends up underneath the live
+marker that replaced it. The schematic is the exception — its callouts sit on
+flat, pale background where a diffusion inpaint is cleaner, and the machine is
+not symmetric, so mirroring would clone the grille.
+
+The callout coordinates are measured on the 1248x832 plates as supplied and
+listed in `CALLOUTS` / `SCHEMATIC_RECTS` at the top of the script. Regenerate
+the plates and those need re-measuring.
 
 ### Re-rendering the spin set from a 3D model instead
 

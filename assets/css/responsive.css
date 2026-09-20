@@ -130,11 +130,13 @@
       var(--bg-hero) 50% 56% / cover no-repeat;
   }
   /* stay positioned: a static element cannot sit above the hero overlay */
-  .ov__crumbs { position: relative; padding: 1.4rem 1.8rem 0; }
+  /* relative, not absolute — but the desktop offsets have to go with it, or
+     the bar sits 1.6rem past the hero's right edge. */
+  .ov__crumbs { position: relative; left: 0; top: auto; padding: 1.4rem 1.8rem 0; flex-wrap: wrap; row-gap: .4rem; }
   .ov__heroText { position: relative; top: auto; left: auto; padding: 1rem 1.8rem 0; width: auto; }
   /* the wash runs top-to-bottom here, so the tractor goes back above it
      rather than being read through it as it is on the stage. */
-  .ov__heroImg { height: 16rem; top: auto; bottom: 5.6rem; right: -1rem; z-index: 3; }
+  .ov__heroImg { height: 16rem; top: auto; bottom: 5.6rem; right: 0; z-index: 3; }
   /* Four trust items in one nowrap row measure ~52rem; anything narrower than
      that silently clipped the last one against the hero's overflow. */
   .ov__trust {
@@ -157,58 +159,112 @@
   .ov__appsGrid .mframe { flex: none; height: 9rem; }
   .ov__perfMedia { height: 16rem; }
 
-  /* --- stage screens (360°, Exterior, Engine, Operator, Hydraulics,
-         Features): keep the absolute composition, just give it a box ------ */
+  /* --- 360° view --------------------------------------------------------
+     Same move as the hotspot screens below: the headline, the turntable and
+     the controls stop overlapping each other and become three blocks. The
+     turntable keeps a box of its own so the spin frame — and the markers
+     pinned to it — has a definite shape to sit in. ---------------------- */
   .sc-360, .sc-hot { padding: 0; }
-  .v360, .ht__stage {
-    position: relative; height: clamp(40rem, 62svh, 56rem);
-    min-height: 0; aspect-ratio: auto;
+  .sc-360 { background: var(--c-canvas); }
+  .v360 { position: relative; display: block; height: auto; min-height: 0; aspect-ratio: auto; }
+  .v360__stage {
+    position: relative; inset: auto; width: 100%; aspect-ratio: 1.42;
+    background: var(--bg-pad) center 58% / cover no-repeat;
   }
-  .v360__stage, .ht__stage::before { inset: 0; }
-  .ht__head, .v360__head { left: 1.4rem; right: 1.4rem; top: 1.4rem; max-width: none; transform: none; }
-  .v360__head { align-items: flex-start; }
-  .v360__headTitle, .ht__title { font-size: 3.2rem; }
+  .v360__box {
+    width:  min(92cqw, calc(88cqh * var(--ar)));
+    height: min(88cqh, calc(92cqw / var(--ar)));
+    max-height: none;
+  }
+  .v360__head {
+    position: static; left: auto; right: auto; top: auto; max-width: none;
+    transform: none; align-items: flex-start; padding: 1.6rem 1.6rem 1rem;
+  }
+  .v360__headTitle { font-size: 3.2rem; }
   .v360__glyph { width: 7.2rem; height: 3.6rem; }
-  .v360__headSub, .ht__sub { font-size: 1.4rem; }
+  .v360__headSub { font-size: 1.4rem; }
+  .v360__script { display: none; }
   .v360 .hotspot__chip { display: none; }
-  .ht__art { max-width: 88%; max-height: 52%; top: 44%; }
 
-  /* Inline hotspot labels are placed for the 1600x900 stage. On the four
-     screens that also carry a side panel there is no longer room for them:
-     they collide with the headline copy, with the panel and with each other.
-     Drop to bare markers — tapping one still opens the full hotspot card.
-     Exterior has no side panel and only three labels, so it keeps them. */
-  .sc-engine .hotspot__note,
-  .sc-operator .hotspot__note,
-  .sc-hydraulics .hotspot__note,
-  .sc-features .hotspot__note { display: none; }
+  /* --- Exterior · Engine · Operator · Hydraulics · Features --------------
+     On the 16:9 stage these are one composition: headline, product and side
+     panel all float over the same box. Off it there is no box left to float
+     in — the panel covered the product, the markers landed on the headline
+     and the picture ended up the smallest thing on the screen. So the parts
+     become a document: copy, then the photograph at its own aspect ratio
+     with the markers on it, then the panel, then the furniture. ---------- */
+  /* NB: never `display:block` on .sc-hot itself — .screen is display:none
+     until it is the active route, and a bare display here would reveal every
+     one of these five screens at once. */
+  .sc-hot { background: var(--c-canvas); }
+  .ht__stage { display: block; height: auto; overflow: visible; padding-bottom: 1.4rem; }
+  .ht__stage::before { display: none; }
 
-  /* Cap against the stage rather than a fixed 30rem: the panel then uses the
-     height the stage actually has, clearing the headline block at the top. */
-  /* Cap against the stage rather than a fixed 30rem, so the panel uses the
-     height the stage actually has. The reserve is the 7.2rem bottom offset
-     plus the tallest headline block (11.5rem here) plus a gap. */
-  .sidepane, .sidepane--wide {
-    position: absolute; right: 1.2rem; top: auto; bottom: 7.2rem;
-    width: 25rem; max-height: calc(100% - 20.5rem);
+  .ht__head, .sc-hot .ht__head--copy {
+    position: static; max-width: none; padding: 1.6rem 1.6rem 1rem;
   }
-  .sc-engine .sidepane, .sc-operator .sidepane { top: auto; }
-  .ft__side { top: auto; bottom: 8rem; max-height: calc(100% - 21.3rem); }
-  /* A capped panel must scroll its own body, never crop a row mid-line. */
-  .sidepane .panel__body { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
-  /* Decorative script art — hidden here for the same reason as .script. */
+  .ht__title { font-size: 3.2rem; }
+  .ht__sub { font-size: 1.6rem; }
+  .ht__copy { font-size: 1.35rem; margin-top: .6rem; }
+  .ht__script { display: none; }
+
+  /* The frame fills the media block exactly, so a marker sits on the part it
+     names at any width — nothing is positioned against the stage any more. */
+  .ht__media { position: relative; inset: auto; width: 100%; aspect-ratio: var(--art-ar, 1.5); }
+  .sc-exterior .ht__media { --art-ar: 1.596; }
+  /* two classes, so this beats the per-screen `--w`/`--h` in detail.css */
+  .sc-hot .ht__frame { --w: 100; --h: 100; --dx: 0; }
+  .ht__art { border-radius: 0; filter: none; }
+  .sc-exterior .ht__art, .sc-exterior .ht__media { background: var(--c-surface-2); }
+
+  /* Inline labels are authored for a 1600x900 frame; at this width they
+     collide with each other and with the product. Markers alone — tapping
+     one still opens the full hotspot card. */
+  .sc-engine .hotspot__note, .sc-operator .hotspot__note,
+  .sc-hydraulics .hotspot__note, .sc-features .hotspot__note,
+  .sc-exterior .hotspot__note { display: none; }
+
+  .sidepane, .sidepane--wide, .ft__side {
+    position: static; width: auto; max-height: none;
+    margin: 1.2rem 1.6rem 0; box-shadow: var(--sh-2);
+  }
+  .sidepane .panel__body { overflow: visible; }
+  .ft__side { top: auto; bottom: auto; }
   .ft__banner { display: none; }
-  .ctrlstack { flex-direction: row; top: auto; bottom: 1.2rem; right: auto; left: 50%; transform: translateX(-50%); }
-  .ctrlstack__btn { width: 8.2rem; padding: .7rem .4rem; border-bottom: 0; border-right: .1rem solid var(--c-line-2); font-size: 1.1rem; }
-  .ht__plate, .v360__plate { left: 1.2rem; right: auto; bottom: 7rem; }
-  .ht__hint, .ht__ar, .v360__hint { right: 1.2rem; left: auto; bottom: 7rem; }
-  /* Those same four screens have no control stack, so the empty band under
-     the side panel is free — move the hint pill there instead of letting it
-     sit on top of the panel. */
-  .sc-engine .ht__hint, .sc-operator .ht__hint,
-  .sc-hydraulics .ht__hint, .sc-features .ht__hint { bottom: 1.2rem; }
-  .sc-engine .ht__plate, .sc-operator .ht__plate,
-  .sc-hydraulics .ht__plate, .sc-features .ht__plate { bottom: 1.2rem; }
+  .hy__mini { position: static; width: auto; margin: 1.2rem 1.6rem 0; }
+
+  /* Scoped to .sc-hot: the 360° screen keeps its stage, so its control stack
+     stays docked to the bottom of that stage rather than joining the flow. */
+  .sc-hot .ctrlstack {
+    position: static; flex-direction: row; transform: none;
+    margin: 1.2rem 1.6rem 0; overflow: hidden;
+  }
+  .sc-360 .ctrlstack {
+    position: static; flex-direction: row; transform: none;
+    margin: 1.2rem 1.6rem 0; overflow: hidden;
+  }
+  .ctrlstack__btn { flex: 1 1 0; width: auto; padding: .9rem .4rem; border-bottom: 0; border-right: .1rem solid var(--c-line-2); font-size: 1.1rem; }
+  .ctrlstack__btn:last-child { border-right: 0; }
+
+  /* In flow these are rows of the document, not pills floating over a stage:
+     they take the same column as the control stack and the panels above and
+     below them, so every block on the screen shares one left and right edge. */
+  .ht__plate, .ht__hint, .ht__ar, .v360__plate, .v360__hint {
+    width: auto; max-width: none; justify-content: flex-start;
+    text-align: left; padding: 1.2rem 1.4rem;
+  }
+  .ht__plate, .ht__hint, .ht__ar { position: static; margin: 1.2rem 1.6rem 0; }
+  /* the mark gets a tile of its own so the row reads as one control */
+  .plate--row > .i, .hintpill > .i, .hintpill > .v360__glyphSm {
+    box-sizing: content-box; flex: none; padding: .9rem;
+    border-radius: var(--r-md); background: rgba(255, 255, 255, .12);
+  }
+  .v360__plate, .v360__hint {
+    position: static; left: auto; right: auto; bottom: auto; margin: 1.2rem 1.6rem 0;
+  }
+  /* .plate is a centred block by default; in flow the two lines stack left */
+  .v360__plate { display: block; }
+  .v360__plate .plate__s { margin-top: .3rem; }
   .plate { padding: .8rem 1.4rem; }
   .plate__t { font-size: 1.7rem; }
   .plate__s { font-size: 1.1rem; }
@@ -216,7 +272,6 @@
   .hintpill__t { font-size: 1.3rem; }
   .hintpill__s { font-size: 1.1rem; }
   .ht__rotate, .v360__arc { display: none; }
-  .hy__mini { left: 1.2rem; bottom: 22rem; width: 24rem; }
   .thumbstrip {
     flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain;
     scroll-snap-type: x proximity; scrollbar-width: thin; padding: .8rem 1.2rem;
@@ -303,23 +358,42 @@
   .gl__strip { grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: 1.2rem; }
   .gl__strip .mframe { flex: none; height: 10rem; }
 
-  /* --- brochure ---------------------------------------------------------- */
+  /* --- brochure ----------------------------------------------------------
+     The facsimile is a 3D composition sized in per-cent of a wide box while
+     its type is fixed — narrow the box and the copy runs straight out of the
+     pages. Off the stage it lies flat instead: the cover, then the spread,
+     each at a height that fits what is written on it. */
   .sc-brochure { padding: 1.4rem; }
   .br__top { display: block; padding-right: 0; }
-  .br__mock { height: 40rem; margin-top: 1.6rem; }
+  .br__mock {
+    height: auto; margin-top: 1.6rem; perspective: none;
+    display: grid; gap: 1.2rem;
+  }
+  .br__cover {
+    position: relative; left: auto; top: auto; order: -1;
+    width: 100%; max-width: 28rem; height: auto; min-height: 36rem;
+    margin-inline: auto; transform: none;
+  }
+  .br__spread {
+    position: relative; right: auto; top: auto;
+    width: 100%; height: auto; transform: none; gap: .4rem;
+  }
+  .br__page { min-height: 28rem; }
   .br__acts { flex-wrap: wrap; margin-top: 1.6rem; }
   .br__preview { padding: 1.6rem 0 0; }
-  .br__pages { grid-auto-columns: 12rem; }
+  .br__pages { grid-auto-columns: 12rem; grid-auto-rows: 16rem; }
+  .br__pg b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
   /* --- compare ----------------------------------------------------------- */
   .cp__hero { display: block; padding: 1.6rem; height: auto; }
-  /* Pinned at 55% the photo meets the navy on a hard vertical seam once the
-     hero narrows. Cover the box and fade it in, as the reference does. */
+  /* the stacked hero has no right-hand column to hold the photograph, so it
+     washes down the block instead of across it */
   .cp__hero::after {
-    inset: 0;
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 55%);
-    mask-image: linear-gradient(90deg, transparent 0%, #000 55%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 72%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 72%);
   }
+  /* in flow the table is not height-capped, so nothing needs fading out */
+  .cp__scroll { -webkit-mask-image: none; mask-image: none; }
   .cp__trust { margin: 1.2rem 0 0; flex-wrap: wrap; gap: 1rem; }
   .cp__trust .trust__sep { display: none; }
   .cp__body { display: block; padding: 1.4rem; }
@@ -340,13 +414,41 @@
   .dg__head, .vr__head { display: block; }
   .dw__note { position: static; display: inline-block; margin-top: 1rem; }
   .dg__body { display: block; }
-  .dg__canvas { height: 34rem; margin-bottom: 1.2rem; }
+  /* hug the artwork instead of reserving a fixed band it cannot fill */
+  .dg__canvas { height: auto; aspect-ratio: 1.5; margin-bottom: 1.2rem; }
+  .dg__frame { --w: 100; --h: 100; }
+  /* The system callouts are authored against a 1600x900 frame. Scale them
+     with the artwork so they stop colliding with each other. */
+  .cal { font-size: 1rem; padding: .2rem .55rem; border-width: .12rem; }
+  .pin { width: 2.2rem; height: 2.2rem; font-size: 1.02rem; }
   .dg__side { display: block; }
   .dg__parts { margin-bottom: 1rem; }
   .dg__partsBody { max-height: 36rem; }
-  .dg__cards, .sch__cards { grid-template-columns: repeat(3, minmax(0,1fr)); height: auto; grid-auto-rows: 20rem; margin-top: 1.2rem; }
-  .dw__grid { grid-template-columns: repeat(2, minmax(0,1fr)); grid-auto-rows: 26rem; }
-  .dw__key, .dw__detail { grid-column: auto; }
+  /* The stage lays these out as one fixed-height row of six. Off the stage
+     they wrap, so the explicit row/column tracks have to go with it:
+     `grid-template-rows: none` is the important half — leaving the desktop
+     `minmax(0,1fr)` rows in place gives the first items a zero-height track
+     (their art is absolutely positioned, so there is no content to measure)
+     while everything after them picks up grid-auto-rows and renders. */
+  .dg__cards, .sch__cards {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    grid-template-rows: none; height: auto; grid-auto-rows: 21rem; margin-top: 1.2rem;
+  }
+  /* the system cards are lists, not pictures — let them be as tall as they
+     need and give the close-up the space that frees up */
+  .sch__cards { grid-auto-rows: auto; }
+  .sch__cardImg { height: 9rem; }
+  .dw__grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    grid-template-rows: none; grid-auto-rows: auto;
+  }
+  /* Off the stage the four blueprint plates are the only items that need a
+     height of their own; the key table and the detail views are reading
+     matter and grow with their content instead of being cropped to a row. */
+  .dw__view { height: 27rem; }
+  .dw__key, .dw__detail { grid-column: auto; grid-row: auto; }
+  .dw__keyBody { overflow: visible; }
+  .dw__detailGrid figure { height: 15rem; }
   .dw__foot { display: block; margin-top: 1.2rem; }
   .dw__footItems { flex-wrap: wrap; gap: 1.4rem; margin-top: .8rem; }
 
@@ -420,16 +522,15 @@
   .ov__highGrid, .ov__appsGrid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .ov__thumbs .thumb, .thumbstrip .thumb { flex: 0 0 10rem; height: 8.2rem; }
 
-  .v360, .ht__stage { height: clamp(46rem, 68svh, 58rem); min-height: 0; aspect-ratio: auto; }
-  .v360__headTitle, .ht__title { font-size: 2.7rem; }
+  .v360__headTitle { font-size: 2.7rem; }
   .v360__glyph { width: 6.1rem; height: 3.05rem; }
-  .v360__headSub, .ht__sub { font-size: 1.2rem; letter-spacing: .08em; }
-  .ht__art { max-height: 38%; top: 39%; }
-  /* Headline blocks run taller here (Hydraulics reaches 14.2rem), so the
-     panel has to reserve more before it would reach them. */
-  .sidepane, .sidepane--wide, .ft__side {
-    right: 1rem; left: 1rem; width: auto; bottom: 7.2rem; max-height: calc(100% - 23rem);
-  }
+  .v360__headSub { font-size: 1.2rem; letter-spacing: .08em; }
+  .ht__title { font-size: 2.7rem; }
+  .ht__sub { font-size: 1.45rem; }
+  .ht__head, .sc-hot .ht__head--copy { padding: 1.4rem 1.2rem .8rem; }
+  .sidepane, .sidepane--wide, .ft__side,
+  .hy__mini, .ctrlstack { margin-inline: 1.2rem; }
+  .ht__plate, .ht__hint, .ht__ar { margin-inline: 1.2rem; }
   .hotspot__note, .hotspot__chip { display: none; }
   /* Not every small screen reports `hover: none`, so size the markers here too.
      The mark stays close to its desktop size; .hotspot__dot::after carries the
@@ -441,15 +542,11 @@
   .hotspot__dot .i { width: 1.5rem; height: 1.5rem; }
   .hotspot--card .hotspot__dot { width: 3.4rem; height: 3.4rem; }
   .hotcard { width: 24rem; }
-  .ctrlstack { left: 1rem; right: 1rem; bottom: 1rem; transform: none; }
-  .ctrlstack__btn { flex: 1; width: auto; }
-  .ht__plate, .v360__plate { display: none; }
-  .ht__hint, .ht__ar, .v360__hint { top: 8.4rem; right: 1rem; bottom: auto; }
-  /* Pinned to the top these sat on the headline copy. The four side-panel
-     screens carry no control stack, so the band under the panel is free. */
-  .sc-engine .ht__hint, .sc-operator .ht__hint,
-  .sc-hydraulics .ht__hint, .sc-features .ht__hint { top: auto; bottom: 1rem; right: 1rem; }
-  .hintpill__s { display: none; }
+  .ctrlstack__btn { flex: 1; width: auto; font-size: 1.05rem; }
+  .sc-360 .ctrlstack { margin-inline: 1.2rem; }
+  .v360__stage { aspect-ratio: 1.24; }
+  .v360__plate, .v360__hint { margin-inline: 1.2rem; }
+  .v360__headTitle { font-size: 2.7rem; }
   .hintpill .i { width: 2rem; height: 2rem; }
   .hintpill .v360__glyphSm { width: 3.2rem; height: 1.6rem; }
   .hy__mini { display: none; }
@@ -460,7 +557,15 @@
   .sp__stats span:nth-child(2n) { border-right: 0; }
 
   .vd__grid, .gl__strip, .dg__cards, .sch__cards, .vr__grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .br__spread { grid-template-columns: 1fr; }
+  /* Twelve labels cannot share a 39rem-wide diagram without overlapping, and
+     a label that sits on another label is worse than no label: the artwork
+     carries the colour-keyed routing itself and the legend below names every
+     colour, so the callouts stand down here. */
+  .cal { display: none; }
+  .pin { width: 1.9rem; height: 1.9rem; font-size: .95rem; }
   .dw__grid { grid-template-columns: 1fr; }
+  .dw__view { height: 30rem; }
   .eq__fields { grid-template-columns: 1fr; }
   .gl__grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
 
@@ -505,7 +610,6 @@
   .sc-listing, .sc-overview, .sc-diagram, .sc-specs,
   .sc-videos, .sc-gallery, .sc-brochure, .sc-compare, .sc-enquire, .sc-variants { padding: 1rem; }
   .lst__body, .sp__body, .cp__body { padding: 1rem; }
-  .v360, .ht__stage { height: clamp(44rem, 66svh, 54rem); }
 }
 
 /* ===========================================================================

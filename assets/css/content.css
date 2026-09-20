@@ -296,7 +296,14 @@
   display: flex; flex-direction: column; padding: .4rem;
 }
 .br__pg b { font-size: .72rem; font-weight: 800; color: var(--c-primary-band); line-height: 1.1; }
-.br__pg img { position: absolute; left: .4rem; right: .4rem; bottom: .4rem; top: 2rem; width: auto; height: auto; object-fit: cover; border-radius: .2rem; }
+/* An absolutely positioned replaced element with `width:auto` takes its
+   INTRINSIC width, not the one its four offsets imply — the page thumbnails
+   were overflowing their own card by the difference. State the box. */
+.br__pg img {
+  position: absolute; left: .4rem; top: 2rem;
+  width: calc(100% - .8rem); height: calc(100% - 2.4rem);
+  object-fit: cover; border-radius: .2rem;
+}
 .br__pg--cover { background: var(--c-primary-band); }
 .br__pg--cover b { color: #fff; }
 .br__pg--end { background: linear-gradient(180deg, #F7FAFD, #E3EDF7); align-items: center; justify-content: center; text-align: center; }
@@ -312,7 +319,14 @@
   position: relative; display: flex; align-items: center; gap: 2.4rem; padding: 0 3rem;
   background: linear-gradient(90deg, #052D57 0%, #0A3F73 58%, #0A3F73 100%); color: #fff; overflow: hidden;
 }
-.cp__hero::after { content: ""; position: absolute; inset: 0 0 0 55%; background: var(--bg-crop) center/cover; opacity: .42; }
+/* Pinned at 55% the photograph met the navy on a hard vertical seam. Cover
+   the box and fade it in instead, as the reference does. */
+.cp__hero::after {
+  content: ""; position: absolute; inset: 0;
+  background: var(--bg-crop) center/cover; opacity: .42;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 42%, #000 68%);
+  mask-image: linear-gradient(90deg, transparent 0%, transparent 42%, #000 68%);
+}
 .cp__heroText { position: relative; z-index: 2; }
 .cp__title { font-size: 3.8rem; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; margin-top: .3rem; }
 .cp__sub { font-size: 1.28rem; opacity: .92; margin-top: .2rem; }
@@ -332,10 +346,22 @@
 .cp__links a { display: flex; align-items: center; gap: .7rem; font-size: 1.18rem; font-weight: 600; color: var(--c-primary); }
 .cp__links a:hover { text-decoration: underline; }
 .cp__promo { position: relative; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-2); }
+/* the caption sits on the photograph, so it carries its own scrim */
+.cp__promo::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(0deg, rgba(6,22,40,.72) 0%, rgba(6,22,40,.22) 38%, rgba(6,22,40,0) 62%);
+}
 .cp__promoTxt { position: absolute; left: 1.2rem; bottom: 1.2rem; z-index: 2; color: #fff; font-size: 1.7rem; font-weight: 800; line-height: 1.15; text-shadow: 0 .2rem .8rem rgba(0,0,0,.55); }
 
 .cp__tableWrap { min-width: 0; display: flex; flex-direction: column; }
-.cp__scroll { flex: 1; min-height: 0; }
+/* The table is taller than the stage's row budget, so it scrolls. Fade the
+   last visible line out rather than cutting it off mid-row, which reads as a
+   rendering fault instead of as more content. */
+.cp__scroll {
+  flex: 1; min-height: 0;
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 2.4rem), transparent 100%);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 2.4rem), transparent 100%);
+}
 .cp__table { font-size: 1.12rem; }
 .cp__table th, .cp__table td { padding: .38rem .9rem; border-bottom: .1rem solid var(--c-line-2); text-align: left; vertical-align: middle; }
 .cp__table tbody th { width: 13rem; font-weight: 700; color: var(--c-ink); background: #F7FAFD; }

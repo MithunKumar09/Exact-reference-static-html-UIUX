@@ -557,10 +557,18 @@
        child is circular -- the box wants the image's width, the image wants
        the box's height. Browsers resolve it to the intrinsic width and the
        product ends up the wrong size. Every frame shares one size, so pin the
-       ratio from the first one that loads and the box becomes deterministic. */
+       ratio from the first one that loads and the box becomes deterministic.
+
+       `aspect-ratio` alone is not enough: the stylesheet also has to cap the
+       box against BOTH axes of the stage, and a max-width/max-height clamp on
+       an aspect-ratio box is not re-transferred back to the other axis -- the
+       box stops matching the photograph and every marker slides off the part
+       it names. So publish the ratio as a number too and let the stylesheet
+       compute the contain-fit itself (see .v360__box in screens.css). */
     function lockRatio(im) {
       if (im && im.naturalWidth && im.naturalHeight) {
         box.style.aspectRatio = im.naturalWidth + ' / ' + im.naturalHeight;
+        box.style.setProperty('--ar', im.naturalWidth / im.naturalHeight);
       }
     }
 
