@@ -1,5 +1,7 @@
 <!-- ============================================================ 16 COMPARE -->
-<section class="screen sc-compare" id="s-compare" data-rail="none" data-chrome="corporate">
+<!-- The rail stays up on Compare: it is a rail destination, so dropping the
+     menu here would strand anyone who arrived from it. -->
+<section class="screen sc-compare" id="s-compare" data-rail="solid" data-chrome="corporate">
 
   <header class="cp__hero">
     <div class="cp__heroText">
@@ -277,7 +279,7 @@
   </div><!-- /.stage__main -->
 
   <!-- ===================== FOOTER BAR ==================================== -->
-  <footer class="footbar" id="footbar" data-off="view360">
+  <footer class="footbar" id="footbar">
     <a class="brand brand--on-dark brand--sm" href="#listing" data-goto="listing">
       <!-- BRAND MARK SLOT — same slot as the top bar; see parts/03-app-chrome.html. -->
       <span class="brand__mark brand__logo">
@@ -288,10 +290,10 @@
     </a>
 
     <div class="footbar__items" data-on="listing">
-      <span class="footbar__item"><svg class="i"><use href="#i-chart"></use></svg>Wide Product Range</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-growth"></use></svg>Wide Product Range</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-pin"></use></svg>Pan India Dealer Network</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Genuine Parts Support</span><i class="footbar__sep"></i>
-      <span class="footbar__item"><svg class="i"><use href="#i-wrench"></use></svg>Expert Service</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-tools"></use></svg>Expert Service</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Trusted by 1,00,000+ Farmers</span>
     </div>
 
@@ -317,14 +319,22 @@
       <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Trusted by Generations</span>
     </div>
 
-    <div class="footbar__items" data-on="exterior gallery operator">
+    <div class="footbar__items" data-on="view360 exterior gallery operator">
       <span class="footbar__item"><svg class="i"><use href="#i-shield"></use></svg>Durable by Design</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Trusted by Farmers</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-wrench"></use></svg>Backed by Service</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-globe"></use></svg>Trusted Worldwide</span>
     </div>
 
-    <div class="footbar__items" data-on="engine videos features specs hydraulics brochure">
+    <!-- Features carries the strip 12.features.png states, not the shared one -->
+    <div class="footbar__items" data-on="features">
+      <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Reliable Performance</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Farmers First</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Innovative Solutions</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-sprout"></use></svg>A Greener Tomorrow</span>
+    </div>
+
+    <div class="footbar__items" data-on="engine videos specs hydraulics brochure">
       <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Strong Roots</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Farmers First</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Technology for Tomorrow</span><i class="footbar__sep"></i>
@@ -334,12 +344,12 @@
     <a class="btn btn--accent footbar__cta" data-on="listing" href="#" data-inert="Demo build &mdash; dealer locator ships with the Laravel release.">
       <svg class="i i--sm"><use href="#i-pin"></use></svg> Find a Dealer Near You
     </a>
-    <a class="btn btn--ghost footbar__cta" data-on="exterior engine operator hydraulics features specs gallery brochure videos" href="#enquire" data-goto="enquire">
+    <a class="btn btn--ghost footbar__cta" data-on="view360 exterior engine operator hydraulics features specs gallery brochure videos" href="#enquire" data-goto="enquire">
       <svg class="i i--sm"><use href="#i-phone"></use></svg> Talk to Our Experts
     </a>
 
     <div class="footbar__flash" data-on="overview compare exploded schematic drawing enquire variants">
-      <div class="script script--light">Fields Today.<br>A Better Tomorrow.
+      <div class="script">Fields Today.<br>A Better Tomorrow.
         <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
       </div>
     </div>

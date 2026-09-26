@@ -8,7 +8,7 @@
 
 .rail {
   --rail-w: 6.4rem;
-  --rail-w-open: 20.4rem;
+  --rail-w-open: 23rem;   /* fits the longest label — "Engineering Drawing" */
   position: absolute; inset: 0 auto 0 0; z-index: 50;
   width: var(--rail-w);
   display: flex; flex-direction: column;
@@ -20,23 +20,10 @@
 }
 .rail:hover, .rail:focus-within, .rail.is-open { width: var(--rail-w-open); }
 
-/* ---- header ------------------------------------------------------------- */
-.rail__head {
-  padding: 1rem 1.6rem .9rem; height: 6rem; flex: none;
-  display: flex; flex-direction: column; justify-content: center;
-  white-space: nowrap; overflow: hidden;
-  opacity: 0; transition: opacity var(--t-fast) var(--ease);
-}
-.rail:hover .rail__head, .rail.is-open .rail__head, .rail:focus-within .rail__head { opacity: 1; }
-.rail__eyebrow { font-size: 1.35rem; font-weight: 500; color: #7E93AC; line-height: 1; }
-.rail__title   { font-size: 2.1rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.1; margin-top: .1rem; }
-.rail__badge {
-  width: 3.2rem; height: 3.2rem; border-radius: var(--r-sm); display: grid; place-items: center;
-  background: rgba(255,255,255,.1); font-size: 1.15rem; font-weight: 800; letter-spacing: .02em;
-}
-
-/* ---- nav ---------------------------------------------------------------- */
-.rail__nav { flex: 1; min-height: 0; padding: 0 .9rem; display: flex; flex-direction: column; gap: .15rem; overflow: hidden; }
+/* ---- nav -----------------------------------------------------------------
+   The menu starts at the top of the rail — no product header above it — with
+   a short breathing space over the first item, per the supplied menu art. */
+.rail__nav { flex: 1; min-height: 0; padding: 1.4rem .9rem 0; display: flex; flex-direction: column; gap: .15rem; overflow: hidden; }
 .rail__item {
   position: relative; display: flex; align-items: center; gap: 1.2rem;
   height: 3.4rem; padding: 0 1rem; border-radius: var(--r-sm); flex: none;

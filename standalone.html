@@ -132,6 +132,14 @@
 <symbol id="i-aircleaner" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="12" rx="2"/><path d="M9.5 7V4.5h5V7M4.5 19h15M10 11v4M14 11v4"/></symbol>
 <symbol id="i-radiator" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="14" rx="2"/><path d="M8 4v14M12 4v14M16 4v14M7 21h10"/></symbol>
 <symbol id="i-gearbox" viewBox="0 0 24 24"><rect x="3" y="7" width="12" height="10" rx="2"/><path d="M15 10h3l3 2v4h-6"/><circle cx="8" cy="12" r="2.2"/></symbol>
+<!-- gear-shift pattern, weight and growth-chart marks: the glyphs the
+     reference listing uses on the product cards and the footer bar. -->
+<symbol id="i-shift" viewBox="0 0 24 24"><path d="M6 6.4v11.2M12 6.4v11.2M18 6.4v11.2M6 12h12"/><circle cx="6" cy="4.6" r="1.7"/><circle cx="12" cy="4.6" r="1.7"/><circle cx="18" cy="4.6" r="1.7"/><circle cx="6" cy="19.4" r="1.7"/><circle cx="18" cy="19.4" r="1.7"/></symbol>
+<symbol id="i-weight" viewBox="0 0 24 24"><path d="M8.7 7.4h6.6a2 2 0 0 1 1.98 1.7l1.3 8.6A2 2 0 0 1 16.6 20H7.4a2 2 0 0 1-1.98-2.3l1.3-8.6a2 2 0 0 1 1.98-1.7Z"/><path d="M9.7 7.4a2.3 2.3 0 1 1 4.6 0"/></symbol>
+<symbol id="i-growth" viewBox="0 0 24 24"><path d="M3.5 20.5h17"/><path d="M6.5 20.5v-4.8M11.5 20.5v-8M16.5 20.5V11"/><path d="m5.5 11.5 5-3.6 3.2 2.1 6-5.2"/><path d="M15.6 4.3h4.1v4"/></symbol>
+<symbol id="i-setsquare" viewBox="0 0 24 24"><path d="M4.4 2.8v16.4a1.6 1.6 0 0 0 1.6 1.6h15.2z"/><path d="M8 16.6h3M8 12.9h2.6M8 9.2h2.2"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10.2 13.8a4 4 0 0 0 5.66 0l3.4-3.4a4 4 0 0 0-5.66-5.66l-1.7 1.7"/><path d="M13.8 10.2a4 4 0 0 0-5.66 0l-3.4 3.4a4 4 0 1 0 5.66 5.66l1.7-1.7"/></symbol>
+<symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.6 3.4a4.3 4.3 0 0 1 5.6 5.6l-2.4-2.4-1.9.5-.5 1.9 2.4 2.4a4.3 4.3 0 0 1-5.6-5.6"/><path d="M12.4 9.9 4.3 18a2.05 2.05 0 0 0 2.9 2.9l8.1-8.1"/><path d="M3.3 6.6 6.7 3.2l2.2 2.3-.8 2.4-2.4.8z"/><path d="m8.5 8.4 11 11.2"/></symbol>
 <symbol id="i-drive" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="2.8"/><circle cx="18.5" cy="12" r="2.8"/><path d="M8.3 12h7.4M12 9v6"/></symbol>
 <symbol id="i-cyl" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.6"/><path d="M5.5 6v12c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6V6"/><path d="M5.5 12c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6"/></symbol>
 <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12c0-3.3-2.7-6-6-6 0 3.3 2.7 6 6 6ZM12 12c0-3.3 2.7-6 6-6 0 3.3-2.7 6-6 6Z"/><path d="M6 21h12"/></symbol>
@@ -179,8 +187,12 @@
 
     <!-- corporate navigation (listing + compare screens) -->
     <nav class="topbar__nav" data-on="listing compare overview">
-      <a class="topbar__link is-active" href="#listing" data-inert="Demo build — corporate pages are out of scope.">Home</a>
-      <a class="topbar__link" href="#listing" data-goto="listing">Products</a>
+      <!-- The router owns this state: it toggles .is-active on every
+           [data-goto] as the screen changes. "Home" has no data-goto, so a
+           hard-coded .is-active here would never be cleared and would light
+           up alongside the screen's real entry. -->
+      <a class="topbar__link" href="#overview" data-goto="overview">Home</a>
+      <a class="topbar__link is-active" href="#listing" data-goto="listing">Products</a>
       <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Technology</a>
       <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Applications</a>
       <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Services</a>
@@ -233,10 +245,6 @@
 
     <!-- ===================== MASTER DASHBOARD RAIL ======================== -->
     <nav class="rail" id="rail" aria-label="Product sections">
-      <div class="rail__head">
-        <span class="rail__eyebrow">DI 470</span>
-        <span class="rail__title">DI 470</span>
-      </div>
       <div class="rail__nav">
         <a class="rail__item" href="#overview"   data-goto="overview"><svg class="i"><use href="#i-home"></use></svg><span>Overview</span></a>
         <a class="rail__item" href="#view360"    data-goto="view360"><svg class="i"><use href="#i-cube"></use></svg><span>360° View</span></a>
@@ -252,7 +260,6 @@
         <a class="rail__item" href="#variants"   data-goto="variants"><svg class="i"><use href="#i-grid4"></use></svg><span>Variants</span></a>
         <a class="rail__item" href="#videos"     data-goto="videos"><svg class="i"><use href="#i-play"></use></svg><span>Videos</span></a>
         <a class="rail__item" href="#gallery"    data-goto="gallery"><svg class="i"><use href="#i-images"></use></svg><span>Gallery</span></a>
-        <a class="rail__item" href="#brochure"   data-goto="brochure"><svg class="i"><use href="#i-download"></use></svg><span>Brochure</span></a>
         <a class="rail__item" href="#compare"    data-goto="compare"><svg class="i"><use href="#i-compare"></use></svg><span>Compare</span></a>
         <a class="rail__item" href="#enquire"    data-goto="enquire"><svg class="i"><use href="#i-mail"></use></svg><span>Enquire</span></a>
       </div>
@@ -378,8 +385,8 @@
           <p class="pcard__tag">Power for Every Field</p>
           <ul class="pcard__specs">
             <li><svg class="i i--xs"><use href="#i-gear"></use></svg>47 HP</li>
-            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>8F + 2R</li>
-            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>1800 kg</li>
+            <li><svg class="i i--xs"><use href="#i-shift"></use></svg>8F + 2R</li>
+            <li><svg class="i i--xs"><use href="#i-weight"></use></svg>1800 kg</li>
             <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
           </ul>
           <label class="pcard__cmp"><input type="checkbox" data-compare checked><span>Compare</span></label>
@@ -396,8 +403,8 @@
           <p class="pcard__tag">More Power. More Possibilities.</p>
           <ul class="pcard__specs">
             <li><svg class="i i--xs"><use href="#i-gear"></use></svg>55 HP</li>
-            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>12F + 3R</li>
-            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>2100 kg</li>
+            <li><svg class="i i--xs"><use href="#i-shift"></use></svg>12F + 3R</li>
+            <li><svg class="i i--xs"><use href="#i-weight"></use></svg>2100 kg</li>
             <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
           </ul>
           <label class="pcard__cmp"><input type="checkbox" data-compare checked><span>Compare</span></label>
@@ -414,8 +421,8 @@
           <p class="pcard__tag">Performance You Can Trust</p>
           <ul class="pcard__specs">
             <li><svg class="i i--xs"><use href="#i-gear"></use></svg>35 HP</li>
-            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>8F + 2R</li>
-            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>1600 kg</li>
+            <li><svg class="i i--xs"><use href="#i-shift"></use></svg>8F + 2R</li>
+            <li><svg class="i i--xs"><use href="#i-weight"></use></svg>1600 kg</li>
             <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
           </ul>
           <label class="pcard__cmp"><input type="checkbox" data-compare><span>Compare</span></label>
@@ -432,8 +439,8 @@
           <p class="pcard__tag">Built for Tough Terrain</p>
           <ul class="pcard__specs">
             <li><svg class="i i--xs"><use href="#i-gear"></use></svg>75 HP</li>
-            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>12F + 3R</li>
-            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>2800 kg</li>
+            <li><svg class="i i--xs"><use href="#i-shift"></use></svg>12F + 3R</li>
+            <li><svg class="i i--xs"><use href="#i-weight"></use></svg>2800 kg</li>
             <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
           </ul>
           <label class="pcard__cmp"><input type="checkbox" data-compare><span>Compare</span></label>
@@ -450,8 +457,8 @@
           <p class="pcard__tag">Compact. Capable. Confident.</p>
           <ul class="pcard__specs">
             <li><svg class="i i--xs"><use href="#i-gear"></use></svg>28 HP</li>
-            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>8F + 2R</li>
-            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>1400 kg</li>
+            <li><svg class="i i--xs"><use href="#i-shift"></use></svg>8F + 2R</li>
+            <li><svg class="i i--xs"><use href="#i-weight"></use></svg>1400 kg</li>
             <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
           </ul>
           <label class="pcard__cmp"><input type="checkbox" data-compare><span>Compare</span></label>
@@ -468,8 +475,8 @@
           <p class="pcard__tag">Smart Choice for Growing Farmers</p>
           <ul class="pcard__specs">
             <li><svg class="i i--xs"><use href="#i-gear"></use></svg>32 HP</li>
-            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>8F + 2R</li>
-            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>1500 kg</li>
+            <li><svg class="i i--xs"><use href="#i-shift"></use></svg>8F + 2R</li>
+            <li><svg class="i i--xs"><use href="#i-weight"></use></svg>1500 kg</li>
             <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
           </ul>
           <label class="pcard__cmp"><input type="checkbox" data-compare checked><span>Compare</span></label>
@@ -486,8 +493,8 @@
           <p class="pcard__tag">For Bigger Dreams</p>
           <ul class="pcard__specs">
             <li><svg class="i i--xs"><use href="#i-gear"></use></svg>60 HP</li>
-            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>12F + 3R</li>
-            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>2400 kg</li>
+            <li><svg class="i i--xs"><use href="#i-shift"></use></svg>12F + 3R</li>
+            <li><svg class="i i--xs"><use href="#i-weight"></use></svg>2400 kg</li>
             <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
           </ul>
           <label class="pcard__cmp"><input type="checkbox" data-compare><span>Compare</span></label>
@@ -504,8 +511,8 @@
           <p class="pcard__tag">Next Level Performance</p>
           <ul class="pcard__specs">
             <li><svg class="i i--xs"><use href="#i-gear"></use></svg>65 HP</li>
-            <li><svg class="i i--xs"><use href="#i-gearbox"></use></svg>12F + 3R</li>
-            <li><svg class="i i--xs"><use href="#i-lift"></use></svg>2500 kg</li>
+            <li><svg class="i i--xs"><use href="#i-shift"></use></svg>12F + 3R</li>
+            <li><svg class="i i--xs"><use href="#i-weight"></use></svg>2500 kg</li>
             <li><svg class="i i--xs"><use href="#i-fuel"></use></svg>Diesel</li>
           </ul>
           <label class="pcard__cmp"><input type="checkbox" data-compare checked><span>Compare</span></label>
@@ -629,10 +636,10 @@
       <div class="panel__body ov__highGrid">
         <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-engine"></use></svg></span><span class="hltile__t">Powerful</span><span class="hltile__s">Engine</span></div>
         <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-gear"></use></svg></span><span class="hltile__t">Advanced</span><span class="hltile__s">Transmission</span></div>
-        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-compare"></use></svg></span><span class="hltile__t">Robust Build</span><span class="hltile__s">Quality</span></div>
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-link"></use></svg></span><span class="hltile__t">Robust Build</span><span class="hltile__s">Quality</span></div>
         <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-leaf"></use></svg></span><span class="hltile__t">Fuel</span><span class="hltile__s">Efficient</span></div>
         <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-seat"></use></svg></span><span class="hltile__t">Comfortable</span><span class="hltile__s">Operator Station</span></div>
-        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-bolt"></use></svg></span><span class="hltile__t">High Lifting</span><span class="hltile__s">Capacity</span></div>
+        <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-gear"></use></svg></span><span class="hltile__t">High Lifting</span><span class="hltile__s">Capacity</span></div>
         <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-wrench"></use></svg></span><span class="hltile__t">Easy</span><span class="hltile__s">Maintenance</span></div>
         <div class="hltile"><span class="hltile__ico"><svg class="i i--lg"><use href="#i-shield"></use></svg></span><span class="hltile__t">Reliable</span><span class="hltile__s">Performance</span></div>
       </div>
@@ -761,11 +768,6 @@
     <div class="hintpill v360__hint">
       <svg class="i i--lg"><use href="#i-ar"></use></svg>
       <span class="hintpill__t">Drag to rotate</span>
-    </div>
-
-    <div class="plate v360__plate">
-      <span class="plate__t">STANDARD</span>
-      <span class="plate__s">TRUST &nbsp;|&nbsp; DURABILITY &nbsp;|&nbsp; PERFORMANCE</span>
     </div>
 
     <div class="v360__arc">
@@ -1023,7 +1025,6 @@
     <div class="dg__headText">
       <h1 class="dg__title">Engineering Drawing / Blueprint</h1>
       <p class="dg__sub">Physical Dimension View</p>
-      <p class="dg__copy">Accurate dimensions for planning, transport, operation and attachment compatibility. All dimensions are in millimetres (mm) unless otherwise stated.</p>
     </div>
     <div class="band dg__band">
       <span class="band__t">STANDARD DI 470</span>
@@ -1037,44 +1038,33 @@
 
     <figure class="panel dw__view">
       <figcaption class="dw__cap">FRONT VIEW</figcaption>
-      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:.867">
+      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:.939">
           <img src="assets/img/part/bp-front.webp" alt="Front view blueprint" decoding="async">
         </div>
-        <span class="dv dv--tl"><b>2160</b><i>Overall Height</i></span>
-        <span class="dv dv--br"><b>1980</b><i>Overall Width</i></span>
-        <span class="dv dv--bl"><b>1580</b><i>Front Track</i></span>
       </div>
     </figure>
 
     <figure class="panel dw__view dw__view--side">
       <figcaption class="dw__cap">SIDE VIEW (LEFT)</figcaption>
-      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:1.992">
+      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:1.694">
           <img src="assets/img/part/bp-side.webp" alt="Side view blueprint" decoding="async">
         </div>
-        <span class="dv dv--tl"><b>1340</b><i>Height to Steering Wheel</i></span>
-        <span class="dv dv--bl"><b>2180</b><i>Wheelbase</i></span>
-        <span class="dv dv--br"><b>4205</b><i>Overall Length</i></span>
       </div>
     </figure>
 
     <figure class="panel dw__view">
       <figcaption class="dw__cap">REAR VIEW</figcaption>
-      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:1.099">
+      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:.865">
           <img src="assets/img/part/bp-rear.webp" alt="Rear view blueprint" decoding="async">
         </div>
-        <span class="dv dv--tl"><b>410</b><i>Ground Clearance</i></span>
-        <span class="dv dv--bl"><b>1670</b><i>Rear Track</i></span>
-        <span class="dv dv--br"><b>1980</b><i>Overall Width</i></span>
       </div>
     </figure>
 
     <figure class="panel dw__view dw__view--top">
       <figcaption class="dw__cap">TOP VIEW</figcaption>
-      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:1.712">
+      <div class="dw__art artfit"><div class="dw__frame artfit__in" style="--ar:1.373">
           <img src="assets/img/part/bp-top.webp" alt="Top view blueprint" decoding="async">
         </div>
-        <span class="dv dv--tl"><b>1980</b><i>Overall Width</i></span>
-        <span class="dv dv--br"><b>4205</b><i>Overall Length</i></span>
       </div>
     </figure>
 
@@ -1116,12 +1106,12 @@
   </div>
 
   <div class="dw__foot">
-    <span class="dw__footBrand"><svg class="i i--xl"><use href="#i-ruler"></use></svg><b>Precision Engineering</b><span>for a Stronger Tomorrow</span></span>
+    <span class="dw__footBrand"><svg class="i"><use href="#i-setsquare"></use></svg><span class="dw__footBrandTxt"><b>Precision Engineering</b><span>for a Stronger Tomorrow</span></span></span>
     <div class="dw__footItems">
-      <span><svg class="i i--sm"><use href="#i-gear"></use></svg>Optimized Dimensions<br>for Indian Fields</span>
-      <span><svg class="i i--sm"><use href="#i-shield"></use></svg>Robust &amp; Reliable<br>Design</span>
-      <span><svg class="i i--sm"><use href="#i-tractor"></use></svg>Easy Attachment<br>Compatibility</span>
-      <span><svg class="i i--sm"><use href="#i-wrench"></use></svg>Built for Performance<br>and Durability</span>
+      <span><svg class="i"><use href="#i-gear"></use></svg>Optimized Dimensions<br>for Indian Fields</span>
+      <span><svg class="i"><use href="#i-shield"></use></svg>Robust &amp; Reliable<br>Design</span>
+      <span><svg class="i"><use href="#i-tractor"></use></svg>Easy Attachment<br>Compatibility</span>
+      <span><svg class="i"><use href="#i-wrench"></use></svg>Built for Performance<br>and Durability</span>
     </div>
     <span class="dw__footNote">Note: Dimensions are approximate and may vary based on tyre size, optional equipment and configuration. &nbsp;|&nbsp; STANDARD DI 470 &ndash; Engineering Drawing &nbsp;|&nbsp; Rev. 01</span>
   </div>
@@ -1227,7 +1217,7 @@
       <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
     </div>
 
-    <div class="ht__media artfit">
+    <div class="ht__media artfit artfit--cover">
       <div class="ht__frame artfit__in">
         <img class="ht__art ht__art--wide" data-view-target src="assets/img/product/engine.webp" alt="STANDARD DI 470 engine" decoding="async">
         <div class="hotlayer">
@@ -1319,7 +1309,7 @@
       <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
     </div>
 
-    <div class="ht__media artfit">
+    <div class="ht__media artfit artfit--cover">
       <div class="ht__frame artfit__in">
         <img class="ht__art ht__art--wide" data-view-target src="assets/img/product/operator.webp" alt="STANDARD DI 470 operator station" decoding="async">
         <div class="hotlayer">
@@ -1415,7 +1405,7 @@
       <p class="ht__copy">The STANDARD DI 470 comes with a robust and reliable hydraulic system, designed to deliver superior lifting capacity, smooth control and versatility for a wide range of implements.</p>
     </header>
 
-    <div class="ht__media artfit">
+    <div class="ht__media artfit artfit--cover">
       <div class="ht__frame artfit__in">
         <img class="ht__art ht__art--wide" data-view-target src="assets/img/product/hydraulics.webp" alt="STANDARD DI 470 hydraulics" decoding="async">
         <div class="hotlayer">
@@ -1509,7 +1499,7 @@
       <p class="ht__copy">The STANDARD DI 470 combines power, reliability and modern features to help you achieve higher productivity and profitability in every field.</p>
     </header>
 
-    <div class="ht__media artfit">
+    <div class="ht__media artfit artfit--cover">
       <div class="ht__frame artfit__in">
         <img class="ht__art" data-view-target src="assets/img/product/showcase.webp" alt="STANDARD DI 470 features" decoding="async">
         <div class="hotlayer hotlayer--icons">
@@ -2036,7 +2026,9 @@
 </section>
 
 <!-- ============================================================ 16 COMPARE -->
-<section class="screen sc-compare" id="s-compare" data-rail="none" data-chrome="corporate">
+<!-- The rail stays up on Compare: it is a rail destination, so dropping the
+     menu here would strand anyone who arrived from it. -->
+<section class="screen sc-compare" id="s-compare" data-rail="solid" data-chrome="corporate">
 
   <header class="cp__hero">
     <div class="cp__heroText">
@@ -2314,7 +2306,7 @@
   </div><!-- /.stage__main -->
 
   <!-- ===================== FOOTER BAR ==================================== -->
-  <footer class="footbar" id="footbar" data-off="view360">
+  <footer class="footbar" id="footbar">
     <a class="brand brand--on-dark brand--sm" href="#listing" data-goto="listing">
       <!-- BRAND MARK SLOT — same slot as the top bar; see parts/03-app-chrome.html. -->
       <span class="brand__mark brand__logo">
@@ -2325,10 +2317,10 @@
     </a>
 
     <div class="footbar__items" data-on="listing">
-      <span class="footbar__item"><svg class="i"><use href="#i-chart"></use></svg>Wide Product Range</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-growth"></use></svg>Wide Product Range</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-pin"></use></svg>Pan India Dealer Network</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Genuine Parts Support</span><i class="footbar__sep"></i>
-      <span class="footbar__item"><svg class="i"><use href="#i-wrench"></use></svg>Expert Service</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-tools"></use></svg>Expert Service</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Trusted by 1,00,000+ Farmers</span>
     </div>
 
@@ -2354,14 +2346,22 @@
       <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Trusted by Generations</span>
     </div>
 
-    <div class="footbar__items" data-on="exterior gallery operator">
+    <div class="footbar__items" data-on="view360 exterior gallery operator">
       <span class="footbar__item"><svg class="i"><use href="#i-shield"></use></svg>Durable by Design</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Trusted by Farmers</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-wrench"></use></svg>Backed by Service</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-globe"></use></svg>Trusted Worldwide</span>
     </div>
 
-    <div class="footbar__items" data-on="engine videos features specs hydraulics brochure">
+    <!-- Features carries the strip 12.features.png states, not the shared one -->
+    <div class="footbar__items" data-on="features">
+      <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Reliable Performance</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Farmers First</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Innovative Solutions</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-sprout"></use></svg>A Greener Tomorrow</span>
+    </div>
+
+    <div class="footbar__items" data-on="engine videos specs hydraulics brochure">
       <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Strong Roots</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-users"></use></svg>Farmers First</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Technology for Tomorrow</span><i class="footbar__sep"></i>
@@ -2371,12 +2371,12 @@
     <a class="btn btn--accent footbar__cta" data-on="listing" href="#" data-inert="Demo build &mdash; dealer locator ships with the Laravel release.">
       <svg class="i i--sm"><use href="#i-pin"></use></svg> Find a Dealer Near You
     </a>
-    <a class="btn btn--ghost footbar__cta" data-on="exterior engine operator hydraulics features specs gallery brochure videos" href="#enquire" data-goto="enquire">
+    <a class="btn btn--ghost footbar__cta" data-on="view360 exterior engine operator hydraulics features specs gallery brochure videos" href="#enquire" data-goto="enquire">
       <svg class="i i--sm"><use href="#i-phone"></use></svg> Talk to Our Experts
     </a>
 
     <div class="footbar__flash" data-on="overview compare exploded schematic drawing enquire variants">
-      <div class="script script--light">Fields Today.<br>A Better Tomorrow.
+      <div class="script">Fields Today.<br>A Better Tomorrow.
         <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
       </div>
     </div>

@@ -9,9 +9,13 @@
    ========================================================================= */
 .sc-listing { grid-template-rows: 16.4rem 3.2rem minmax(0,1fr); }
 
+/* The supplied hero plate (scene/home-hero-bg.png). The band is a ~10:1 strip
+   and the plate is 3:1 with its own tractor on the right third, so it is laid
+   in on its left half — field, tree line and sunrise — and the cut-out tractor
+   this screen already carries stays the one machine in the band. */
 .lst__hero {
   position: relative; overflow: hidden;
-  background: var(--bg-hero) center 34% / cover no-repeat;
+  background: url("../img/scene/home-hero-bg.png") 0% 60% / 220% auto no-repeat;
 }
 .lst__hero::before {
   content: ""; position: absolute; inset: 0;
@@ -22,7 +26,8 @@
 .lst__heroTitle b { color: #022451; font-weight: 900; }
 .lst__heroSub { font-size: 1.7rem; font-weight: 700; color: #0B3F7E; margin-top: .5rem; }
 .lst__trust { margin-top: 1.4rem; color: #12365F; gap: 1.6rem; }
-.lst__trust .trust__item .i { color: #0B4F9E; }
+/* Reference-size marks: they read as a row of icons, not as bullets. */
+.lst__trust .trust__item .i { width: 2.8rem; height: 2.8rem; color: #0B4F9E; }
 .lst__heroImg {
   position: absolute; right: 15rem; bottom: -1rem; height: 15rem; width: auto;
   object-fit: contain; filter: drop-shadow(0 1.2rem 1.6rem rgba(10,40,70,.28));
@@ -59,15 +64,18 @@
 .lst__main { display: grid; grid-template-rows: auto auto 1fr; gap: 1rem; min-height: 0; }
 .lst__title { font-size: 3rem; font-weight: 800; letter-spacing: -.025em; color: #0B3F7E; line-height: 1.05; }
 .lst__lead { font-size: 1.35rem; color: var(--c-ink-2); margin-top: .3rem; }
-.lst__tools { display: flex; align-items: center; gap: 1rem; }
+/* The toolbar carries the reference's rhythm: the search field takes the slack
+   so the row runs edge to edge, each label opens a new group, and the selects
+   keep a clear gutter between their value and the chevron. */
+.lst__tools { display: flex; align-items: center; gap: .9rem; }
 .lst__search {
-  display: flex; align-items: center; gap: .8rem; flex: 1 1 auto; max-width: 34rem; height: 4rem;
+  display: flex; align-items: center; gap: .8rem; flex: 1 1 auto; max-width: 53rem; height: 4rem;
   padding: 0 1.2rem; border-radius: var(--r-md); background: #fff; border: .1rem solid var(--c-line); color: var(--c-ink-4);
 }
 .lst__search input { flex: 1; min-width: 0; border: 0; background: none; font-size: 1.25rem; }
-.lst__toolLbl { font-size: 1.25rem; color: var(--c-ink-2); font-weight: 500; }
+.lst__toolLbl { font-size: 1.25rem; color: var(--c-ink-2); font-weight: 500; margin-left: 1.2rem; }
 .lst__select {
-  height: 4rem; min-width: 12.5rem; padding: 0 1rem; border-radius: var(--r-md);
+  height: 4rem; min-width: 13.4rem; padding: 0 1rem 0 1.2rem; border-radius: var(--r-md);
   background: #fff; border: .1rem solid var(--c-line); font-size: 1.25rem; cursor: pointer;
 }
 .lst__viewtog { display: flex; gap: .3rem; }
@@ -91,7 +99,7 @@
    Listing.png once that 3:2 reference is scaled to this 16:9 stage. */
 .pcard {
   position: relative; display: grid; grid-template-rows: minmax(0,1fr) auto auto auto auto auto;
-  gap: .28rem; padding: 0 1rem .85rem; min-height: 0; background: #fff; overflow: hidden;
+  gap: .2rem; padding: 0 1rem .7rem; min-height: 0; background: #fff; overflow: hidden;
   border: .1rem solid var(--c-line); border-radius: var(--r-lg); box-shadow: var(--sh-1);
   transition: box-shadow var(--t-base) var(--ease), transform var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
 }
@@ -102,17 +110,20 @@
    <img> resolves to auto: it lays out at its intrinsic ratio, overshoots the
    row and the overflow crops everything but the top sliver. Pinned to the
    box, object-fit scales it instead of the box growing around it. */
-.pcard__img { position: relative; min-height: 0; overflow: hidden; margin-inline: -1rem; }
-.pcard__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-.pcard__name { font-size: 1.55rem; line-height: 1.18; font-weight: 800; color: var(--c-primary-band); letter-spacing: -.01em; }
-.pcard__tag { font-size: 1.12rem; line-height: 1.3; color: var(--c-ink-3); }
+/* The badge sits in the card's top-left corner, so the photo is held clear of
+   it: the row keeps a top gutter and the tractor is parked on the row's
+   baseline, exactly as it stands in 02.Product Listing.png. */
+.pcard__img { position: relative; min-height: 0; overflow: hidden; margin-inline: -1rem; padding-top: 1.2rem; }
+.pcard__img img { position: absolute; inset: 1.2rem 0 0; width: 100%; height: calc(100% - 1.2rem); object-fit: contain; object-position: 50% 100%; }
+.pcard__name { font-size: 1.55rem; line-height: 1.12; font-weight: 800; color: var(--c-primary-band); letter-spacing: -.01em; }
+.pcard__tag { font-size: 1.12rem; line-height: 1.25; color: var(--c-ink-3); }
 .pcard__specs { display: flex; gap: .85rem; flex-wrap: nowrap; }
-.pcard__specs li { display: flex; align-items: center; gap: .3rem; font-size: 1.02rem; line-height: 1.35; color: var(--c-ink-2); white-space: nowrap; }
-.pcard__specs .i { color: var(--c-ink-3); }
+.pcard__specs li { display: flex; align-items: center; gap: .35rem; font-size: 1.02rem; line-height: 1.3; color: var(--c-ink-2); white-space: nowrap; }
+.pcard__specs .i { width: 1.6rem; height: 1.6rem; color: var(--c-primary-band); }
 .pcard__cmp { display: flex; align-items: center; gap: .6rem; font-size: 1.15rem; color: var(--c-ink-2); cursor: pointer; }
 .pcard__cmp input { width: 1.4rem; height: 1.4rem; accent-color: var(--c-primary); cursor: pointer; }
-.pcard__acts { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .15rem; }
-.pcard__acts .btn { width: 100%; --btn-h: 2.7rem; }
+.pcard__acts { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .1rem; }
+.pcard__acts .btn { width: 100%; --btn-h: 2.6rem; }
 
 /* ===========================================================================
    02 · OVERVIEW
@@ -226,10 +237,12 @@
 .ov__panels { display: grid; grid-template-columns: 32rem 41rem minmax(0,1fr); gap: 1rem; min-height: 0; }
 
 .ov__perf { overflow: hidden; }
-.ov__perfBody { padding: 1.4rem 1.5rem .8rem; }
+.ov__perfBody { padding: 1.4rem 1.5rem 1rem; flex: none; }
 .ov__perfTitle { font-size: 2rem; font-weight: 800; line-height: 1.12; letter-spacing: -.015em; color: #0A2F5C; }
 .ov__perfCopy { font-size: 1.22rem; line-height: 1.42; color: var(--c-ink-2); margin-top: .7rem; }
-.ov__perfMedia { position: relative; flex: 1; min-height: 0; margin: 0 1.2rem 1.2rem; border-radius: var(--r-md); overflow: hidden; }
+/* Full-bleed to the card's own edges and carried further up the card, the way
+   3.Overview.png draws it — no inset frame around the photograph. */
+.ov__perfMedia { position: relative; flex: 1; min-height: 0; margin: 0; overflow: hidden; }
 .ov__perfMedia img { width: 100%; height: 100%; object-fit: cover; }
 .ov__perfMini {
   position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: .9rem;
@@ -240,7 +253,13 @@
 .ov__perfMini i { width: .1rem; height: 2.2rem; background: rgba(255,255,255,.3); }
 
 .ov__high .panel__head { padding-bottom: .4rem; }
-.ov__highGrid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); grid-template-rows: minmax(0,1fr) minmax(0,1fr); gap: .4rem; }
+/* The reference rules the eight tiles into a box: a hairline between every
+   column and between the two rows. Borders on the cells themselves (rather
+   than gaps) is what draws that grid. */
+.ov__highGrid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); grid-template-rows: minmax(0,1fr) minmax(0,1fr); gap: 0; }
+.ov__highGrid .hltile { border-right: .1rem solid var(--c-line-2); border-bottom: .1rem solid var(--c-line-2); }
+.ov__highGrid .hltile:nth-child(4n) { border-right: 0; }
+.ov__highGrid .hltile:nth-child(n+5) { border-bottom: 0; }
 
 .ov__right { display: grid; grid-template-rows: minmax(0,1fr) 10.6rem; gap: 1rem; min-height: 0; min-width: 0; }
 .ov__apps .panel__head { padding-bottom: .5rem; }
@@ -249,16 +268,18 @@
 .ov__appsGrid .mframe { flex: 1; min-height: 0; }
 .ov__appsGrid figcaption { font-size: 1.05rem; color: var(--c-ink-2); text-align: center; }
 
-.ov__watch { position: relative; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-2); }
-.ov__watch img { width: 100%; height: 100%; object-fit: cover; }
+/* Half photograph, half solid navy, with the play button straddling the seam —
+   the card as 3.Overview.png draws it. */
+.ov__watch { position: relative; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-2); background: #0B2744; }
+.ov__watch img { position: absolute; left: 0; top: 0; width: 48%; height: 100%; object-fit: cover; }
 .ov__watchOverlay {
-  position: absolute; inset: 0; display: flex; align-items: center; gap: 1.4rem; padding: 0 1.8rem;
-  background: linear-gradient(90deg, rgba(8,28,48,.05) 0%, rgba(8,28,48,.45) 30%, rgba(8,28,48,.78) 58%, rgba(8,28,48,.86) 100%);
+  position: absolute; inset: 0; display: flex; align-items: center; gap: 1.6rem; padding: 0 1.8rem 0 38%;
+  background: linear-gradient(90deg, rgba(11,39,68,0) 30%, rgba(11,39,68,.55) 40%, #0B2744 48%);
   color: #fff;
 }
 .ov__watchPlay {
-  width: 4.4rem; height: 4.4rem; flex: none; border-radius: 50%; display: grid; place-items: center;
-  background: rgba(255,255,255,.22); border: .22rem solid #fff; padding-left: .3rem;
+  width: 5rem; height: 5rem; flex: none; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(255,255,255,.18); border: .28rem solid #fff; padding-left: .3rem;
   transition: transform var(--t-base) var(--ease-out);
 }
 .ov__watch:hover .ov__watchPlay { transform: scale(1.08); }
@@ -286,10 +307,12 @@
 /* The 360 screen carries its own backdrop. Re-pointing --bg-pad here rather
    than in tokens.css keeps Specs and Exterior on the shared sky pad, and the
    tablet rule that paints .v360__stage inherits the override for free. */
+/* Backdrop pulled up off the road: the apron under the turntable is a band,
+   not half the screen. */
 .sc-360 {
   --bg-pad: url("../img/bg/exact-bg.png");
   grid-template-rows: minmax(0,1fr) 10.2rem;
-  background: var(--bg-pad) center 58% / cover no-repeat;
+  background: var(--bg-pad) center 40% / cover no-repeat;
 }
 
 .v360 { position: relative; min-height: 0; min-width: 0; }
@@ -341,8 +364,8 @@
      the box — slides off the part it names. --ar is written by lockRatio()
      from the first frame that loads; the fallback is the shipped set's. */
   --ar: 1.596;
-  width:  min(88cqw, calc(78cqh * var(--ar)));
-  height: min(78cqh, calc(88cqw / var(--ar)));
+  width:  min(78cqw, calc(72cqh * var(--ar)));
+  height: min(72cqh, calc(78cqw / var(--ar)));
 }
 .v360__stage.is-drag .v360__box { cursor: grabbing; }
 .v360__frame {
@@ -374,8 +397,9 @@
 @keyframes ld { 0%,100% { opacity: .25; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-.5rem); } }
 
 .v360__ctrl { right: 1.6rem; top: 50%; transform: translateY(-46%); }
-.v360__hint { left: 8.6rem; bottom: 9.6rem; }
-.v360__plate { right: 1.6rem; bottom: 9.6rem; }
+/* The identity plate is gone from this screen; the drag hint takes its place
+   on the right, clear of the turntable arc. */
+.v360__hint { right: 1.6rem; bottom: 2.4rem; }
 
 .v360__arc {
   position: absolute; left: 50%; bottom: 3rem; transform: translateX(-50%);

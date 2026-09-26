@@ -7,9 +7,11 @@
    12 · SPECIFICATIONS
    ========================================================================= */
 .sc-specs { grid-template-rows: minmax(0,1fr) 9.6rem; background: var(--bg-pad) center 58% / cover no-repeat; }
+/* The intro column carries the tractor and the stat strip, and the tables keep
+   to the narrower block 13.specifications.png gives them. */
 .sp__body {
-  position: relative; display: grid; grid-template-columns: 46rem minmax(0,1fr);
-  gap: 1.2rem; padding: 1.2rem 1.4rem 1.2rem 8rem; min-height: 0; grid-template-rows: minmax(0,1fr);
+  position: relative; display: grid; grid-template-columns: 58rem minmax(0,1fr);
+  gap: 1.6rem; padding: 1.2rem 1.4rem 1.2rem 8rem; min-height: 0; grid-template-rows: minmax(0,1fr);
 }
 .sp__body::before {
   content: ""; position: absolute; inset: 0; z-index: 0;
@@ -27,21 +29,27 @@
   background: var(--c-deep); color: #fff; border-radius: var(--r-md); padding: .9rem 1rem; flex: none;
 }
 .sp__stats span { display: grid; grid-template-columns: auto minmax(0,1fr); grid-template-rows: auto auto;
-  column-gap: .7rem; align-items: center; padding: 0 .8rem; border-right: .1rem solid rgba(255,255,255,.14); }
-.sp__stats span:last-child { border-right: 0; }
-.sp__stats .i { grid-row: 1 / 3; color: var(--c-on-dark); }
-.sp__stats b { font-size: 1.25rem; font-weight: 800; line-height: 1.15; }
-.sp__stats i { font-size: 1rem; font-style: normal; color: var(--c-on-dark-2); line-height: 1.15; }
+  column-gap: .8rem; align-items: center; padding: 0 1.1rem; border-right: .1rem solid rgba(255,255,255,.14); }
+.sp__stats span:first-child { padding-left: .4rem; }
+.sp__stats span:last-child { border-right: 0; padding-right: .4rem; }
+.sp__stats .i { grid-row: 1 / 3; width: 2.4rem; height: 2.4rem; color: var(--c-on-dark); }
+.sp__stats b { font-size: 1.3rem; font-weight: 800; line-height: 1.2; }
+.sp__stats i { font-size: 1.02rem; font-style: normal; color: var(--c-on-dark-2); line-height: 1.2; }
 
 .sp__tables {
   position: relative; z-index: 1; display: grid; gap: .8rem; min-height: 0;
   grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-  grid-template-rows: auto auto auto auto minmax(0,1fr) auto;
+  grid-template-rows: auto auto auto auto auto auto;
   align-content: start;
 }
 .sp__tbl { overflow: hidden; }
 .sp__tbl .panel__bar { font-size: 1.2rem; letter-spacing: .05em; font-weight: 800; }
 .sp__tbl .tbl td { padding: .3rem .9rem; font-size: 1.08rem; }
+/* Ruled both ways, as the reference draws them: a line between the label and
+   the value column and a hairline under every row. */
+.sp__tbl .tbl td:first-child { width: 44%; border-right: .1rem solid var(--c-line); }
+.sp__tbl .tbl td { border-bottom: .1rem solid var(--c-line); }
+.sp__tbl .tbl tbody tr:last-child td { border-bottom: 0; }
 .sp__tbl:nth-of-type(1) { grid-area: 1 / 1 / 3 / 2; }   /* Engine      */
 .sp__tbl:nth-of-type(2) { grid-area: 1 / 2 / 2 / 3; }   /* Transmission*/
 .sp__tbl:nth-of-type(3) { grid-area: 2 / 2 / 3 / 3; }   /* Hydraulics  */
@@ -49,11 +57,13 @@
 .sp__tbl:nth-of-type(5) { grid-area: 3 / 2 / 4 / 3; }   /* Tyres       */
 .sp__tbl:nth-of-type(6) { grid-area: 4 / 2 / 5 / 3; }   /* Others      */
 .sp__actions            { grid-area: 6 / 1 / 7 / 3; }
+/* Four equal cells divided by hairlines, flush under the tables. */
 .sp__actions {
-  flex-direction: row; align-items: center; justify-content: space-between;
-  padding: .7rem 1.4rem; gap: 1rem;
+  flex-direction: row; align-items: stretch; justify-content: space-between;
+  padding: .7rem 0; gap: 0; margin-top: .8rem;
 }
-.sp__actions a { display: flex; align-items: center; gap: .9rem; font-size: 1.18rem; font-weight: 600; color: var(--c-ink); line-height: 1.2; }
+.sp__actions a { flex: 1 1 0; display: flex; align-items: center; gap: .9rem; padding: 0 1.4rem;
+  font-size: 1.18rem; font-weight: 600; color: var(--c-ink); line-height: 1.2; }
 .sp__actions a:hover { color: var(--c-primary); }
 .sp__actions a .i { color: var(--c-primary-band); }
 .sp__actions i { width: .1rem; align-self: stretch; background: var(--c-line); }
@@ -208,7 +218,17 @@
    14 · GALLERY
    ========================================================================= */
 .sc-gallery { grid-template-rows: 9rem 4.6rem minmax(0,1fr) 11.4rem 9.6rem; gap: .8rem; padding: 1rem 1.4rem 0 8rem; background: var(--c-canvas); }
-.gl__head { position: relative; display: flex; align-items: flex-start; }
+/* The header band is photographic in 15.Gallery.png — field and tree line
+   behind the title, washed out on the left so the copy still reads. */
+.gl__head {
+  position: relative; display: flex; align-items: flex-start;
+  background: url("../img/scene/home-hero-bg.png") 0% 58% / 200% auto no-repeat;
+}
+.gl__head::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(96deg, rgba(243,249,254,.96) 0%, rgba(243,249,254,.88) 24%, rgba(243,249,254,.3) 44%, rgba(243,249,254,0) 58%);
+}
+.gl__headText { position: relative; z-index: 1; }
 .gl__title { font-size: 3.6rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: #0A2540; }
 .gl__sub   { font-size: 1.85rem; font-weight: 600; color: #22405E; margin-top: .1rem; }
 .gl__copy  { font-size: 1.22rem; color: var(--c-ink-2); margin-top: .3rem; }
@@ -396,8 +416,12 @@
 /* ===========================================================================
    17 · VARIANTS
    ========================================================================= */
-.sc-variants { grid-template-rows: 9.4rem minmax(0,1fr) 6.4rem; gap: 1.2rem; padding: 0 1.6rem 1.4rem; background: var(--c-canvas); }
+/* The intro runs to two lines — the head row is budgeted for both so the copy
+   is not read through the card grid below it. */
+.sc-variants { grid-template-rows: 11.4rem minmax(0,1fr) 6.4rem; gap: 1.2rem; padding: 0 1.6rem 1.4rem; background: var(--c-canvas); }
 .vr__head { position: relative; display: flex; align-items: flex-start; padding-top: 1.4rem; }
+.vr__head .dg__copy { max-width: 74rem; }
+.vr__card .speclist__row .i { width: 2.2rem; height: 2.2rem; color: var(--c-primary-band); }
 .vr__grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1.2rem; min-height: 0; }
 .vr__card { position: relative; padding-bottom: 1.2rem; }
 .vr__flag { position: absolute; left: 0; top: 1.2rem; border-radius: 0 .5rem .5rem 0; z-index: 2; }

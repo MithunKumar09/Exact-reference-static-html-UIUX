@@ -273,6 +273,18 @@
   height: min(calc(var(--h, 100) * 1cqh), calc(var(--w, 100) / var(--ar, 1.5) * 1cqw));
 }
 .artfit__in > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+/* Cover variant: the picture fills the screen edge to edge (the photographed
+   screens in the reference are full-bleed) and the surplus is clipped. The
+   markers still live INSIDE the picture's own box, so they keep sitting on the
+   parts they name however the frame is cropped. */
+.artfit--cover { overflow: hidden; }
+.artfit--cover .artfit__in {
+  width:  max(calc(var(--w, 100) * 1cqw), calc(var(--h, 100) * var(--ar, 1.5) * 1cqh));
+  height: max(calc(var(--h, 100) * 1cqh), calc(var(--w, 100) / var(--ar, 1.5) * 1cqw));
+}
+@supports not (width: 1cqw) {
+  .artfit--cover .artfit__in { width: calc(var(--w, 100) * 1%); height: auto; aspect-ratio: var(--ar, 1.5); }
+}
 @supports not (width: 1cqw) {
   .artfit__in { width: calc(var(--w, 100) * 1%); height: auto; aspect-ratio: var(--ar, 1.5); }
 }
@@ -329,7 +341,7 @@
 
 /* rich popup card (opens on click) */
 .hotcard {
-  position: absolute; left: 0; top: 0; width: 21rem; z-index: 60;
+  position: absolute; left: 0; top: 0; width: 23.5rem; z-index: 60;
   background: #fff; border-radius: var(--r-lg); box-shadow: var(--sh-4);
   overflow: hidden; transform-origin: top left;
   /* the card sits inside .hotlayer, which is click-through */
@@ -343,20 +355,22 @@
   background: rgba(255,255,255,.9); z-index: 2;
 }
 .hotcard__close:hover { background: var(--c-line-2); color: var(--c-ink); }
+/* Taller picture panel, and the shot fills it edge to edge instead of floating
+   in a letterboxed frame. */
 .hotcard__media {
-  position: relative; height: 9.6rem; overflow: hidden;
+  position: relative; height: 13.4rem; overflow: hidden;
   background: linear-gradient(180deg, #F6F9FD, #E9F1F9);
 }
 /* absolute + explicit box: a percentage height cannot resolve against an
    auto-sized grid row, which lets the artwork spill over the copy. */
 .hotcard__media img {
-  position: absolute; inset: .8rem;
-  width: calc(100% - 1.6rem); height: calc(100% - 1.6rem);
-  object-fit: contain;
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
 }
-.hotcard__body { padding: 1.1rem 1.3rem 1.4rem; }
-.hotcard__title { font-size: 1.6rem; font-weight: 800; color: var(--c-primary); margin-bottom: .5rem; }
-.hotcard__text  { font-size: 1.15rem; line-height: 1.42; color: var(--c-ink-2); }
+.hotcard__body { padding: 1.3rem 1.5rem 1.7rem; }
+.hotcard__title { font-size: 1.75rem; font-weight: 800; color: var(--c-primary); margin-bottom: .6rem; }
+.hotcard__text  { font-size: 1.25rem; line-height: 1.45; color: var(--c-ink-2); }
 
 /* ===========================================================================
    VIEW CONTROL STACK  (Full Screen / Auto Rotate / Reset View)
@@ -404,6 +418,9 @@
   display: flex; align-items: stretch; gap: .8rem; padding: .8rem 1rem;
   background: #F2F5F8; border-top: .1rem solid var(--c-line);
 }
+/* On the full-bleed screens the rail floats over the strip, so the first
+   thumbnail starts clear of it — all nine stay visible and none is cut. */
+.stage[data-rail="overlay"] .thumbstrip { padding-left: 7.4rem; }
 .thumb {
   flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center;
   gap: .2rem; padding: .5rem .3rem .4rem; border-radius: var(--r-md);
@@ -426,15 +443,25 @@
   position: relative; overflow: hidden; z-index: 30;
 }
 .footbar--alt { background: var(--c-footer-alt); }
-.footbar__items { display: flex; align-items: center; gap: 2.4rem; flex: 1; }
-.footbar__item { display: flex; align-items: center; gap: .9rem; font-size: 1.22rem; line-height: 1.2; }
-.footbar__item .i { opacity: .9; }
+/* The reference spreads the trust items evenly between the logo and the CTA,
+   each one opening its own column with a hairline in between. */
+.footbar__items { display: flex; align-items: center; gap: 0; flex: 1; }
+.footbar__items > .footbar__item { flex: 1 1 0; min-width: 0; padding: 0 2rem; }
+/* The flash is painted over the bar's right end, so the row stops short of it
+   on the screens that show it. */
+.footbar:has(.footbar__flash:not([hidden])) .footbar__items { padding-right: 27rem; }
+.footbar__item { display: flex; align-items: center; gap: 1.1rem; font-size: 1.22rem; line-height: 1.2; }
+/* The reference footer carries the marks at roughly twice the body size. */
+.footbar__item .i { width: 2.8rem; height: 2.8rem; opacity: .9; }
 .footbar__sep { width: .1rem; height: 3.2rem; background: rgba(255,255,255,.16); }
 .footbar__flash {
-  position: absolute; right: 0; top: 0; bottom: 0; width: 26rem;
+  position: absolute; right: 0; top: 0; bottom: 0; width: 28rem;
   background: var(--grad-accent); clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
   display: grid; place-items: center; padding-left: 3rem;
 }
+/* Navy script on the yellow flash, at the size the references show. */
+.footbar__flash .script { color: var(--c-primary-band); font-size: 2.1rem; width: 20rem; }
+.footbar__flash .script__swoosh path { fill: var(--c-accent-lo); }
 
 /* ===========================================================================
    BREADCRUMB
@@ -462,9 +489,10 @@
 /* circular icon tile (Key Highlights) */
 .hltile { display: flex; flex-direction: column; align-items: center; gap: .6rem; text-align: center; padding: .6rem .3rem; }
 .hltile__ico {
-  width: 4.4rem; height: 4.4rem; border-radius: 50%; display: grid; place-items: center;
-  background: var(--c-primary-softer); border: .12rem solid var(--c-primary-soft); color: var(--c-primary);
+  width: 4.8rem; height: 4.8rem; border-radius: 50%; display: grid; place-items: center;
+  background: var(--c-primary-softer); border: .12rem solid var(--c-primary-soft); color: var(--c-primary-band);
 }
+.hltile__ico .i { width: 2.6rem; height: 2.6rem; }
 .hltile__t { font-size: 1.15rem; font-weight: 700; line-height: 1.2; }
 .hltile__s { font-size: 1.05rem; color: var(--c-ink-3); line-height: 1.15; }
 

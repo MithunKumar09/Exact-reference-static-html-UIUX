@@ -12,10 +12,13 @@
 
 :root {
   /* ---- Design canvas (16:9). Do not change unless the whole deck changes. --
-     160 x 90 units. base.css caps 1rem at 9px, so the stage tops out at the
-     1440 x 810 design frame and is centred past it. -------------------------- */
-  --canvas-w: 160rem;      /* 1440px at the capped scale */
-  --canvas-h: 90rem;       /*  810px at the capped scale */
+     Screens are drawn on a 160 x 90 unit grid and the stage FILLS the window:
+     base.css scales 1rem so the shorter axis always lands inside, and the
+     stage itself takes the window's own width and height — no side gaps, no
+     page scroll. On a window wider than 16:9 the extra width goes to the
+     flexible columns of each screen. ---------------------------------------- */
+  --canvas-w: 100vw;       /* stage width  — the window                        */
+  --canvas-h: 100vh;       /* stage height — the window                        */
 
   /* ---- Geometry scale -------------------------------------------------- */
   --r-xs: 0.4rem;  --r-sm: 0.6rem;  --r-md: 0.9rem;

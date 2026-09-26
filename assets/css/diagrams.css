@@ -34,12 +34,21 @@
 .dg__body { display: grid; grid-template-columns: minmax(0,1fr) 33rem; gap: 1rem; min-height: 0; }
 
 .dg__canvas { position: relative; min-width: 0; min-height: 0; overflow: hidden; }
+/* Exploded / Schematic zoom: the plate is ratio-locked, so the only way to
+   render it at the size the reference shows is to give it the head band's
+   height as well. The headline then floats over the plate's empty top-left
+   corner — which is exactly how 5.Exploded View.png and 6.Schematic
+   Diagram.png are drawn. The side column is untouched. */
+.sc-exploded .dg__head, .sc-schematic .dg__head { z-index: 6; }
+.sc-exploded .dg__canvas { margin-top: -8.4rem; }
+/* the schematic's callouts sit higher in its plate, so it borrows less */
+.sc-schematic .dg__canvas { margin-top: -5.4rem; }
 /* The artwork and its numbered pins / system callouts share one box, so a
    marker sits on the part it names at every viewport — see .artfit, ui.css. */
 .dg__media { z-index: 1; }
-.dg__frame { --ar: 1.5; --w: 97; --h: 97; }
+.dg__frame { --ar: 1.5; --w: 100; --h: 100; }
 .dg__art { width: 100%; height: 100%; object-fit: contain; }
-.sch__canvas .dg__frame { --w: 96; --h: 96; }
+.sch__canvas .dg__frame { --w: 100; --h: 100; }
 .dg__script { position: absolute; left: .4rem; bottom: .4rem; width: 15rem; font-size: 1.9rem; z-index: 4; }
 
 /* ---- numbered pins ------------------------------------------------------ */
@@ -132,11 +141,18 @@
    Engineering drawing
    ========================================================================= */
 .sc-drawing { grid-template-rows: 9.2rem minmax(0,1fr) 6.4rem; }
+/* Column widths per row, as the sheet lays them out: the side elevation is
+   the wide one on top, and underneath the key table is narrow so the detailed
+   views get the room they need. */
 .dw__grid {
   display: grid; gap: .9rem; min-height: 0;
-  grid-template-columns: repeat(3, minmax(0,1fr));
+  grid-template-columns: repeat(20, minmax(0,1fr));
   grid-template-rows: minmax(0,1.06fr) minmax(0,1fr);
 }
+.dw__view:nth-of-type(1)  { grid-area: 1 / 1 / 2 / 7; }    /* front */
+.dw__view--side           { grid-area: 1 / 7 / 2 / 16; }   /* side  */
+.dw__view:nth-of-type(3)  { grid-area: 1 / 16 / 2 / 21; }  /* rear  */
+.dw__view--top            { grid-area: 2 / 1 / 3 / 7; }    /* top   */
 .dw__view { padding: .7rem; background: #fff; }
 .dw__cap {
   align-self: flex-start; padding: .3rem 1.2rem; border-radius: .4rem;
@@ -162,12 +178,20 @@
 .dv--bl { left: 0; bottom: 0; }
 .dv--br { right: 0; bottom: 0; border-left: 0; border-right: .22rem solid #C4342A; text-align: right; }
 
-.dw__key { grid-column: 2; }
+.dw__key { grid-area: 2 / 7 / 3 / 12; }
 .dw__key .panel__bar { justify-content: flex-start; font-size: 1.15rem; letter-spacing: .04em; }
 .dw__keyBody { padding: 0 .8rem .6rem; overflow: hidden; }
 .dw__keyBody .tbl td, .dw__keyBody .tbl th { padding: .27rem .7rem; font-size: 1.04rem; }
+/* Ruled like the sheet's own table: a line between the two columns, a header
+   rule and banded rows. */
+.dw__keyBody .tbl { border: .1rem solid var(--c-line); }
+.dw__keyBody .tbl th:last-child, .dw__keyBody .tbl td:last-child {
+  border-left: .1rem solid var(--c-line); text-align: center;
+}
+.dw__keyBody .tbl thead th { background: #fff; border-bottom: .1rem solid var(--c-line); }
+.dw__keyBody .tbl tbody tr:nth-child(even) { background: var(--c-primary-softer); }
 
-.dw__detail { grid-column: 3; }
+.dw__detail { grid-area: 2 / 12 / 3 / 21; }
 .dw__detail .panel__head { padding: .8rem 1.2rem .3rem; }
 .dw__detail .panel__title { font-size: 1.35rem; letter-spacing: .04em; }
 .dw__detailGrid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .6rem; padding: 0 .8rem .8rem; }
@@ -184,8 +208,19 @@
   gap: .2rem 2rem; padding: .6rem 1rem;
   background: #fff; border: .1rem solid var(--c-line); border-radius: var(--r-lg);
 }
-.dw__footBrand { display: flex; align-items: center; gap: .8rem; color: var(--c-primary-band); font-size: 1.1rem; }
-.dw__footBrand b { font-size: 1.4rem; font-weight: 800; }
-.dw__footItems { display: flex; align-items: center; gap: 2.4rem; }
-.dw__footItems span { display: flex; align-items: center; gap: .6rem; font-size: 1.08rem; color: var(--c-ink-2); line-height: 1.2; }
+.dw__footBrand { display: flex; align-items: center; gap: 1.1rem; color: var(--c-primary-band); font-size: 1.1rem; }
+.dw__footBrand .i { width: 3.6rem; height: 3.6rem; }
+.dw__footBrandTxt { display: flex; flex-direction: column; line-height: 1.2; }
+.dw__footBrandTxt b { font-size: 1.4rem; font-weight: 800; }
+/* The four notes sit on their own pale band with hairlines between them. */
+.dw__footItems {
+  display: flex; align-items: center; gap: 0; align-self: stretch;
+  background: var(--c-primary-softer); border-radius: var(--r-md); padding: .4rem 0;
+}
+.dw__footItems span {
+  flex: 1 1 0; display: flex; align-items: center; gap: .9rem;
+  padding: 0 1.6rem; font-size: 1.08rem; color: var(--c-ink-2); line-height: 1.2;
+}
+.dw__footItems span + span { border-left: .1rem solid var(--c-line); }
+.dw__footItems .i { width: 2.6rem; height: 2.6rem; color: var(--c-primary-band); }
 .dw__footNote { grid-column: 1 / -1; font-size: .95rem; color: var(--c-ink-4); text-align: center; }

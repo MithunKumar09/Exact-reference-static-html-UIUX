@@ -19,6 +19,10 @@
 /* ---- headline block ------------------------------------------------------ */
 .ht__head { position: absolute; left: 8.6rem; top: 2rem; z-index: 6; max-width: 30rem; }
 .ht__head--copy { max-width: 31rem; }
+/* "Rugged. Reliable. Ready for Every Field." reads as one line here, as it
+   does in 8.Exterior View.png. */
+.sc-exterior .ht__head { max-width: 46rem; }
+.sc-exterior .ht__sub { white-space: nowrap; }
 .ht__title { font-size: 4.2rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: #0A2540; }
 .ht__sub   { font-size: 1.85rem; font-weight: 600; color: #22405E; margin-top: .3rem; }
 .ht__copy  { font-size: 1.25rem; line-height: 1.42; color: var(--c-ink-2); margin-top: 1rem; }
@@ -36,14 +40,30 @@
   filter: drop-shadow(0 2rem 2.4rem rgba(10,40,70,.3));
   transition: opacity var(--t-base) var(--ease);
 }
-/* The cut-out plates are 1200x752; the four photographed screens are 3:2.
-   --dx nudges the picture clear of the headline column on the left, which is
-   fixed-width and would otherwise be read through the photograph's edge. */
+/* The cut-out plate on Exterior is 1200x752 and floats on its own pad; --dx
+   nudges it clear of the fixed-width headline column on the left.
+   The four photographed screens are 3:2 and run FULL BLEED — one photograph,
+   edge to edge, exactly as 9.Engine view.png and 10.Operator station.png are
+   drawn — so they take the cover fit and carry no second backdrop behind
+   them. --dy holds the crop on the band the markers live in. */
 .sc-exterior .ht__frame   { --ar: 1.596; --w: 60; --h: 94; --dx: 4; }
-.sc-engine .ht__frame     { --w: 64; --h: 96; --dx: 5; }
-.sc-operator .ht__frame   { --w: 62; --h: 96; --dx: 5; }
-.sc-hydraulics .ht__frame { --w: 58; --h: 96; --dx: 5; }
-.sc-features .ht__frame   { --w: 62; --h: 94; --dx: 5; }
+.sc-engine .ht__frame     { --w: 100; --h: 100; --dy: 14; }
+.sc-operator .ht__frame   { --w: 100; --h: 100; --dy: 12; }
+.sc-hydraulics .ht__frame { --w: 100; --h: 100; --dy: 6; }
+.sc-features .ht__frame   { --w: 100; --h: 100; --dy: 8; }
+.sc-engine, .sc-operator, .sc-hydraulics, .sc-features { background: #DDE6EE; }
+.sc-engine .ht__art, .sc-operator .ht__art,
+.sc-hydraulics .ht__art, .sc-features .ht__art { border-radius: 0; filter: none; }
+/* The headline column sits straight on the photograph on these screens, so
+   the wash rides ON the picture — above the photograph, below the markers,
+   which keeps the hotspot cards at full contrast. */
+.sc-engine .ht__frame::after, .sc-operator .ht__frame::after,
+.sc-hydraulics .ht__frame::after, .sc-features .ht__frame::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(100deg, rgba(248,251,254,.96) 0%, rgba(248,251,254,.86) 18%, rgba(248,251,254,.42) 32%, rgba(248,251,254,0) 46%);
+}
+.sc-engine .hotlayer, .sc-operator .hotlayer,
+.sc-hydraulics .hotlayer, .sc-features .hotlayer { z-index: 3; }
 
 /* ---- side panel ---------------------------------------------------------- */
 .sidepane { position: absolute; right: 1.6rem; top: 1.6rem; width: 24rem; max-height: calc(100% - 3.2rem); z-index: 7; }
@@ -70,9 +90,11 @@
   position: absolute; left: 50%; bottom: 1.4rem; transform: translateX(-50%);
   z-index: 5; display: grid; place-items: center; width: 34rem; pointer-events: none;
 }
+/* White, as on the 360° screen — the arc sits on the dark apron here. */
 .ht__rotate svg { width: 100%; height: 4.4rem; }
-.ht__rotate b { position: absolute; top: .2rem; font-size: 2.8rem; font-weight: 800; color: #12314F; text-shadow: 0 .1rem .4rem rgba(255,255,255,.7); }
-.ht__rotate span { font-size: 1.2rem; color: #22405E; font-weight: 500; margin-top: -.4rem; }
+.ht__rotate svg path { stroke: #fff; }
+.ht__rotate b { position: absolute; top: .2rem; font-size: 2.8rem; font-weight: 800; color: #fff; text-shadow: 0 .2rem .8rem rgba(0,0,0,.45); }
+.ht__rotate span { font-size: 1.2rem; color: #fff; font-weight: 500; margin-top: -.4rem; text-shadow: 0 .2rem .6rem rgba(0,0,0,.45); }
 
 .ht__thumbs { background: #F2F5F8; }
 .ht__thumbs--wide .thumb__label { font-size: .96rem; }

@@ -216,9 +216,18 @@ def save_bgr(bgr, rel, maxw=1280, q=86, thumb=None):
         t.save(os.path.join(IMG, thumb), 'WEBP', quality=84, method=6)
 
 
-def line_art(img, box, rel, scale=2.2, write=True):
-    """Crop a blueprint view and lift it off its paper into an alpha channel."""
+def line_art(img, box, rel, scale=2.2, write=True, mask=()):
+    """Crop a blueprint view and lift it off its paper into an alpha channel.
+
+    `mask` is a list of boxes in SHEET coordinates painted back to paper white
+    before the crop — used to drop the view captions the sheet has baked in,
+    which the screen draws itself.
+    """
     x0, y0, x1, y1 = box
+    if mask:
+        img = img.copy()
+        for mx0, my0, mx1, my1 in mask:
+            img[my0:my1, mx0:mx1] = 255
     c = cv2.resize(img[y0:y1, x0:x1], None, fx=scale, fy=scale,
                    interpolation=cv2.INTER_CUBIC)
     c = np.clip(cv2.addWeighted(c, 1.55, cv2.GaussianBlur(c, (0, 0), 1.1), -.55, 0),
@@ -282,12 +291,16 @@ SPIN_VIEWS = (('front', 'f000'), ('front-left', 'f001'), ('left', 'f002'),
               ('rear-left', 'f004'), ('rear', 'f005'), ('rear-right', 'f006'),
               ('right', 'f008'), ('front-right', 'f009'))
 
-BLUEPRINTS = (((104, 96, 300, 322), 'part/bp-front.webp'),
-              ((392, 96, 842, 322), 'part/bp-side.webp'),
-              ((952, 96, 1200, 322), 'part/bp-rear.webp'),
-              ((58, 462, 366, 642), 'part/bp-top.webp'),
-              ((722, 478, 842, 614), 'part/bp-axle.webp'),
-              ((866, 480, 1026, 612), 'part/bp-hitch.webp'))
+# Each view is taken WITH its dimension lines, arrows and callouts — that is
+# what the drawing sheet states and what 7.Engineering Drawing.png shows, so
+# the screen no longer has to restate them as corner chips. The third field
+# masks the caption the sheet bakes into the plate, which the panel draws.
+BLUEPRINTS = (((30, 84, 336, 410), 'part/bp-front.webp', ()),
+              ((374, 84, 930, 412), 'part/bp-side.webp', ()),
+              ((936, 84, 1218, 410), 'part/bp-rear.webp', ()),
+              ((44, 414, 426, 692), 'part/bp-top.webp', ((40, 424, 180, 486),)),
+              ((722, 478, 842, 614), 'part/bp-axle.webp', ()),
+              ((866, 480, 1026, 612), 'part/bp-hitch.webp', ()))
 
 PARTS = (((62, 344, 236, 528), 'part/part-radiator.webp'),
          ((250, 340, 480, 540), 'part/part-engine.webp'),
@@ -357,8 +370,8 @@ def step_menu_photography():
 def step_blueprints():
     print('3/5  blueprint views, from the Engineering Drawing sheet')
     dw = plate('Engineering Drawing')
-    for box, rel in BLUEPRINTS:
-        line_art(dw, box, rel)
+    for box, rel, mask in BLUEPRINTS:
+        line_art(dw, box, rel, mask=mask)
     # the two tyre sections are cropped apart so the garbled sheet lettering
     # between them is left behind, then set side by side on one canvas
     fr = line_art(dw, (1054, 500, 1090, 620), None, 2.6, write=False)

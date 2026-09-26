@@ -22,8 +22,12 @@
 
     <!-- corporate navigation (listing + compare screens) -->
     <nav class="topbar__nav" data-on="listing compare overview">
-      <a class="topbar__link is-active" href="#listing" data-inert="Demo build — corporate pages are out of scope.">Home</a>
-      <a class="topbar__link" href="#listing" data-goto="listing">Products</a>
+      <!-- The router owns this state: it toggles .is-active on every
+           [data-goto] as the screen changes. "Home" has no data-goto, so a
+           hard-coded .is-active here would never be cleared and would light
+           up alongside the screen's real entry. -->
+      <a class="topbar__link" href="#overview" data-goto="overview">Home</a>
+      <a class="topbar__link is-active" href="#listing" data-goto="listing">Products</a>
       <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Technology</a>
       <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Applications</a>
       <a class="topbar__link" href="#" data-inert="Demo build — corporate pages are out of scope.">Services</a>
@@ -76,10 +80,6 @@
 
     <!-- ===================== MASTER DASHBOARD RAIL ======================== -->
     <nav class="rail" id="rail" aria-label="Product sections">
-      <div class="rail__head">
-        <span class="rail__eyebrow">DI 470</span>
-        <span class="rail__title">DI 470</span>
-      </div>
       <div class="rail__nav">
         <a class="rail__item" href="#overview"   data-goto="overview"><svg class="i"><use href="#i-home"></use></svg><span>Overview</span></a>
         <a class="rail__item" href="#view360"    data-goto="view360"><svg class="i"><use href="#i-cube"></use></svg><span>360° View</span></a>
@@ -95,7 +95,6 @@
         <a class="rail__item" href="#variants"   data-goto="variants"><svg class="i"><use href="#i-grid4"></use></svg><span>Variants</span></a>
         <a class="rail__item" href="#videos"     data-goto="videos"><svg class="i"><use href="#i-play"></use></svg><span>Videos</span></a>
         <a class="rail__item" href="#gallery"    data-goto="gallery"><svg class="i"><use href="#i-images"></use></svg><span>Gallery</span></a>
-        <a class="rail__item" href="#brochure"   data-goto="brochure"><svg class="i"><use href="#i-download"></use></svg><span>Brochure</span></a>
         <a class="rail__item" href="#compare"    data-goto="compare"><svg class="i"><use href="#i-compare"></use></svg><span>Compare</span></a>
         <a class="rail__item" href="#enquire"    data-goto="enquire"><svg class="i"><use href="#i-mail"></use></svg><span>Enquire</span></a>
       </div>

@@ -9,15 +9,14 @@
    project is expressed in rem, so the whole UI scales as one piece with no
    blurry transforms.
 
-   The scale follows viewport WIDTH and stops at the 1440px design frame:
-   1rem === 9px puts the stage at exactly 1440 wide. Below the frame the stage
-   fills the window edge to edge — no letterboxing to the shorter axis, and a
-   window shorter than 9/16 of its width scrolls the last strip into view. At
-   or above it the scale holds and the stage sits centred as a fixed-width
-   content container while the page background runs on to any monitor width,
-   rather than the UI stretching to 1920 and beyond.                        */
+   The scale follows the SHORTER axis of the window, so the 90-unit row budget
+   every screen is designed against always lands inside the window and nothing
+   is ever cut off or scrolled. The stage then takes the window's full width
+   and height (see .stage below), so there is no gap left or right and no
+   letterboxing: on a window wider than 16:9 the spare width is handed to the
+   flexible columns of each screen instead of being painted as a margin.   */
 html {
-  font-size: min(calc(100vw / 160), 9px);
+  font-size: min(calc(100vw / 160), calc(100vh / 90));
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -63,15 +62,15 @@ table { border-collapse: collapse; width: 100%; }
 :focus-visible { outline: .3rem solid var(--c-primary-ring); outline-offset: .2rem; }
 
 /* --- Stage ---------------------------------------------------------------- */
-/* Width tracks the window up to the 1440px design frame; height stays locked
-   to it at 16:9 so every screen keeps the row budget it was designed against.
-   Past the frame it reads as a centred fixed-width container against a page
-   background that keeps going. */
+/* The stage IS the window: full width, full height, on every monitor. The rem
+   scale above keeps the 160 x 90 design grid inside it, so screens never
+   overflow their row budget; anything wider than 16:9 simply gives its extra
+   width to the 1fr columns. */
 .stage {
   position: relative;
   flex: none;
-  width: 100%;
-  max-width: var(--canvas-w);
+  width: var(--canvas-w);
+  max-width: 100%;
   height: var(--canvas-h);
   margin-inline: auto;
   background: var(--c-canvas);
@@ -79,11 +78,6 @@ table { border-collapse: collapse; width: 100%; }
   display: grid;
   grid-template-rows: auto 1fr auto;
   isolation: isolate;
-}
-/* Only meaningful once the page is wider than the design frame — it gives the
-   container an edge instead of letting it float on a flat field. */
-@media (min-width: 1441px) {
-  .stage { box-shadow: 0 0 0 1px rgba(9,30,55,.07), 0 24px 64px rgba(9,30,55,.16); }
 }
 
 /* --- Screens -------------------------------------------------------------- */

@@ -66,7 +66,7 @@
     color: #fff; box-shadow: 0 .4rem 1.2rem rgba(6,22,40,.2); z-index: 45;
   }
   .stage[data-rail="none"] .rail { display: none; }
-  .rail__head, .rail__foot, .rail::after { display: none; }
+  .rail__foot, .rail::after { display: none; }
   .rail__nav {
     flex-direction: row; gap: .4rem; padding: .6rem 1rem; overflow-x: auto;
     scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity;
@@ -198,6 +198,27 @@
   .ht__stage { display: block; height: auto; overflow: visible; padding-bottom: 1.4rem; }
   .ht__stage::before { display: none; }
 
+  /* Reading order on a phone: the controls, the hint and the angle strip
+     belong DIRECTLY under the picture they drive; the reading panels follow
+     them instead of pushing them to the foot of a long page. The stage stops
+     generating a box so its children and the strip share one flow — and it
+     takes one back the moment it goes fullscreen. Desktop is untouched. */
+  .sc-hot.is-active { display: flex; flex-direction: column; }
+  .sc-hot .ht__stage { display: contents; }
+  .sc-hot .ht__stage:fullscreen {
+    display: block; background: var(--c-canvas); padding-bottom: 1.4rem;
+  }
+  .sc-hot .ht__head   { order: 1; }
+  .sc-hot .ht__media  { order: 2; }
+  .sc-hot .ctrlstack  { order: 3; }
+  .sc-hot .thumbstrip { order: 4; margin-top: 1.2rem; }
+  /* the dark identity plates and hint pills read as a caption to the angle
+     strip, so they sit under it rather than between it and the picture */
+  .sc-hot .ht__plate, .sc-hot .ht__hint, .sc-hot .ht__ar { order: 5; }
+  .sc-hot .sidepane, .sc-hot .sidepane--wide,
+  .sc-hot .ft__side, .sc-hot .hy__mini { order: 6; }
+  .sc-hot .ht__script { order: 7; }
+
   .ht__head, .sc-hot .ht__head--copy {
     position: static; max-width: none; padding: 1.6rem 1.6rem 1rem;
   }
@@ -210,9 +231,15 @@
      names at any width — nothing is positioned against the stage any more. */
   .ht__media { position: relative; inset: auto; width: 100%; aspect-ratio: var(--art-ar, 1.5); }
   .sc-exterior .ht__media { --art-ar: 1.596; }
-  /* two classes, so this beats the per-screen `--w`/`--h` in detail.css */
-  .sc-hot .ht__frame { --w: 100; --h: 100; --dx: 0; }
+  /* two classes, so this beats the per-screen `--w`/`--h` in detail.css.
+     --dy goes back to 0: the media block is already the picture's own shape
+     here, so the desktop crop nudge would only push it off centre. */
+  .sc-hot .ht__frame { --w: 100; --h: 100; --dx: 0; --dy: 0; }
   .ht__art { border-radius: 0; filter: none; }
+  /* Off the stage the headline sits above the picture, not on it, so the
+     photograph keeps its full colour. */
+  .sc-engine .ht__frame::after, .sc-operator .ht__frame::after,
+  .sc-hydraulics .ht__frame::after, .sc-features .ht__frame::after { display: none; }
   .sc-exterior .ht__art, .sc-exterior .ht__media { background: var(--c-surface-2); }
 
   /* Inline labels are authored for a 1600x900 frame; at this width they
@@ -251,7 +278,7 @@
     width: auto; max-width: none; justify-content: flex-start;
     text-align: left; padding: 1.2rem 1.4rem;
   }
-  .ht__plate, .ht__hint, .ht__ar { position: static; margin: 1.2rem 1.6rem 0; }
+  .ht__plate, .ht__hint, .ht__ar { position: static; margin: 1.2rem 1.6rem; }
   /* the mark gets a tile of its own so the row reads as one control */
   .plate--row > .i, .hintpill > .i, .hintpill > .v360__glyphSm {
     box-sizing: content-box; flex: none; padding: .9rem;
@@ -311,7 +338,15 @@
 
   /* --- specifications ---------------------------------------------------- */
   .sp__body { display: block; padding: 1.4rem; }
-  .sp__body::before { display: none; }
+  .sp__body::before { display: block; }
+  /* Phone order: the hero block (model, tractor, stat strip), then the angle
+     strip straight under it, then the spec tables — the strip belongs with
+     the picture it switches, not at the foot of six tables. */
+  .sc-specs.is-active { display: flex; flex-direction: column; }
+  .sc-specs .sp__body { display: contents; }
+  .sc-specs .sp__intro  { order: 1; padding: 1.4rem 1.4rem 0; }
+  .sc-specs .thumbstrip { order: 2; margin-top: 1.4rem; }
+  .sc-specs .sp__tables { order: 3; padding: 1.4rem; }
   .sp__art { height: 22rem; }
   .sp__stats { margin-bottom: 1.4rem; }
   .sp__tables { display: block; }
@@ -346,7 +381,9 @@
   .vd__strip > span + span { border-left: 0; }
 
   /* --- gallery ----------------------------------------------------------- */
-  .gl__head { display: block; }
+  /* the photographic header band is a stage-only treatment */
+  .gl__head { display: block; background: none; }
+  .gl__head::before { display: none; }
   .band { position: static; clip-path: none; height: auto; padding: 1rem 1.4rem; margin-top: 1rem; border-radius: var(--r-md); }
   .band__t { font-size: 2.2rem; }
   .gl__tools { flex-wrap: wrap; margin: 1.2rem 0; }
@@ -413,7 +450,13 @@
   .dw__note { position: static; display: inline-block; margin-top: 1rem; }
   .dg__body { display: block; }
   /* hug the artwork instead of reserving a fixed band it cannot fill */
-  .dg__canvas { height: auto; aspect-ratio: 1.5; margin-bottom: 1.2rem; }
+  /* the plate no longer borrows the head band's height off-stage — the
+     per-screen pull in diagrams.css is more specific, so it is named here or
+     the artwork rides up over the headline band. */
+  .dg__canvas,
+  .sc-exploded .dg__canvas, .sc-schematic .dg__canvas {
+    height: auto; aspect-ratio: 1.5; margin: 0 0 1.2rem;
+  }
   .dg__frame { --w: 100; --h: 100; }
   /* The system callouts are authored against a 1600x900 frame. Scale them
      with the artwork so they stop colliding with each other. */
@@ -444,14 +487,22 @@
      height of their own; the key table and the detail views are reading
      matter and grow with their content instead of being cropped to a row. */
   .dw__view { height: 27rem; }
-  .dw__key, .dw__detail { grid-column: auto; grid-row: auto; }
+  /* The stage's per-row column tracks do not survive off the 16:9 canvas —
+     every panel goes back to flowing through the two-column grid. */
+  .dw__view, .dw__view--side, .dw__view--top,
+  .dw__view:nth-of-type(1), .dw__view:nth-of-type(3),
+  .dw__key, .dw__detail { grid-area: auto; }
   .dw__keyBody { overflow: visible; }
   .dw__detailGrid figure { height: 15rem; }
   .dw__foot { display: block; margin-top: 1.2rem; }
   .dw__footItems { flex-wrap: wrap; gap: 1.4rem; margin-top: .8rem; }
 
   .footbar { height: auto; flex-wrap: wrap; gap: 1.2rem; padding: 1.6rem 1.4rem; }
-  .footbar__items { flex-wrap: wrap; gap: 1.2rem; }
+  /* Off the stage the items wrap to their own width — the desktop bar's equal
+     columns would squeeze four labels into a phone's width. */
+  .footbar__items { flex-wrap: wrap; gap: 1.2rem; padding-right: 0 !important; }
+  .footbar__items > .footbar__item { flex: 0 1 auto; padding: 0; }
+  .footbar__item .i { width: 2.2rem; height: 2.2rem; }
   .footbar__sep, .footbar__flash { display: none; }
   .toaster { bottom: 2rem; }
 }
@@ -597,7 +648,7 @@
   .vd__bar button { min-width: 4rem; min-height: 4rem; }
   .chip { height: 4rem; padding-inline: 1.4rem; }
   .btn--sm, .pcard__acts .btn, .cp__acts .btn { --btn-h: 4rem; font-size: 1.2rem; }
-  .sp__actions a { padding: .8rem 0; }
+  /* .sp__actions a { padding: .8rem 0; } */
   .gl__dl, .gl__tools .chip { min-height: 4rem; }
   .brand, .footbar .brand { min-height: 4rem; }
 }
@@ -666,4 +717,26 @@
   .vd__bar { left: 1rem; right: 1rem; }
   .vd__playlist { position: static; width: auto; }
   .vd__strip { margin: 0; padding: 1rem 0 0; }
+}
+
+@media (max-width: 680px) {
+  .sc-specs {
+    background:
+      linear-gradient(
+        100deg,
+        rgba(248, 251, 254, .96) 0%,
+        rgba(248, 251, 254, .88) 40%,
+        rgba(248, 251, 254, .80) 100%
+      ),
+      var(--bg-pad) center 58% / cover no-repeat;
+  }
+}
+
+@media (max-width: 680px) {
+  .sc-specs .thumbstrip .thumb__label,
+  .sc-specs .ht__thumbs--wide .thumb__label,
+  .sc-specs .thumbstrip .thumb.is-active .thumb__label {
+    color: #000 !important;
+    opacity: 1 !important;
+  }
 }
