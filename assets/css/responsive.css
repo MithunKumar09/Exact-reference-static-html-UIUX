@@ -216,7 +216,7 @@
      strip, so they sit under it rather than between it and the picture */
   .sc-hot .ht__plate, .sc-hot .ht__hint, .sc-hot .ht__ar { order: 5; }
   .sc-hot .sidepane, .sc-hot .sidepane--wide,
-  .sc-hot .ft__side, .sc-hot .hy__mini { order: 6; }
+  .sc-hot .ft__side, .sc-hot .hy__mini { order: 6; margin-bottom: 20px; }
   .sc-hot .ht__script { order: 7; }
 
   .ht__head, .sc-hot .ht__head--copy {
@@ -739,4 +739,248 @@
     color: #000 !important;
     opacity: 1 !important;
   }
+}
+/* ===========================================================================
+   PHONE CORRECTIONS  —  mobile-only pass, desktop and tablet untouched.
+   Every rule below is scoped to (max-width: 680px) on purpose: the 16:9 stage
+   and the tablet reflow above are the reference layouts and must not move.
+   ========================================================================= */
+@media (max-width: 680px) {
+
+  /* --- footer: the trust strip reads UNDER the brand ----------------------
+     Wrapped beside the logo the four items were squeezed into a narrow
+     column; in a column of its own each one keeps a single line. */
+  .footbar { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+  .footbar__items {
+    flex-direction: column; align-items: flex-start;
+    gap: .9rem; width: 100%; flex: none;
+  }
+  .footbar__items > .footbar__item { width: 100%; }
+  /* the authored two-line breaks fold away; the space after each <br> in the
+     markup carries the word gap, and is collapsed again on the stage. */
+  .footbar__brk { display: none; }
+  .footbar__cta { align-self: flex-start; }
+}
+
+/* ===========================================================================
+   PHONE CORRECTIONS · 02 OVERVIEW
+   ========================================================================= */
+@media (max-width: 680px) {
+
+  /* --- "View in 360°" follows the tractor picture ------------------------
+     The phone hero promotes .ov__perf (the photograph) to the top of the
+     page; the 360 entry point belongs directly under it rather than at the
+     foot of the angle strip. .ov__strip dissolves so its two children can be
+     ordered against the promoted panel — .ov__thumbs keeps document order. */
+  .ov__strip { display: contents; }
+  .ov__perf  { order: -2; }
+  .ov__go360 { order: -1; }
+
+  /* --- trust strip: three across, nothing stranded on a row of its own ---
+     Two columns left "Farmer Focused" alone on a third row with the right
+     half of the strip empty. Three columns use the full width and close the
+     five items into two rows. */
+  .ov__trust {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .9rem .8rem; align-items: start;
+  }
+  .ov__trust .trust__sep { display: none; }
+  .ov__trust .trust__item { align-items: flex-start; gap: .5rem; font-size: 1.1rem; }
+  .ov__trust .trust__item .i { width: 2rem; height: 2rem; flex: none; }
+}
+
+/* ===========================================================================
+   PHONE CORRECTIONS · 01 LISTING
+   ========================================================================= */
+@media (max-width: 680px) {
+
+  /* --- filters start closed ---------------------------------------------
+     Five open filter groups pushed the catalogue a full screen down. The
+     panel collapses to its head and opens on tap; the checkbox above it in
+     the markup carries the state, so no script is involved. */
+  .lst__filtersToggle { flex: 1; min-height: 4.4rem; cursor: pointer; }
+  .lst__filtersChev { display: block; transition: transform var(--t-fast) var(--ease); }
+  .lst__filters .lst__filtersBody,
+  .lst__filters .lst__apply { display: none; }
+  .lst__filtersChk:checked ~ .lst__filtersBody { display: block; }
+  .lst__filtersChk:checked ~ .lst__apply { display: flex; }
+  .lst__filtersChk:checked ~ .lst__filtersHead .lst__filtersChev { transform: rotate(180deg); }
+}
+
+/* ===========================================================================
+   PHONE CORRECTIONS · IDENTITY BAND  (Variants · Exploded · Schematic · …)
+   ========================================================================= */
+@media (max-width: 680px) {
+
+  /* The band is a stage-scale headline block. Off the stage it cannot sit
+     beside the copy any more, so instead of taking a full row of its own at
+     stage size it drops to a compact strip. */
+  .band { padding: .7rem 1.1rem; margin-top: .8rem; }
+  .band__t { font-size: 1.7rem; }
+  .band__s { font-size: .95rem; letter-spacing: .01em; margin-top: .25rem; }
+  .band__rule { height: .2rem; margin: .3rem 0; }
+  .band__s--lg { font-size: 1.25rem; }
+  .dg__band--split { gap: 1rem; }
+  .dg__bandRule { width: .2rem; margin: .4rem 0; }
+}
+
+/* ===========================================================================
+   PHONE CORRECTIONS · 17 VARIANTS
+   ========================================================================= */
+@media (max-width: 680px) {
+
+  /* The "Best Seller" / "Popular" flag is pinned over the top of the picture
+     box; at two cards across the tractor rode straight into it. Padding the
+     art down clears the flag instead of shrinking the card. */
+  .vr__img { height: 12rem; }
+  .vr__img img { padding: 3rem .8rem .8rem; }
+
+  /* "DI 470 · Narrow" and "DI 470 · Power+" broke onto a second line. */
+  .vr__name { font-size: 1.5rem; white-space: nowrap; }
+  .vr__tag { font-size: 1.1rem; }
+  .vr__body { padding: 1rem 1rem .4rem; }
+
+  /* "View Specifications" ran past the card edge: the label sits inside the
+     narrower gutters, and the trailing arrow stands down to make room. */
+  .vr__cta {
+    margin: 0 1rem; width: calc(100% - 2rem);
+    padding-inline: .4rem; font-size: 1.1rem;
+  }
+  .vr__cta .i { display: none; }
+}
+
+/* ===========================================================================
+   PHONE CORRECTIONS · 05 SCHEMATIC
+   ========================================================================= */
+@media (max-width: 680px) {
+
+  /* The twelve system callouts were stood down here; the phone then showed a
+     bare schematic where the stage names every system. They come back at the
+     artwork's own scale — the authored positions fall into three clear bands
+     across the plate, so at this size they read without colliding. */
+  .sc-schematic .cal {
+    display: block;
+    font-size: .88rem; line-height: 1.15;
+    padding: .1rem .3rem; border-width: .1rem; border-radius: .3rem;
+    box-shadow: 0 .1rem .3rem rgba(10, 40, 70, .18);
+  }
+}
+
+/* ===========================================================================
+   PHONE CORRECTIONS · 07-11 EXTERIOR · ENGINE · OPERATOR · HYDRAULICS · FEATURES
+   ========================================================================= */
+@media (max-width: 680px) {
+
+  /* --- the furniture goes back ONTO the picture ---------------------------
+     In flow the identity plate, the drag hint and the AR link each took a
+     full row between the angle strip and the reading panels — three bands of
+     chrome before any content. The screen becomes a single-column GRID so
+     the picture and its three badges can share one cell: the picture is
+     pinned to row 2 and the badges are pinned there with it, bottom-aligned
+     inside it. Everything else auto-places around that row in `order`, so
+     the reading sequence set above is unchanged. */
+  /* NB: .sc-hot carries the stage's `grid-template-rows: minmax(0,1fr) 9.6rem`
+     (detail.css, unscoped). Turning this back into a grid here would revive
+     that template and squeeze the picture into a 9.6rem band, so the rows are
+     explicitly handed back to content. */
+  .sc-hot.is-active {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none; grid-auto-rows: auto;
+    align-content: start; gap: 0;
+  }
+  /* grid-column is NOT optional: an item with a definite row but an auto
+     column is placed in the next FREE column of that row, so the three would
+     each open an implicit column instead of sharing the picture's cell. */
+  .sc-hot .ht__media { grid-row: 2; grid-column: 1; }
+
+  .sc-hot .ht__plate,
+  .sc-hot .ht__hint,
+  .sc-hot .ht__ar {
+    grid-row: 2; grid-column: 1; align-self: end;
+    /* static, not relative: the desktop `left: 8.6rem` / `right: 1.6rem`
+       offsets would otherwise still shift the badge inside its cell.
+       z-index applies to a grid item regardless of position. */
+    position: static; z-index: 6;
+    width: auto; max-width: calc(100% - 2.4rem);
+    margin: 0 1.2rem 1.2rem; padding: .55rem .8rem;
+    border-radius: var(--r-md);
+  }
+  /* the tile behind the mark is a full-width-row treatment; at badge size the
+     mark sits straight on the glass. */
+  .sc-hot .ht__plate > .i,
+  .sc-hot .ht__hint  > .i,
+  .sc-hot .ht__hint  > .v360__glyphSm,
+  .sc-hot .ht__ar    > .i {
+    padding: 0; background: none; border-radius: 0;
+  }
+
+  /* identity plate — bottom left, model name only */
+  .sc-hot .ht__plate { justify-self: start; gap: .7rem; }
+  .sc-hot .ht__plate > .i { width: 2rem; height: 2rem; }
+  .sc-hot .ht__plate .plate__t { font-size: 1.25rem; }
+  .sc-hot .ht__plate .plate__s { display: none; }
+  /* Operator Station names the tractor in its own headline, so the plate is
+     redundant there and stands down rather than repeating it. */
+  .sc-operator .ht__plate { display: none; }
+
+  /* drag hint and AR launcher — bottom right, icon only */
+  .sc-hot .ht__hint,
+  .sc-hot .ht__ar { justify-self: end; gap: 0; }
+  .sc-hot .ht__hint > span,
+  .sc-hot .ht__ar   > span { display: none; }
+  .sc-hot .ht__hint > .v360__glyphSm { width: 3.4rem; height: 1.7rem; }
+  .sc-hot .ht__ar   > .i { width: 2.2rem; height: 2.2rem; }
+  /* the AR badge is the only one of the three that is tappable, so it keeps a
+     40px box even though it now shows nothing but its mark. */
+  .sc-hot .ht__ar { min-width: 4rem; min-height: 4rem; justify-content: center; }
+}
+
+/* ===========================================================================
+   PHONE CORRECTIONS · 03 360° VIEW
+   ========================================================================= */
+@media (max-width: 680px) {
+
+  /* The masthead was set to carry a 16:9 stage; on a phone it was the largest
+     type on the page and pushed the turntable below the fold. */
+  .v360__headTitle { font-size: 2.2rem; }
+  .v360__glyph { width: 5rem; height: 2.5rem; }
+  .v360__headSub { font-size: 1.05rem; letter-spacing: .07em; }
+  .v360__head { padding: 1.2rem 1.6rem .8rem; }
+
+  /* Same move as the hotspot screens: the drag hint rides on the turntable
+     rather than taking a row under it. */
+  .sc-360 .v360 {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none; grid-auto-rows: auto; align-content: start; gap: 0;
+  }
+  .sc-360 .v360__stage { grid-row: 2; grid-column: 1; }
+  .sc-360 .v360__hint {
+    grid-row: 2; grid-column: 1; align-self: end; justify-self: end;
+    position: static; z-index: 6; gap: 0;
+    width: auto; margin: 0 1.2rem 1.2rem; padding: .55rem .8rem;
+    border-radius: var(--r-md);
+  }
+  .sc-360 .v360__hint > .i {
+    width: 2.2rem; height: 2.2rem; padding: 0; background: none; border-radius: 0;
+  }
+  .sc-360 .v360__hint > .hintpill__t { display: none; }
+}
+
+/* ===========================================================================
+   PHONE CORRECTIONS · MARKERS
+   After the PHONE MARKERS block above, which it tightens further.
+   ========================================================================= */
+@media (max-width: 680px) {
+
+  /* Eight to twelve marks over a 36rem-wide product still read as a rash of
+     dots. The visible circle drops again; .hotspot__dot::after keeps the
+     44px tap target, so nothing gets harder to hit. */
+  .hotspot__dot {
+    width: 1.9rem; height: 1.9rem;
+    box-shadow: 0 0 0 .18rem rgba(255, 255, 255, .92), 0 .2rem .6rem rgba(4, 60, 130, .4);
+  }
+  .hotspot__dot .i { width: 1rem; height: 1rem; }
+  .hotspot__dot::before { border-width: .15rem; }
+  .hotspot--card .hotspot__dot { width: 2.1rem; height: 2.1rem; }
+  .hotspot--card .hotspot__dot .i { width: 1.1rem; height: 1.1rem; }
 }

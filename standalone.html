@@ -310,8 +310,15 @@
 
     <!-- ---- filters ------------------------------------------------------- -->
     <aside class="panel lst__filters">
+      <!-- Phone only: the panel opens on tap. The checkbox is the state, the
+           <label> in the head is the switch — no script, and on the stage the
+           input stays hidden and the body is always open. -->
+      <input class="lst__filtersChk" id="lstFiltersOpen" type="checkbox" hidden>
       <div class="u-between lst__filtersHead">
-        <span class="t-h3">Filters</span>
+        <label class="lst__filtersToggle" for="lstFiltersOpen">
+          <span class="t-h3">Filters</span>
+          <svg class="i i--xs lst__filtersChev" aria-hidden="true"><use href="#i-chev-d"></use></svg>
+        </label>
         <a class="lst__clear" href="#" data-inert="Demo build &mdash; filtering ships with the Laravel release.">Clear All</a>
       </div>
       <div class="scroll-y lst__filtersBody">
@@ -1184,7 +1191,7 @@
       <span>Drag to rotate &nbsp;|&nbsp; Click on hotspots to explore</span>
     </div>
 
-    <a class="hintpill ht__ar" href="#view360" data-goto="view360">
+    <a class="hintpill ht__ar" href="#view360" data-goto="view360" aria-label="View in your space — AR">
       <svg class="i i--lg"><use href="#i-ar"></use></svg>
       <span><span class="hintpill__t">View in your space</span><span class="hintpill__s">AR</span></span>
     </a>
@@ -2325,18 +2332,18 @@
     </div>
 
     <div class="footbar__items" data-on="compare">
-      <span class="footbar__item"><svg class="i"><use href="#i-tractor"></use></svg>Trusted by<br>1,00,000+ Farmers</span><i class="footbar__sep"></i>
-      <span class="footbar__item"><svg class="i"><use href="#i-chart"></use></svg>Pan India<br>Dealer Network</span><i class="footbar__sep"></i>
-      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Genuine Parts<br>&amp; Service</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-tractor"></use></svg>Trusted by<br class="footbar__brk"> 1,00,000+ Farmers</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-chart"></use></svg>Pan India<br class="footbar__brk"> Dealer Network</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Genuine Parts<br class="footbar__brk"> &amp; Service</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Sustainable Farming</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-globe"></use></svg>A Greener Tomorrow</span>
     </div>
 
     <div class="footbar__items" data-on="overview enquire variants">
-      <span class="footbar__item"><svg class="i"><use href="#i-pin"></use></svg>Wide Dealer Network<br>Across India</span><i class="footbar__sep"></i>
-      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Genuine Parts<br>&amp; Service</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-pin"></use></svg>Wide Dealer Network<br class="footbar__brk"> Across India</span><i class="footbar__sep"></i>
+      <span class="footbar__item"><svg class="i"><use href="#i-gear"></use></svg>Genuine Parts<br class="footbar__brk"> &amp; Service</span><i class="footbar__sep"></i>
       <span class="footbar__item"><svg class="i"><use href="#i-headset"></use></svg>Expert Support</span><i class="footbar__sep"></i>
-      <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Sustainable Farming<br>A Greener Tomorrow</span>
+      <span class="footbar__item"><svg class="i"><use href="#i-leaf"></use></svg>Sustainable Farming<br class="footbar__brk"> A Greener Tomorrow</span>
     </div>
 
     <div class="footbar__items" data-on="exploded schematic drawing">

@@ -33,8 +33,15 @@
 
     <!-- ---- filters ------------------------------------------------------- -->
     <aside class="panel lst__filters">
+      <!-- Phone only: the panel opens on tap. The checkbox is the state, the
+           <label> in the head is the switch — no script, and on the stage the
+           input stays hidden and the body is always open. -->
+      <input class="lst__filtersChk" id="lstFiltersOpen" type="checkbox" hidden>
       <div class="u-between lst__filtersHead">
-        <span class="t-h3">Filters</span>
+        <label class="lst__filtersToggle" for="lstFiltersOpen">
+          <span class="t-h3">Filters</span>
+          <svg class="i i--xs lst__filtersChev" aria-hidden="true"><use href="#i-chev-d"></use></svg>
+        </label>
         <a class="lst__clear" href="#" data-inert="Demo build &mdash; filtering ships with the Laravel release.">Clear All</a>
       </div>
       <div class="scroll-y lst__filtersBody">

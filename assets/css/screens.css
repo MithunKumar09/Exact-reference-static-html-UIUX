@@ -47,6 +47,10 @@
 /* filters ---------------------------------------------------------------- */
 .lst__filters { padding: 1.4rem 1.4rem 1.2rem; gap: 1rem; }
 .lst__filtersHead { flex: none; }
+/* The head title is a <label> so the phone can use it as the panel switch;
+   on the stage it is an ordinary heading and the chevron stays out of it. */
+.lst__filtersToggle { display: flex; align-items: center; gap: .8rem; }
+.lst__filtersChev { display: none; }
 .lst__clear { font-size: 1.2rem; font-weight: 600; color: var(--c-primary); text-decoration: underline; }
 .lst__filtersBody { flex: 1; min-height: 0; padding-right: .4rem; }
 .fgroup { padding: .9rem 0; border-bottom: .1rem solid var(--c-line-2); }
@@ -68,8 +72,12 @@
    so the row runs edge to edge, each label opens a new group, and the selects
    keep a clear gutter between their value and the chevron. */
 .lst__tools { display: flex; align-items: center; gap: .9rem; }
+/* No width cap: the search field absorbs the free space so the toolbar runs
+   the full width of the catalogue column, from its left edge to the Compare
+   button. Tablet and phone set their own width below, so this is the stage
+   measure only. */
 .lst__search {
-  display: flex; align-items: center; gap: .8rem; flex: 1 1 auto; max-width: 53rem; height: 4rem;
+  display: flex; align-items: center; gap: .8rem; flex: 1 1 auto; height: 4rem;
   padding: 0 1.2rem; border-radius: var(--r-md); background: #fff; border: .1rem solid var(--c-line); color: var(--c-ink-4);
 }
 .lst__search input { flex: 1; min-width: 0; border: 0; background: none; font-size: 1.25rem; }
