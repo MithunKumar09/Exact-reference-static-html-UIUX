@@ -261,6 +261,14 @@
 <section class="screen sc-gallery" id="s-gallery" data-rail="overlay" data-chrome="product">
 
   <header class="gl__head">
+    <!-- band precedes headText in markup so the mobile float (responsive.css)
+         can sit it beside the title with the copy wrapping under it; desktop
+         positions it absolutely top-right regardless of source order. -->
+    <div class="band gl__band">
+      <span class="band__t">STANDARD<br>DI 470</span>
+      <i class="band__rule"></i>
+      <span class="band__s">STRONGER TRACTORS<br>BRIGHTER TOMORROWS</span>
+    </div>
     <div class="gl__headText">
       <h1 class="gl__title">Gallery</h1>
       <p class="gl__sub">A Closer Look at Excellence</p>
@@ -268,11 +276,6 @@
     </div>
     <div class="script gl__script">Powering<br>Progress<br>in Every Field
       <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
-    </div>
-    <div class="band gl__band">
-      <span class="band__t">STANDARD<br>DI 470</span>
-      <i class="band__rule"></i>
-      <span class="band__s">STRONGER TRACTORS<br>BRIGHTER TOMORROWS</span>
     </div>
   </header>
 

@@ -136,15 +136,18 @@
      design system so the dashboard has no dead links. -->
 <section class="screen sc-variants" id="s-variants" data-rail="solid" data-chrome="product">
   <header class="vr__head">
-    <div>
-      <h1 class="dg__title">DI 470 Variants</h1>
-      <p class="dg__sub">One Platform. Four Ways to Work.</p>
-      <p class="dg__copy">Every DI 470 variant shares the same 47 HP engine and 1500 kg hydraulics. Pick the drive, transmission and tyre package that matches your fields.</p>
-    </div>
+    <!-- band precedes the text div so the mobile float (responsive.css) can
+         sit it beside the title with the copy wrapping under it; desktop
+         positions it absolutely top-right regardless of source order. -->
     <div class="band dg__band">
       <span class="band__t">STANDARD DI 470</span>
       <i class="band__rule"></i>
       <span class="band__s">CHOOSE YOUR CONFIGURATION.</span>
+    </div>
+    <div>
+      <h1 class="dg__title">DI 470 Variants</h1>
+      <p class="dg__sub">One Platform. Four Ways to Work.</p>
+      <p class="dg__copy">Every DI 470 variant shares the same 47 HP engine and 1500 kg hydraulics. Pick the drive, transmission and tyre package that matches your fields.</p>
     </div>
   </header>
 

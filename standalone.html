@@ -803,15 +803,18 @@
 <section class="screen sc-diagram sc-exploded" id="s-exploded" data-rail="solid" data-chrome="product">
 
   <header class="dg__head">
-    <div class="dg__headText">
-      <h1 class="dg__title">Exploded-View Diagram</h1>
-      <p class="dg__sub">Assembly / Parts View</p>
-      <p class="dg__copy">Explore the STANDARD DI 470 in detail. See how every component fits together to deliver power, reliability and performance.</p>
-    </div>
+    <!-- band precedes headText in markup so the mobile float (responsive.css)
+         can sit it beside the title with the copy wrapping under it; desktop
+         positions it absolutely top-right regardless of source order. -->
     <div class="band dg__band">
       <span class="band__t">STANDARD DI 470</span>
       <i class="band__rule"></i>
       <span class="band__s">ENGINEERED FOR DURABILITY.<br>BUILT FOR REAL FIELDS.</span>
+    </div>
+    <div class="dg__headText">
+      <h1 class="dg__title">Exploded-View Diagram</h1>
+      <p class="dg__sub">Assembly / Parts View</p>
+      <p class="dg__copy">Explore the STANDARD DI 470 in detail. See how every component fits together to deliver power, reliability and performance.</p>
     </div>
   </header>
 
@@ -915,11 +918,9 @@
 <section class="screen sc-diagram sc-schematic" id="s-schematic" data-rail="solid" data-chrome="product">
 
   <header class="dg__head">
-    <div class="dg__headText">
-      <h1 class="dg__title">Schematic Diagram (Systems View)</h1>
-      <p class="dg__sub">Understand How the STANDARD DI 470 Works Together</p>
-      <p class="dg__copy">This schematic shows the major systems and how they interact to deliver power, control, hydraulic output and electrical support for reliable performance in every field.</p>
-    </div>
+    <!-- band precedes headText in markup so the mobile float (responsive.css)
+         can sit it beside the title with the copy wrapping under it; desktop
+         positions it absolutely top-right regardless of source order. -->
     <div class="band dg__band dg__band--split">
       <div>
         <span class="band__t">STANDARD DI 470</span>
@@ -927,6 +928,11 @@
       </div>
       <i class="dg__bandRule"></i>
       <div><span class="band__s band__s--lg">BUILT<br>FOR EVERY FIELD</span></div>
+    </div>
+    <div class="dg__headText">
+      <h1 class="dg__title">Schematic Diagram (Systems View)</h1>
+      <p class="dg__sub">Understand How the STANDARD DI 470 Works Together</p>
+      <p class="dg__copy">This schematic shows the major systems and how they interact to deliver power, control, hydraulic output and electrical support for reliable performance in every field.</p>
     </div>
   </header>
 
@@ -1029,14 +1035,17 @@
 <section class="screen sc-diagram sc-drawing" id="s-drawing" data-rail="solid" data-chrome="product">
 
   <header class="dg__head">
-    <div class="dg__headText">
-      <h1 class="dg__title">Engineering Drawing / Blueprint</h1>
-      <p class="dg__sub">Physical Dimension View</p>
-    </div>
+    <!-- band precedes headText in markup so the mobile float (responsive.css)
+         can sit it beside the title with the copy wrapping under it; desktop
+         positions it absolutely top-right regardless of source order. -->
     <div class="band dg__band">
       <span class="band__t">STANDARD DI 470</span>
       <i class="band__rule"></i>
       <span class="band__s">BUILT TO PERFORM.<br>DESIGNED FOR REAL FIELDS.</span>
+    </div>
+    <div class="dg__headText">
+      <h1 class="dg__title">Engineering Drawing / Blueprint</h1>
+      <p class="dg__sub">Physical Dimension View</p>
     </div>
     <span class="dw__note"><b>All dimensions are in mm</b><span>(For reference only)</span></span>
   </header>
@@ -1865,6 +1874,14 @@
 <section class="screen sc-gallery" id="s-gallery" data-rail="overlay" data-chrome="product">
 
   <header class="gl__head">
+    <!-- band precedes headText in markup so the mobile float (responsive.css)
+         can sit it beside the title with the copy wrapping under it; desktop
+         positions it absolutely top-right regardless of source order. -->
+    <div class="band gl__band">
+      <span class="band__t">STANDARD<br>DI 470</span>
+      <i class="band__rule"></i>
+      <span class="band__s">STRONGER TRACTORS<br>BRIGHTER TOMORROWS</span>
+    </div>
     <div class="gl__headText">
       <h1 class="gl__title">Gallery</h1>
       <p class="gl__sub">A Closer Look at Excellence</p>
@@ -1872,11 +1889,6 @@
     </div>
     <div class="script gl__script">Powering<br>Progress<br>in Every Field
       <svg class="script__swoosh" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C40 2 150 1 198 5 150 6 40 9 2 8Z"/></svg>
-    </div>
-    <div class="band gl__band">
-      <span class="band__t">STANDARD<br>DI 470</span>
-      <i class="band__rule"></i>
-      <span class="band__s">STRONGER TRACTORS<br>BRIGHTER TOMORROWS</span>
     </div>
   </header>
 
@@ -2170,15 +2182,18 @@
      design system so the dashboard has no dead links. -->
 <section class="screen sc-variants" id="s-variants" data-rail="solid" data-chrome="product">
   <header class="vr__head">
-    <div>
-      <h1 class="dg__title">DI 470 Variants</h1>
-      <p class="dg__sub">One Platform. Four Ways to Work.</p>
-      <p class="dg__copy">Every DI 470 variant shares the same 47 HP engine and 1500 kg hydraulics. Pick the drive, transmission and tyre package that matches your fields.</p>
-    </div>
+    <!-- band precedes the text div so the mobile float (responsive.css) can
+         sit it beside the title with the copy wrapping under it; desktop
+         positions it absolutely top-right regardless of source order. -->
     <div class="band dg__band">
       <span class="band__t">STANDARD DI 470</span>
       <i class="band__rule"></i>
       <span class="band__s">CHOOSE YOUR CONFIGURATION.</span>
+    </div>
+    <div>
+      <h1 class="dg__title">DI 470 Variants</h1>
+      <p class="dg__sub">One Platform. Four Ways to Work.</p>
+      <p class="dg__copy">Every DI 470 variant shares the same 47 HP engine and 1500 kg hydraulics. Pick the drive, transmission and tyre package that matches your fields.</p>
     </div>
   </header>
 

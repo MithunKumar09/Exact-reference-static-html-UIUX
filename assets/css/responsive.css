@@ -626,7 +626,7 @@
 
   .tbl { font-size: 1.15rem; }
   .tbl th, .tbl td { padding: .6rem .7rem; }
-  .footbar { padding: 1.4rem 1rem; }
+  .footbar { padding: 1.5rem 1rem; }
   .ov__heroImg { display: none; }
 
   /* --- tap targets --------------------------------------------------------
@@ -730,6 +730,13 @@
       ),
       var(--bg-pad) center 58% / cover no-repeat;
   }
+  /* .sp__body is display:contents on this layout, which drops its box, so its
+     ::before (the photo wash, inset:0 on that box) re-anchors to the next
+     positioned ancestor — .screens — and balloons over the whole scrolling
+     column, washing out the thumbstrip and tables painted after it. The
+     gradient above already does the wash's job as a real background layer,
+     so the orphaned overlay stands down. */
+  .sc-specs .sp__body::before { display: none; }
 }
 
 @media (max-width: 680px) {
@@ -748,12 +755,23 @@
 @media (max-width: 680px) {
 
   /* --- footer: the trust strip reads UNDER the brand ----------------------
-     Wrapped beside the logo the four items were squeezed into a narrow
-     column; in a column of its own each one keeps a single line. */
+     Wrapped beside the logo the four items ran together at whatever width
+     each label's text happened to allow, so one data-on set paired up two
+     per row and the next sat one per row for no visible reason. A fixed
+     two-column grid makes the pairing the same for every set on every
+     footer, by default, instead of leaving it to how each label wraps. */
   .footbar { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+  /* The fixed nav bar sits over the strip the stage reserves under the footer.
+     The footer's height is fractional and the page's scroll height is rounded,
+     so on some screens (Exploded View, Gallery, Drawing…) the footer stopped
+     a fraction of a pixel short of the nav and a hairline of page background
+     showed between them. The footer colour runs on underneath the nav so the
+     seam can never open, whatever the screen's content height. */
+  .footbar { box-shadow: 0 .8rem 0 var(--c-footer); }
   .footbar__items {
-    flex-direction: column; align-items: flex-start;
-    gap: .9rem; width: 100%; flex: none;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start; column-gap: 1.4rem; row-gap: .9rem;
+    width: 100%; flex: none;
   }
   .footbar__items > .footbar__item { width: 100%; }
   /* the authored two-line breaks fold away; the space after each <br> in the
@@ -822,6 +840,50 @@
   .band__s--lg { font-size: 1.25rem; }
   .dg__band--split { gap: 1rem; }
   .dg__bandRule { width: .2rem; margin: .4rem 0; }
+
+  /* Variants, Exploded, Schematic, Drawing, Gallery: the plate tucks beside
+     the headline instead of sitting in its own full-width row under the
+     copy. It now comes before the text in markup (see parts/06, parts/08
+     and parts/09), so floating it lets the title wrap around it and the
+     copy resume full width once it clears. */
+  .sc-variants .band,
+  .sc-exploded .band,
+  .sc-schematic .band,
+  .sc-drawing .band,
+  .sc-gallery .band {
+    float: right; clear: none; position: static;
+    max-width: 15.5rem; margin: 0 0 1rem 1.2rem; padding: .6rem .8rem;
+  }
+  .sc-variants .band .band__t,
+  .sc-exploded .band .band__t,
+  .sc-schematic .band .band__t,
+  .sc-drawing .band .band__t,
+  .sc-gallery .band .band__t { font-size: 1.25rem; white-space: nowrap; }
+  .sc-variants .band .band__s,
+  .sc-exploded .band .band__s,
+  .sc-schematic .band .band__s,
+  .sc-drawing .band .band__s,
+  .sc-gallery .band .band__s { font-size: .82rem; margin-top: .2rem; }
+  .sc-variants .band .band__rule,
+  .sc-exploded .band .band__rule,
+  .sc-schematic .band .band__rule,
+  .sc-drawing .band .band__rule,
+  .sc-gallery .band .band__rule { height: .15rem; margin: .25rem 0; }
+  .sc-schematic .band .band__s--lg { font-size: 1rem; }
+  /* Drawing's reference note trails the band in markup; keep it clear of the
+     float instead of letting it ride up into the leftover space beside it. */
+  .sc-drawing .dw__note { clear: right; }
+  /* .band__t/.band__s are inline siblings inside the split layout's plain
+     wrapper divs (it has no flex of its own, unlike the single-column .band
+     shape), so at badge width they run on together — "470 SIMPLE.". Block
+     stacks them cleanly; the plain (non-split) band already stacks via the
+     shared .band flex-column and is untouched by this. */
+  .sc-schematic .dg__band--split .band__t,
+  .sc-schematic .dg__band--split .band__s { display: block; }
+  /* the split layout (two side-by-side halves + vertical rule) only fits a
+     stage-wide band; stacked with a horizontal rule, it reads at badge width */
+  .sc-schematic .dg__band--split { flex-direction: column; align-items: flex-start; gap: .4rem; }
+  .sc-schematic .dg__bandRule { width: 100%; height: .12rem; margin: 0; }
 }
 
 /* ===========================================================================

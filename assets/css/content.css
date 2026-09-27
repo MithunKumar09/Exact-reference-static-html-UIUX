@@ -68,6 +68,24 @@
 .sp__actions a .i { color: var(--c-primary-band); }
 .sp__actions i { width: .1rem; align-self: stretch; background: var(--c-line); }
 
+/* Desktop stage only. The tables used to stop at their content and leave a
+   dead band between them and the action row, which itself stopped short of
+   the stat strip's bottom edge on the left. The four rows now share the whole
+   column in proportion to how many table rows each carries (Engine spans the
+   first two, Dimensions the last two), the tables spread their own rows to
+   fill, and the action row closes the column flush with the stat strip. The
+   phone/tablet reflow re-flows these panels as blocks and is untouched. */
+@media (min-width: 1101px) and (orientation: landscape) {
+  .sp__tables {
+    grid-template-rows: minmax(auto, 6fr) minmax(auto, 6fr) minmax(auto, 3fr) minmax(auto, 5fr) auto;
+    align-content: stretch;
+  }
+  .sp__tbl .tbl { flex: 1 1 auto; }
+  .sp__actions { grid-area: 5 / 1 / 6 / 3; margin-top: 0; }
+  .sp__actions a { gap: 1rem; }
+  .sp__actions a .i { width: 2.6rem; height: 2.6rem; flex: none; }
+}
+
 /* ===========================================================================
    13 · VIDEOS
    Laid out to _reference/14.Videos.png: one full-bleed hero band carrying the
